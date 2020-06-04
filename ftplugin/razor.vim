@@ -14,9 +14,5 @@ runtime! ftplugin/html.vim
 "
 " NOTE: Modified from ftplugin/html.vim to include Razor files
 if has("gui_win32")
-    let  b:browsefilter="Razor Files (*.cshtml,*.razor)\t*.cshtml;*.razor\n" .
-		\	"HTML Files (*.html,*.htm)\t*.htm;*.html\n" .
-		\	"JavaScript Files (*.js)\t*.js\n" .
-		\	"Cascading StyleSheets (*.css)\t*.css\n" .
-		\	"All Files (*.*)\t*.*\n"
+    let b:browsefilter = "Razor Files (*.cshtml,*.razor)\t*.cshtml;*.razor\n".b:browsefilter
 endif
