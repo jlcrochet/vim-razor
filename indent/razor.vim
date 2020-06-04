@@ -56,10 +56,6 @@ function! s:ignored_brace(lnum, col) abort
   return synIDattr(synID(a:lnum, a:col, 1), "name") !~# '^\%(razorDelimiter\|csBraces\)$'
 endfunction
 
-function! s:is_html(lnum, col) abort
-  return synIDattr(synID(a:lnum, a:col, 1), "name") =~# '^html'
-endfunction
-
 let s:skip_expr = 's:ignored_brace(line("."), col("."))'
 
 " GetRazorIndent {{{1
