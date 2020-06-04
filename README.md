@@ -18,6 +18,9 @@ Any C# tokens that are not highlighted will receive the `razorExpression` highli
 `g:razor_indent_shiftwidth`:
 * If defined, overrides `shiftwidth` for C# lines; this is useful if you want HTML and C# to be indented differently.
 
+`g:razor_fold`:
+* If defined, razor blocks will be folded.
+
 # TODO
 
 * Finish `g:razor_highlight_cs`
