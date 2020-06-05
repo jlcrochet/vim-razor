@@ -19,6 +19,11 @@ unlet! b:current_syntax
 
 let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
 
+if type(b:razor_highlight_cs) != 1
+  echoerr 'Valid values for razor_highlight_cs are "full", "half", or "none"'
+  let b:razor_highlight_cs = "full"
+endif
+
 " Syntax groups {{{1
 " =============
 
