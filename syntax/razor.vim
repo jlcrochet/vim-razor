@@ -56,7 +56,7 @@ syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contain
 syn keyword htmlTagName text contained
 
 " HTML args for ASP.NET
-syn match htmlArg /\<asp-\%(action\|route-id\|for\|validation-for\|validation-summary\)\>/ display contained
+syn match htmlArg /\<asp-[[:alnum:]-]\+/ display contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
