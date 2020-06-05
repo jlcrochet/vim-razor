@@ -20,7 +20,7 @@ unlet! b:current_syntax
 let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
 
 if type(b:razor_highlight_cs) != 1
-  echoerr 'Valid values for razor_highlight_cs are "full", "half", or "none"'
+  echoerr 'Valid values for razor_highlight_cs are "full", "half", "none"'
   let b:razor_highlight_cs = "full"
 endif
 
