@@ -81,18 +81,18 @@ syn keyword razorLock lock contained nextgroup=razorExpression skipwhite
 syn keyword razorAttribute attribute contained nextgroup=razorExpression skipwhite
 syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorImplements implements contained nextgroup=razorDefinitionName skipwhite
-syn keyword razorInherits inherits contained nextgroup=razorDefinitionName skipwhite
+syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
+syn keyword razorInherits inherits contained nextgroup=razorIdentifier skipwhite
 syn keyword razorInjects injects contained nextgroup=razorInjectExpression skipwhite
 syn keyword razorLayout layout contained nextgroup=razorExpression skipwhite
-syn keyword razorModel model contained nextgroup=razorDefinitionName skipwhite
-syn keyword razorNamespace namespace contained nextgroup=razorDefinitionName skipwhite
+syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
+syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
 syn keyword razorPage page contained
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorBind bind contained
 
-syn match razorDefinitionName /\<\u\w*\%(\.\u\w*\)*\>\%(<\u\w*\%(\.\u\w*\)*>\)\=/ contains=csGeneric contained display
-syn match razorInjectExpression /\<\u\w*\%(\.\u\w*\)*\>\s*\<\u\w*\%(\.\u\w*\)*\>/ contained display
+syn match razorIdentifier /\<\u[[:alnum:].><]*/ contained display
+syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u\[[:alnum:]]*/ contains=razorIdentifier contained transparent
 
 syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display transparent fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
 syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display transparent
@@ -132,7 +132,7 @@ if b:razor_highlight_cs ==# "full"
   hi def link razorSection csUnspecifiedStatement
   hi def link razorBind csUnspecifiedStatement
 
-  hi def link razorDefinitionName razorExpression
+  hi def link razorIdentifier razorExpression
   hi def link razorInjectExpression razorExpression
 else
   hi def link razorAsync razorExpression
@@ -154,7 +154,7 @@ else
   hi def link razorSection razorExpression
   hi def link razorBind razorExpression
 
-  hi def link razorDefinitionName razorExpression
+  hi def link razorIdentifier razorExpression
   hi def link razorInjectExpression razorExpression
 endif
 
