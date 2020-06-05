@@ -16,6 +16,7 @@ endif
 
 runtime! syntax/html.vim
 unlet! b:current_syntax
+
 let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
 
 if b:razor_highlight_cs !=# "none"
@@ -49,12 +50,17 @@ syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contain
 " let's highlight it like a proper tag.
 syn keyword htmlTagName text contained
 
+" Unfortunately, we need to redefine htmlString so that it can contain
+" Razor expressions.
+syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
+syn region htmlString contained start=/'/ end=/'/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
+
 " Implicit expressions:
 syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock skipwhite
 
-syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|[<>[:space:]]\@=\)/ contains=@cs,csBracketed contained display nextgroup=razorBlock skipwhite skipnl
+syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@cs,csBracketed contained display nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
