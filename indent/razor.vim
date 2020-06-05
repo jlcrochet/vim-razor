@@ -10,11 +10,12 @@ if exists("b:did_indent")
   finish
 endif
 
-if !exists("*HtmlIndent")
-  runtime! indent/html.vim
-  unlet! b:did_indent
-endif
+" indent/html.vim has to be source for each buffer since it requires
+" a lot of buffer-local configuration.
+runtime! indent/html.vim
+unlet! b:did_indent
 
+" indent/cs.vim does not, so we only have to source it once per session.
 if !exists("*GetCSIndent")
   runtime! indent/cs.vim
   unlet! b:did_indent
