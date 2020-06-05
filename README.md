@@ -1,6 +1,8 @@
+# vim-razor
+
 ![vim-razor demo](demo.png)
 
-# Description
+## Description
 
 This plugin provides syntax highlighting and indentation for [Razor](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor) markup files. Out of the box, it detects `*.cshtml` and `*.razor` file extensions.
 
@@ -8,7 +10,7 @@ This is only configured to work with the default HTML and C# plugins that are de
 
 This plugin is likely incomplete in its current state, but it is already better than any other Razor plugin I've found. I will continue to update it as I learn more about Razor.
 
-# Configuration
+## Configuration
 
 `g:razor_highlight_cs`: (WIP)
 * `"full"`: Highlight C# tokens in both expressions and blocks (default)
@@ -23,7 +25,7 @@ Any C# tokens that are not highlighted will receive the `razorExpression` highli
 `g:razor_fold`:
 * If defined, razor blocks will be folded.
 
-# TODO
+## TODO
 
 * Finish `g:razor_highlight_cs`
 * Improve highlighting and indentation to cover more cases
