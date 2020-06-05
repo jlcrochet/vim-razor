@@ -94,7 +94,7 @@ syn keyword razorBind bind contained
 syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
 syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u\[[:alnum:]]*/ contains=razorIdentifier contained transparent
 
-syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display transparent fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
+syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@cs,razorDelimiter,razorInnerHTML,razorInnerBlock contained display transparent fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
 syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display transparent
 
 " Explicit expressions:
