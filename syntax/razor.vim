@@ -65,7 +65,7 @@ syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contained display 
 " Implicit expressions:
 syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
 
-syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock skipwhite
+syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
 syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@cs,csBracketed contained display nextgroup=razorBlock skipwhite skipnl
 
