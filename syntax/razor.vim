@@ -19,6 +19,9 @@ unlet! b:current_syntax
 
 let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
 
+" Syntax groups {{{1
+" =============
+
 if b:razor_highlight_cs !=# "none"
   syn include @cs syntax/cs.vim
 else
@@ -30,9 +33,6 @@ if b:razor_highlight_cs !=# "full"
   " in regions where we are not highlighting C# groups
   syn region csBracketed start=/(/ end=/)/ contains=csBracketed contained transparent
 endif
-
-" Razor groups {{{1
-" ============
 
 syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 
@@ -49,6 +49,9 @@ syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contain
 " Unlike in plain HTML, the <text> tag means something in Razor, so
 " let's highlight it like a proper tag.
 syn keyword htmlTagName text contained
+
+" HTML args for ASP.NET
+syn match htmlArg /\<asp-\%(action\|route-id\)\>/ display contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
