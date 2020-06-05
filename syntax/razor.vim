@@ -60,7 +60,7 @@ syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock skipwhite
 
-syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@cs,csBracketed contained display nextgroup=razorBlock skipwhite skipnl
+syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@cs,csBracketed,csUnspecifiedStatement contained display nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
