@@ -78,15 +78,9 @@ function! GetRazorIndent(...) abort
 
     if open_lnum == prev_lnum
       " First line of the block
-      return indent(prev_lnum) + s:cs_sw()
+      return indent(open_lnum) + s:cs_sw()
     else
       let prev_line = getline(prev_lnum)
-
-      " Do not indent this line if the previous line was a oneline
-      " embedded HTML line.
-      if prev_line =~# '\_^\s*\%(@:\|<.\{-1,}/>\|<\([[:alnum:]-]\+\).\{-}>.*</\1>\)'
-        return indent(prev_lnum)
-      endif
 
       " Otherwise, we need to check if we are inside of an embedded
       " multiline HTML block.
@@ -103,11 +97,21 @@ function! GetRazorIndent(...) abort
 
         if open_tag == prev_lnum
           " First line of the block
-          return indent(prev_lnum) + s:sw()
+          return indent(open_tag) + s:sw()
+        endif
+
+        if getline(v:lnum) =~# '\_^\s*</\w>'
+          return indent(open_tag)
         endif
 
         " Use HTML indentation
         return HtmlIndent()
+      endif
+
+      " Do not indent this line if the previous line was a oneline
+      " embedded HTML line.
+      if prev_line =~# '\_^\s*\%(@:\|<\w\)'
+        return indent(prev_lnum)
       endif
 
       " If none of the above exceptions were encountered, then fall back
