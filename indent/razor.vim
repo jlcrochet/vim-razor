@@ -62,20 +62,18 @@ let s:skip_expr = 's:ignored_brace(line("."), col("."))'
 " GetRazorIndent {{{1
 " ==============
 
-function! GetRazorIndent(...) abort
-  let v:lnum = a:0 ? a:1 : v:lnum
-
+function! GetRazorIndent() abort
   let open_lnum = searchpair("{", "", "}", "bW", s:skip_expr)
 
   if open_lnum
     " Inside of a Razor/C# block
 
     " If this line is the closing brace, do nothing.
-    if getline(v:lnum) =~# '\_^\s*}'
+    if getline(a:lnum) =~# '\_^\s*}'
       return indent(open_lnum)
     endif
 
-    let prev_lnum = prevnonblank(v:lnum - 1)
+    let prev_lnum = prevnonblank(a:lnum - 1)
 
     if open_lnum == prev_lnum
       " First line of the block
@@ -85,7 +83,7 @@ function! GetRazorIndent(...) abort
 
       " Otherwise, we need to check if we are inside of an embedded
       " multiline HTML block.
-      call cursor(v:lnum, 1)
+      call cursor(a:lnum, 1)
 
       let open_tag = searchpair(
             \ '\_^\s*<[[:alnum:]-]\+.\{-}>',
@@ -101,7 +99,7 @@ function! GetRazorIndent(...) abort
           return indent(open_tag) + s:sw()
         endif
 
-        if getline(v:lnum) =~# '\_^\s*</\w>'
+        if getline(a:lnum) =~# '\_^\s*</\w>'
           return indent(open_tag)
         endif
 
@@ -117,7 +115,7 @@ function! GetRazorIndent(...) abort
 
       " If none of the above exceptions were encountered, then fall back
       " to C# indentation.
-      return GetCSIndent(v:lnum)
+      return GetCSIndent(a:lnum)
     endif
   endif
 
