@@ -92,7 +92,7 @@ syn keyword razorInjects injects contained nextgroup=razorInjectExpression skipw
 syn keyword razorLayout layout contained nextgroup=razorExpression skipwhite
 syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
-syn keyword razorPage page contained
+syn keyword razorPage page contained nextgroup=razorExpression skipwhite
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorBind bind contained
 
