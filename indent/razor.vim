@@ -62,7 +62,7 @@ let s:skip_expr = 's:ignored_brace(line("."), col("."))'
 " GetRazorIndent {{{1
 " ==============
 
-function! GetRazorIndent() abort
+function! GetRazorIndent(lnum) abort
   let open_lnum = searchpair("{", "", "}", "bW", s:skip_expr)
 
   if open_lnum
