@@ -60,7 +60,13 @@ endfunction
 " Determine whether or not the character at the given position should be
 " ignored when searching for HTML tags.
 function! s:ignored_tag(lnum, col) abort
-  return synIDattr(synID(a:lnum, a:col, 1), "name")[:3] !=# "html"
+  " Ignore matches that are not inside HTML elements; also ignore tags
+  " that are part of void elements.
+  "
+  " List of void elements retrieved from
+  " <https://html.spec.whatwg.org/multipage/syntax.html#void-elements>.
+  return synIDattr(synID(a:lnum, a:col, 1), "name")[:3] !=# "html" ||
+        \ expand("<cword>") =~? '\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)'
 endfunction
 
 let s:cs_skip = 's:ignored_brace(line("."), col("."))'
@@ -92,7 +98,7 @@ function! GetRazorIndent(lnum) abort
       " multiline HTML block.
       call cursor(a:lnum, 1)
 
-      let open_tag = searchpair('<\w', '', '</\w', "b", s:html_skip, open_lnum)
+      let open_tag = searchpair('<\zs\w', '', '</\w', "b", s:html_skip, open_lnum)
 
       if open_tag
         " Inside of an HTML block
