@@ -13,7 +13,7 @@ This plugin is likely incomplete in its current state, but it is already better 
 ## Configuration
 
 `g:razor_highlight_cs`:
-* `"full"`: Highlight C# tokens in both expressions and blocks (default)
+* `"full"` (default): Highlight C# tokens in both expressions and blocks
 * `"half"`: Highlight C# tokens in blocks, but not expressions
 * `"none"`: Do not highlight C# tokens in either expressions or blocks
 
