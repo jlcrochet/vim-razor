@@ -12,7 +12,7 @@ This plugin is likely incomplete in its current state, but it is already better 
 
 ## Configuration
 
-`g:razor_highlight_cs`: (WIP)
+`g:razor_highlight_cs`:
 * `"full"`: Highlight C# tokens in both expressions and blocks (default)
 * `"half"`: Highlight C# tokens in blocks, but not expressions
 * `"none"`: Do not highlight C# tokens in either expressions or blocks
@@ -27,5 +27,4 @@ Any C# tokens that are not highlighted will receive the `razorExpression` highli
 
 ## TODO
 
-* Finish `g:razor_highlight_cs`
 * Improve highlighting and indentation to cover more cases
