@@ -38,7 +38,7 @@ syn keyword htmlTagName text contained
 
 " HTML args for ASP.NET
 syn match htmlArg /\<asp-\w[[:alnum:]-]*/ display contained
-syn match htmlArg /\<data-\w[[:alnum:]-]*/ display contained
+syn match htmlArg /\<data-\w[[:alnum:]-]*/ display contains=htmlArg contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
