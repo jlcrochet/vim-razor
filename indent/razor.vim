@@ -57,13 +57,20 @@ function! s:ignored_brace(lnum, col) abort
   return synIDattr(synID(a:lnum, a:col, 1), "name") !~# '^\%(razorDelimiter\|csBraces\)$'
 endfunction
 
-let s:skip_expr = 's:ignored_brace(line("."), col("."))'
+" Determine whether or not the character at the given position should be
+" ignored when searching for HTML tags.
+function! s:ignored_tag(lnum, col) abort
+  return synIDattr(synID(a:lnum, a:col, 1), "name")[:3] !=# "html"
+endfunction
+
+let s:cs_skip = 's:ignored_brace(line("."), col("."))'
+let s:html_skip = 's:ignored_tag(line("."), col("."))'
 
 " GetRazorIndent {{{1
 " ==============
 
 function! GetRazorIndent(lnum) abort
-  let open_lnum = searchpair("{", "", "}", "bW", s:skip_expr)
+  let open_lnum = searchpair("{", "", "}", "bW", s:cs_skip)
 
   if open_lnum
     " Inside of a Razor/C# block
@@ -85,11 +92,7 @@ function! GetRazorIndent(lnum) abort
       " multiline HTML block.
       call cursor(a:lnum, 1)
 
-      let open_tag = searchpair(
-            \ '\_^\s*<[[:alnum:]-]\+.\{-}>',
-            \ '',
-            \ '</[[:alnum:]-]\+>',
-            \ "b", "", open_lnum)
+      let open_tag = searchpair('<\w', '', '</\w', "b", s:html_skip, open_lnum)
 
       if open_tag
         " Inside of an HTML block
@@ -99,7 +102,8 @@ function! GetRazorIndent(lnum) abort
           return indent(open_tag) + s:sw()
         endif
 
-        if getline(a:lnum) =~# '\_^\s*</\w>'
+        if getline(a:lnum) =~# '\_^\s*</\w'
+          " Closing tag
           return indent(open_tag)
         endif
 

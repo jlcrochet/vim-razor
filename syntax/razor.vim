@@ -48,7 +48,7 @@ syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 " don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-syn region razorInnerHTML start=/\_^\s*\zs<\z([[:alnum:]-]\+\).\{-}>/ end=/<\/\z1>\ze\s*\_$/ contains=TOP contained display transparent keepend
+syn region razorInnerHTML start=/\_^\s*\zs<\z(\w[[:alnum:]-]*\).\{-}>/ end=/<\/\z1>\ze\s*\_$/ contains=TOP contained display transparent keepend
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display transparent keepend
 
 " Unlike in plain HTML, the <text> tag means something in Razor, so
