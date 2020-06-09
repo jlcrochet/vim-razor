@@ -37,8 +37,8 @@ syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 syn keyword htmlTagName text contained
 
 " HTML args for ASP.NET
-syn match htmlArg /asp-[[:alnum:]-]\+/ display contained
-syn match htmlArg /data-\%(toggle\|target\)/ display contained
+syn match htmlArg /\<asp-[[:alnum:]-]\+/ display contained
+syn match htmlArg /\<data-\%(toggle\|target\)/ display contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
