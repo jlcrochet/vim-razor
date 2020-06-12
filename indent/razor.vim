@@ -105,16 +105,16 @@ function! GetRazorIndent(lnum) abort
       if open_tag
         " Inside of an HTML block
 
-        if open_tag == prev_lnum
-          " First line of the block
-          echo "baz"
-          return indent(open_tag) + s:sw()
-        endif
-
         if getline(a:lnum) =~# '\_^\s*</\a'
           " Closing tag
           echo "qux"
           return indent(open_tag)
+        endif
+
+        if open_tag == prev_lnum
+          " First line of the block
+          echo "baz"
+          return indent(open_tag) + s:sw()
         endif
 
         " Use HTML indentation
