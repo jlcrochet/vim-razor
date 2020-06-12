@@ -37,7 +37,7 @@ syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 syn keyword htmlTagName text contained
 
 " HTML args for ASP.NET
-syn match htmlArg /\<asp-\w[[:alnum:]-]*/ display contained
+syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
@@ -76,7 +76,7 @@ endif
 " they don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-syn region razorInnerHTML start=/\_^\s*\zs<\z(\w[[:alnum:]-]*\).\{-}>/ end=/<\/\z1>\ze\s*\_$/ contains=TOP contained display keepend
+syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\).\{-}>/ end=/<\/\z1>\ze\s*\_$/ contains=TOP contained display keepend
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
 " Implicit expressions:
