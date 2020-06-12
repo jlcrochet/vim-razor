@@ -123,8 +123,8 @@ function! GetRazorIndent(lnum) abort
       endif
 
       " Do not indent this line if the previous line was a oneline
-      " embedded HTML line.
-      if prev_line =~# '\_^\s*\%(@:\|<\a\)'
+      " embedded HTML line or a closing HTML tag.
+      if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
         echo "bloo"
         return indent(prev_lnum)
       endif
