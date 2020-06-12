@@ -76,7 +76,7 @@ endif
 " they don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/<\/\z1>/ contains=TOP contained display keepend
+syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/<\/\z1>/ contains=TOP contained display keepend extend
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
 " Implicit expressions:
