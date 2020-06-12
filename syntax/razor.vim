@@ -82,7 +82,7 @@ syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contain
 " Implicit expressions:
 syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
 
-syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%(\_^\|\s\)\@1<=@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
 syn region razorExpression start=/\S/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
 
