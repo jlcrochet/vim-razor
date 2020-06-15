@@ -84,7 +84,7 @@ endif
 "hi def link razorInnerHTMLTag htmlTag
 "hi def link razorInnerHTMLEndTag htmlEndTag
 
-syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=@razorHTML,razorInnerHTML contained display
+syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=@razorHTML,razorInnerHTML contained transparent
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
