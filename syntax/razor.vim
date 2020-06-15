@@ -27,6 +27,8 @@ endif
 " Syntax groups {{{1
 " =============
 
+syn cluster razorHTML contains=TOP
+
 syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 
 syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=@razorAllowed display keepend
@@ -82,11 +84,9 @@ endif
 "hi def link razorInnerHTMLTag htmlTag
 "hi def link razorInnerHTMLEndTag htmlEndTag
 
-syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=razorInnerHTML contained display
+syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=@razorHTML,razorInnerHTML contained display
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
-
-hi def link razorInnerHTML Special
 
 " Implicit expressions:
 syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
