@@ -78,12 +78,6 @@ endif
 " they don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-"syn region razorInnerHTMLTag    start=/<\/\@!/ end=/>/ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster display contained fold keepend
-"syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend oneline
-"
-"hi def link razorInnerHTMLTag htmlTag
-"hi def link razorInnerHTMLEndTag htmlEndTag
-
 syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*\>/ end=/<\/\a[[:alnum:]-]*>/ contains=@razorHTML,razorInnerHTML contained display transparent keepend extend
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
@@ -93,7 +87,7 @@ syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn region razorExpression start=/\S/ end=/["'<>[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
+syn region razorExpression start=/\S/ end=/\_$\|["'<>[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
