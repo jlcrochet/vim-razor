@@ -98,19 +98,19 @@ function! GetRazorIndent(lnum) abort
       " multiline HTML block.
       call cursor(a:lnum, 1)
 
-      let open_tag = searchpair('<\zs\w', '', '</\w', "b", s:html_skip, open_lnum)
+      let open_tag = searchpair('<\zs\a', '', '</\a', "b", s:html_skip, open_lnum)
 
       if open_tag
         " Inside of an HTML block
 
+        if getline(a:lnum) =~# '\_^\s*</\a'
+          " Closing tag
+          return indent(open_tag)
+        endif
+
         if open_tag == prev_lnum
           " First line of the block
           return indent(open_tag) + s:sw()
-        endif
-
-        if getline(a:lnum) =~# '\_^\s*</\w'
-          " Closing tag
-          return indent(open_tag)
         endif
 
         " Use HTML indentation
@@ -118,8 +118,8 @@ function! GetRazorIndent(lnum) abort
       endif
 
       " Do not indent this line if the previous line was a oneline
-      " embedded HTML line.
-      if prev_line =~# '\_^\s*\%(@:\|<\w\)'
+      " embedded HTML line or a closing HTML tag.
+      if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
         return indent(prev_lnum)
       endif
 

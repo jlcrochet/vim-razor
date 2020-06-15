@@ -27,6 +27,8 @@ endif
 " Syntax groups {{{1
 " =============
 
+syn cluster razorHTML contains=TOP
+
 syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 
 syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=@razorAllowed display keepend
@@ -37,7 +39,7 @@ syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 syn keyword htmlTagName text contained
 
 " HTML args for ASP.NET
-syn match htmlArg /\<asp-\w[[:alnum:]-]*/ display contained
+syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
 
 " HACK: Redefine htmlString so that it can contain Razor expressions
 syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
@@ -76,7 +78,8 @@ endif
 " they don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-syn region razorInnerHTML start=/\_^\s*\zs<\z(\w[[:alnum:]-]*\).\{-}>/ end=/<\/\z1>\ze\s*\_$/ contains=TOP contained display keepend
+syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*\>/ end=/<\/\a[[:alnum:]-]*>/ contains=@razorHTML,razorInnerHTML contained display transparent keepend extend
+syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
 " Implicit expressions:
@@ -84,7 +87,7 @@ syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn region razorExpression start=/[^@[:space:]]/ end=/\%(\_$\|["'<>[:space:]]\@=\)/ contains=@razorInsideExpression contained display nextgroup=razorBlock skipwhite skipnl
+syn region razorExpression start=/\S/ end=/\_$\|["'<>[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
