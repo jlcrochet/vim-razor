@@ -78,13 +78,15 @@ endif
 " TODO: This could probably be improved
 "syn region razorInnerHTMLTag    start=/<\/\@!/ end=/>/ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster display contained fold keepend
 "syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend oneline
+"
+"hi def link razorInnerHTMLTag htmlTag
+"hi def link razorInnerHTMLEndTag htmlEndTag
 
-syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=TOP contained transparent
+syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contained display
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
-hi def link razorInnerHTMLTag htmlTag
-hi def link razorInnerHTMLEndTag htmlEndTag
+hi def link razorInnerHTML Special
 
 " Implicit expressions:
 syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
