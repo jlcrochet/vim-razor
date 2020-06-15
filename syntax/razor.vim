@@ -78,11 +78,11 @@ endif
 " they don't get clobbered by C# patterns that involve < and >.
 "
 " TODO: This could probably be improved
-syn region razorInnerHTMLTag    start=/<\/\@!/ end=/>/ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster display contained fold keepend
-syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend oneline
-
-hi def link razorInnerHTMLTag htmlTag
-hi def link razorInnerHTMLEndTag htmlEndTag
+"syn region razorInnerHTMLTag    start=/<\/\@!/ end=/>/ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster display contained fold keepend
+"syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend oneline
+"
+"hi def link razorInnerHTMLTag htmlTag
+"hi def link razorInnerHTMLEndTag htmlEndTag
 
 syn region razorInnerHTML start=/\_^\s*\zs<\a[[:alnum:]-]*.\{-}>/ end=/<\/\a[[:alnum:]-]*>/ contains=razorInnerHTMLTag,razorInnerHTMLEndTag,razorInnerHTML contained transparent keepend extend
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
