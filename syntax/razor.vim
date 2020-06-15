@@ -77,9 +77,9 @@ endif
 "
 " TODO: This could probably be improved
 syn region razorInnerHTMLTag    start=/<\/\@!/ end=/>/ contains=htmlTagN,htmlString,htmlArg,htmlValue,htmlTagError,htmlEvent,htmlCssDefinition,@htmlPreproc,@htmlArgCluster display contained fold keepend
-syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend
+syn region razorInnerHTMLEndTag start=/<\//    end=/>/ contains=htmlTagN,htmlTagError display contained keepend oneline
 
-syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/<\/\z1>/ contains=TOP contained keepend transparent
+syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/\/\z1>/ contains=TOP contained keepend transparent
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contains=htmlTag
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
