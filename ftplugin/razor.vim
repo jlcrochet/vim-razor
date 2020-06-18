@@ -10,6 +10,9 @@ endif
 
 runtime! ftplugin/html.vim
 
+setlocal comments=s:@*,m:\ \ ,e:*@
+setlocal commentstring=@*%s*@
+
 " Change the :browse e filter to primarily show HTML-related files.
 "
 " NOTE: Modified from ftplugin/html.vim to include Razor files
