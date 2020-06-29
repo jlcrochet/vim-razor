@@ -10,22 +10,6 @@ if exists("b:did_indent")
   finish
 endif
 
-" " " indent/html.vim has to be sourced for each buffer since it requires
-" " " a lot of buffer-local configuration.
-" " runtime! indent/html.vim
-" " unlet! b:did_indent
-"
-" if !exists("*XmlIndentGet")
-"   runtime! indent/xml.vim
-"   unlet! b:did_indent
-" endif
-"
-" " indent/cs.vim does not, so we only have to source it once per session.
-" if !exists("*GetCSIndent")
-"   runtime! indent/cs.vim
-"   unlet! b:did_indent
-" endif
-
 setlocal indentexpr=GetRazorIndent(v:lnum)
 execute "setlocal indentkeys=<>>,".&cinkeys
 
@@ -88,7 +72,6 @@ function! GetRazorIndent(lnum) abort
 
     " If this line is the closing brace, do nothing.
     if getline(a:lnum) =~# '\_^\s*}'
-      echo "foo"
       return indent(open_lnum)
     endif
 
@@ -96,7 +79,6 @@ function! GetRazorIndent(lnum) abort
 
     if open_lnum == prev_lnum
       " First line of the block
-      echo "bar"
       return indent(open_lnum) + s:cs_sw
     else
       let prev_line = getline(prev_lnum)
@@ -112,25 +94,21 @@ function! GetRazorIndent(lnum) abort
 
         if getline(a:lnum) =~# '\_^\s*</\a'
           " Closing tag
-          echo "baz"
           return indent(open_tag)
         endif
 
         if open_tag == prev_lnum
           " First line of the block
-          echo "qux"
           return indent(open_tag) + s:sw()
         endif
 
         " Use HTML indentation
-        echo "bleh"
         return GetRazorHtmlIndent(a:lnum)
       endif
 
       " Do not indent this line if the previous line was a oneline
       " embedded HTML line or a closing HTML tag.
       if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
-        echo "bloo"
         return indent(prev_lnum)
       endif
 
@@ -139,22 +117,20 @@ function! GetRazorIndent(lnum) abort
       let old_sw = &shiftwidth
 
       let &shiftwidth = s:cs_sw
-      " let ind = GetCSIndent(a:lnum)
       let ind = cindent(a:lnum)
       let &shiftwidth = old_sw
 
-      echo "blerp"
       return ind
     endif
   endif
 
-  echo "default"
   return GetRazorHtmlIndent(a:lnum)
 endfunction
 
 " GetRazorHtmlIndent {{{1
 " ==================
 
+" XXX: This is probably too naive, but it will work for now
 function! GetRazorHtmlIndent(lnum) abort
   let prev_lnum = prevnonblank(a:lnum - 1)
 
@@ -167,38 +143,17 @@ function! GetRazorHtmlIndent(lnum) abort
   call cursor(prev_lnum, 0)
   call cursor(0, col("$"))
 
-  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", prev_lnum) ? 1 : 0
+  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", prev_lnum)
+        \ ? 1 : 0
 
   call cursor(a:lnum, 1)
 
-  let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag()", a:lnum) ? 1 : 0
+  let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag()", a:lnum)
+        \ ? 1 : 0
 
   echom shift
 
   return ind + s:sw() * shift
-
-  " let ind = 0
-  "
-  " " If the previous line had an opening tag that was not followed by
-  " " a corresponding closing tag, add an indent.
-  "
-  " " First, find an opening tag
-  " call cursor(prev_lnum, 1)
-  "
-  " let found = search('<\zs\a', "", prev_lnum)
-  "
-  " while found && s:ignored_tag()
-  "   let found = search('<\zs\a', "", prev_lnum)
-  " endwhile
-  "
-  " if !found
-  "   return -1
-  " endif
-  "
-  " let element = expand("<cword>")
-  "
-  " " Next, find its closing tag, if it exists
-  " call search()
 endfunction
 
 " }}}
