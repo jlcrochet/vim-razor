@@ -86,7 +86,8 @@ syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contain
 syn cluster razorStatement contains=
       \ razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,
       \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,
-      \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper
+      \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
+      \ razorEventArg
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
@@ -116,10 +117,27 @@ syn keyword razorBind bind contained
 syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 
-syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
+syn keyword razorEventArg contained
+      \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
+      \ ondragover ondrop ondragend onerror onactivate onbeforeactivate
+      \ onbeforedeactivate ondeactive onfullscreenchange
+      \ onfullscreenerror onloadeddata onloadedmetadata
+      \ onpointerlockchange onpointerlockerror onreadystatechange
+      \ onscroll onbeforecut onbeforecopy onbeforepaste oninvalid
+      \ onreset onselect onselectionchange onselectstart oncanplay
+      \ oncanplaythrough oncuechange onemptied onended onpause onplay
+      \ onplaying onratechange onseeked onseeking onstalled onstop
+      \ onsuspend ontimeupdate onvolumechange onwaiting onfocus onblur
+      \ onfocusin onfocusout onchange oninput onkeydown onkeypress
+      \ onkeyup onclick oncontextmenu ondblclick onmousedown onmouseup
+      \ onmouseover onmousemove onmouseout onpointerdown onpointerup
+      \ onpointercancel onpointermove onpointerover onpointerout
+      \ onpointerenter onpointerleave ongotpointercapture
+      \ onlostpointercapture onwheel onmousewheel onabort onload
+      \ onloadend onloadstart onprogress ontimeout ontouchstart
+      \ ontouchend ontouchmove ontouchcenter ontouchleave ontouchcancel
 
-" syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
-" syn match razorTagHelperExpression /\%(\*\|\<\u[[:alnum:].><*]*\)\s*,\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
+syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
 
 syn region razorArea start=// end=/\_$/ display oneline contained
 
@@ -151,6 +169,8 @@ hi def link razorExpression       PreProc
 hi def link razorDelimiter        razorExpression
 hi def link razorEscapedDelimiter PreProc
 hi def link razorComment          Comment
+hi def link razorIdentifier       razorExpression
+hi def link razorArea             razorExpression
 
 if b:razor_highlight_cs ==# "full"
   hi def link razorAsync           csAsync
@@ -173,9 +193,7 @@ if b:razor_highlight_cs ==# "full"
   hi def link razorBind            csUnspecifiedStatement
   hi def link razorAddTagHelper    csUnspecifiedStatement
   hi def link razorRemoveTagHelper csUnspecifiedStatement
-
-  hi def link razorIdentifier razorExpression
-  hi def link razorArea       razorExpression
+  hi def link razorEventArg        csUnspecifiedStatement
 elseif b:razor_highlight_cs ==# "half"
   hi def link razorAsync           razorExpression
   hi def link razorConditional     razorExpression
@@ -197,9 +215,7 @@ elseif b:razor_highlight_cs ==# "half"
   hi def link razorBind            razorExpression
   hi def link razorAddTagHelper    csUnspecifiedStatement
   hi def link razorRemoveTagHelper csUnspecifiedStatement
-
-  hi def link razorIdentifier razorExpression
-  hi def link razorArea       razorExpression
+  hi def link razorEventArg        csUnspecifiedStatement
 else
   hi def link razorAsync           razorExpression
   hi def link razorConditional     razorExpression
@@ -219,11 +235,9 @@ else
   hi def link razorPage            razorExpression
   hi def link razorSection         razorExpression
   hi def link razorBind            razorExpression
-  hi def link razorAddTagHelper    csUnspecifiedStatement
-  hi def link razorRemoveTagHelper csUnspecifiedStatement
-
-  hi def link razorIdentifier razorExpression
-  hi def link razorArea       razorExpression
+  hi def link razorAddTagHelper    razorExpression
+  hi def link razorRemoveTagHelper razorExpression
+  hi def link razorEventArg        razorExpression
 
   hi def link razorBlock      razorExpression
   hi def link razorInnerBlock razorBlock
