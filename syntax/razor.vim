@@ -150,68 +150,74 @@ hi def link razorEscapedDelimiter PreProc
 hi def link razorComment          Comment
 
 if b:razor_highlight_cs ==# "full"
-  hi def link razorAsync       csAsync
-  hi def link razorConditional csConditional
-  hi def link razorRepeat      csRepeat
-  hi def link razorUsing       csUnspecifiedStatement
-  hi def link razorException   csException
-  hi def link razorLock        csUnspecifiedStatement
-  hi def link razorAttribute   csUnspecifiedStatement
-  hi def link razorCode        csUnspecifiedStatement
-  hi def link razorFunctions   csUnspecifiedStatement
-  hi def link razorImplements  csUnspecifiedStatement
-  hi def link razorInherits    csUnspecifiedStatement
-  hi def link razorInject      csUnspecifiedStatement
-  hi def link razorLayout      csUnspecifiedStatement
-  hi def link razorModel       csUnspecifiedStatement
-  hi def link razorNamespace   csStorage
-  hi def link razorPage        csUnspecifiedStatement
-  hi def link razorSection     csUnspecifiedStatement
-  hi def link razorBind        csUnspecifiedStatement
+  hi def link razorAsync           csAsync
+  hi def link razorConditional     csConditional
+  hi def link razorRepeat          csRepeat
+  hi def link razorUsing           csUnspecifiedStatement
+  hi def link razorException       csException
+  hi def link razorLock            csUnspecifiedStatement
+  hi def link razorAttribute       csUnspecifiedStatement
+  hi def link razorCode            csUnspecifiedStatement
+  hi def link razorFunctions       csUnspecifiedStatement
+  hi def link razorImplements      csUnspecifiedStatement
+  hi def link razorInherits        csUnspecifiedStatement
+  hi def link razorInject          csUnspecifiedStatement
+  hi def link razorLayout          csUnspecifiedStatement
+  hi def link razorModel           csUnspecifiedStatement
+  hi def link razorNamespace       csStorage
+  hi def link razorPage            csUnspecifiedStatement
+  hi def link razorSection         csUnspecifiedStatement
+  hi def link razorBind            csUnspecifiedStatement
+  hi def link razorAddTagHelper    csUnspecifiedStatement
+  hi def link razorRemoveTagHelper csUnspecifiedStatement
 
   hi def link razorIdentifier       razorExpression
 elseif b:razor_highlight_cs ==# "half"
-  hi def link razorAsync       razorExpression
-  hi def link razorConditional razorExpression
-  hi def link razorRepeat      razorExpression
-  hi def link razorUsing       razorExpression
-  hi def link razorException   razorExpression
-  hi def link razorLock        razorExpression
-  hi def link razorAttribute   razorExpression
-  hi def link razorCode        razorExpression
-  hi def link razorFunctions   razorExpression
-  hi def link razorImplements  razorExpression
-  hi def link razorInherits    razorExpression
-  hi def link razorInject      razorExpression
-  hi def link razorLayout      razorExpression
-  hi def link razorModel       razorExpression
-  hi def link razorNamespace   razorExpression
-  hi def link razorPage        razorExpression
-  hi def link razorSection     razorExpression
-  hi def link razorBind        razorExpression
+  hi def link razorAsync           razorExpression
+  hi def link razorConditional     razorExpression
+  hi def link razorRepeat          razorExpression
+  hi def link razorUsing           razorExpression
+  hi def link razorException       razorExpression
+  hi def link razorLock            razorExpression
+  hi def link razorAttribute       razorExpression
+  hi def link razorCode            razorExpression
+  hi def link razorFunctions       razorExpression
+  hi def link razorImplements      razorExpression
+  hi def link razorInherits        razorExpression
+  hi def link razorInject          razorExpression
+  hi def link razorLayout          razorExpression
+  hi def link razorModel           razorExpression
+  hi def link razorNamespace       razorExpression
+  hi def link razorPage            razorExpression
+  hi def link razorSection         razorExpression
+  hi def link razorBind            razorExpression
+  hi def link razorAddTagHelper    csUnspecifiedStatement
+  hi def link razorRemoveTagHelper csUnspecifiedStatement
 
   hi def link razorIdentifier       razorExpression
 else
-  hi def link razorAsync       razorExpression
-  hi def link razorConditional razorExpression
-  hi def link razorRepeat      razorExpression
-  hi def link razorUsing       razorExpression
-  hi def link razorException   razorExpression
-  hi def link razorLock        razorExpression
-  hi def link razorAttribute   razorExpression
-  hi def link razorCode        razorExpression
-  hi def link razorFunctions   razorExpression
-  hi def link razorImplements  razorExpression
-  hi def link razorInherits    razorExpression
-  hi def link razorInject      razorExpression
-  hi def link razorLayout      razorExpression
-  hi def link razorModel       razorExpression
-  hi def link razorNamespace   razorExpression
-  hi def link razorPage        razorExpression
-  hi def link razorSection     razorExpression
-  hi def link razorBind        razorExpression
+  hi def link razorAsync           razorExpression
+  hi def link razorConditional     razorExpression
+  hi def link razorRepeat          razorExpression
+  hi def link razorUsing           razorExpression
+  hi def link razorException       razorExpression
+  hi def link razorLock            razorExpression
+  hi def link razorAttribute       razorExpression
+  hi def link razorCode            razorExpression
+  hi def link razorFunctions       razorExpression
+  hi def link razorImplements      razorExpression
+  hi def link razorInherits        razorExpression
+  hi def link razorInject          razorExpression
+  hi def link razorLayout          razorExpression
+  hi def link razorModel           razorExpression
+  hi def link razorNamespace       razorExpression
+  hi def link razorPage            razorExpression
+  hi def link razorSection         razorExpression
+  hi def link razorBind            razorExpression
+  hi def link razorAddTagHelper    csUnspecifiedStatement
+  hi def link razorRemoveTagHelper csUnspecifiedStatement
 
-  hi def link razorIdentifier       razorExpression
+  hi def link razorIdentifier razorExpression
 
   hi def link razorBlock      razorExpression
   hi def link razorInnerBlock razorBlock
