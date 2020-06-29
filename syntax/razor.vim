@@ -80,7 +80,7 @@ endif
 " TODO: This could probably be improved
 syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/<\/\z1>/ contains=@razorHTML,razorInnerHTML display contained transparent keepend extend
 syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contained contains=htmlTag
-syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display contained keepend
+syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display oneline contained keepend
 
 " Implicit expressions:
 syn cluster razorStatement contains=
