@@ -106,19 +106,22 @@ syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
 syn keyword razorInherits inherits contained nextgroup=razorIdentifier skipwhite
-syn keyword razorInject inject contained nextgroup=razorInjectExpression skipwhite
+syn keyword razorInject inject contained nextgroup=razorArea skipwhite
 syn keyword razorLayout layout contained nextgroup=razorExpression skipwhite
 syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
 syn keyword razorPage page contained nextgroup=csString skipwhite
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorBind bind contained
-syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorTagHelperExpression skipwhite
-syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorTagHelperExpression skipwhite
+syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
+syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 
 syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
-syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
-syn match razorTagHelperExpression /\%(\*\|\<\u[[:alnum:].><*]*\)\s*,\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
+
+" syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
+" syn match razorTagHelperExpression /\%(\*\|\<\u[[:alnum:].><*]*\)\s*,\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
+
+syn region razorArea start=// end=/\_$/ display oneline contained
 
 let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorInsideBlock contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
 let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display"
@@ -171,7 +174,8 @@ if b:razor_highlight_cs ==# "full"
   hi def link razorAddTagHelper    csUnspecifiedStatement
   hi def link razorRemoveTagHelper csUnspecifiedStatement
 
-  hi def link razorIdentifier       razorExpression
+  hi def link razorIdentifier razorExpression
+  hi def link razorArea       razorExpression
 elseif b:razor_highlight_cs ==# "half"
   hi def link razorAsync           razorExpression
   hi def link razorConditional     razorExpression
@@ -194,7 +198,8 @@ elseif b:razor_highlight_cs ==# "half"
   hi def link razorAddTagHelper    csUnspecifiedStatement
   hi def link razorRemoveTagHelper csUnspecifiedStatement
 
-  hi def link razorIdentifier       razorExpression
+  hi def link razorIdentifier razorExpression
+  hi def link razorArea       razorExpression
 else
   hi def link razorAsync           razorExpression
   hi def link razorConditional     razorExpression
@@ -218,6 +223,7 @@ else
   hi def link razorRemoveTagHelper csUnspecifiedStatement
 
   hi def link razorIdentifier razorExpression
+  hi def link razorArea       razorExpression
 
   hi def link razorBlock      razorExpression
   hi def link razorInnerBlock razorBlock
