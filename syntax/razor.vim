@@ -118,7 +118,7 @@ syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorTagHel
 
 syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
 syn match razorInjectExpression /\<\u[[:alnum:].><]*\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
-syn match razorTagHelperExpression /\<\u[[:alnum:].><*]*\s*,\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
+syn match razorTagHelperExpression /\%(\*\|\<\u[[:alnum:].><*]*\)\s*,\s*\u[[:alnum:]]*/ contains=razorIdentifier contained transparent
 
 let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorInsideBlock contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
 let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display"
