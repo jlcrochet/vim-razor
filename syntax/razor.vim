@@ -91,7 +91,7 @@ syn cluster razorStatement contains=
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn region razorExpression start=/\S/ end=/\_$\|["'<>()\[\]{}[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
+syn region razorExpression start=/\S/ end=/\_$\|["'<>)\]}[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
