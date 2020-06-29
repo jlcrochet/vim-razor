@@ -46,7 +46,7 @@ syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaS
 syn region htmlString contained start=/'/ end=/'/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
 
 if b:razor_highlight_cs !=# "none"
-  syn include @cs syntax/cs.vim
+  syn include @razorCS syntax/cs.vim
 else
   " HACK: Some C# groups will need to be redefined in order for Razor
   " expression highlighting to work properly in regions where we aren't
@@ -56,7 +56,7 @@ endif
 
 " HACK: We need to define another csBracketed region for square brackets
 " so that they will be highlighted properly inside of expressions.
-syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contained display transparent contains=@cs,csBracketed
+syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contained display transparent contains=@razorCS,csBracketed
 
 " Alternative for csBracketed to use inside of regions where we aren't
 " highlighting C#.
@@ -64,11 +64,11 @@ syn region razorBracketed matchgroup=razorDelimiter start=/(/ end=/)/ contains=r
 syn region razorBracketed matchgroup=razorDelimiter start=/\[/ end=/]/ contains=razorBracketed contained display transparent
 
 if b:razor_highlight_cs ==# "full"
-  syn cluster razorInsideExpression contains=@cs,csBracketed
-  syn cluster razorInsideBlock contains=@cs,razorInnerBlock,razorInnerHTML,razorDelimiter
+  syn cluster razorInsideExpression contains=@razorCS,csBracketed
+  syn cluster razorInsideBlock contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter
 elseif b:razor_highlight_cs ==# "half"
   syn cluster razorInsideExpression contains=razorBracketed
-  syn cluster razorInsideBlock contains=@cs,razorInnerBlock,razorInnerHTML,razorDelimiter
+  syn cluster razorInsideBlock contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter
 else
   syn cluster razorInsideExpression contains=razorBracketed
   syn cluster razorInsideBlock contains=razorInnerBlock,razorInnerHTML,razorDelimiter
@@ -142,7 +142,7 @@ syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained dis
 syn region razorArea start=// end=/\_$/ display oneline contained
 
 let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorInsideBlock contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
-let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@cs,razorInnerHTML,razorInnerBlock contained display"
+let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@razorCS,razorInnerHTML,razorInnerBlock contained display"
 
 if b:razor_highlight_cs !=# "none"
   let s:razor_block_string .= " transparent"
