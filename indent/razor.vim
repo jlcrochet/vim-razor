@@ -47,6 +47,10 @@ function! s:ignored_tag() abort
     return 1
   endif
 
+  if getline(".")[col("."):] =~ '.*/>'
+    return 1
+  endif
+
   let syn_name = synIDattr(synID(line("."), col("."), 1), "name")
 
   return strpart(syn_name, 0, 4) !=# "html" ||
