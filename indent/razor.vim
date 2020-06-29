@@ -40,13 +40,7 @@ else
   endfunction
 endif
 
-if exists("g:razor_indent_shiftwidth")
-  function! s:cs_sw() abort
-    return g:razor_indent_shiftwidth
-  endfunction
-else
-  let s:cs_sw = function("s:sw")
-endif
+let s:cs_sw = get(g:, "razor_indent_shiftwidth", s:sw())
 
 " Helper functions and variables {{{1
 " ==============================
@@ -90,7 +84,7 @@ function! GetRazorIndent(lnum) abort
 
     if open_lnum == prev_lnum
       " First line of the block
-      return indent(open_lnum) + s:cs_sw()
+      return indent(open_lnum) + s:cs_sw
     else
       let prev_line = getline(prev_lnum)
 
@@ -125,7 +119,11 @@ function! GetRazorIndent(lnum) abort
 
       " If none of the above exceptions were encountered, then fall back
       " to C# indentation.
-      return GetCSIndent(a:lnum)
+      execute "setlocal shiftwidth=".s:cs_sw
+      let ind = GetCSIndent(a:lnum)
+      setlocal shiftwidth<
+
+      return ind
     endif
   endif
 
