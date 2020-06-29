@@ -165,7 +165,7 @@ function! GetRazorHtmlIndent(lnum) abort
   let ind = indent(prev_lnum)
 
   call cursor(prev_lnum, 0)
-  call cursor(0, "$")
+  call cursor(0, col("$"))
 
   let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", prev_lnum) ? 1 : 0
 
