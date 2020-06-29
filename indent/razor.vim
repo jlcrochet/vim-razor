@@ -88,6 +88,7 @@ function! GetRazorIndent(lnum) abort
 
     " If this line is the closing brace, do nothing.
     if getline(a:lnum) =~# '\_^\s*}'
+      echo "foo"
       return indent(open_lnum)
     endif
 
@@ -95,6 +96,7 @@ function! GetRazorIndent(lnum) abort
 
     if open_lnum == prev_lnum
       " First line of the block
+      echo "bar"
       return indent(open_lnum) + s:cs_sw
     else
       let prev_line = getline(prev_lnum)
@@ -110,21 +112,25 @@ function! GetRazorIndent(lnum) abort
 
         if getline(a:lnum) =~# '\_^\s*</\a'
           " Closing tag
+          echo "baz"
           return indent(open_tag)
         endif
 
         if open_tag == prev_lnum
           " First line of the block
+          echo "qux"
           return indent(open_tag) + s:sw()
         endif
 
         " Use HTML indentation
+        echo "bleh"
         return GetRazorHtmlIndent(a:lnum)
       endif
 
       " Do not indent this line if the previous line was a oneline
       " embedded HTML line or a closing HTML tag.
       if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
+        echo "bloo"
         return indent(prev_lnum)
       endif
 
@@ -137,10 +143,12 @@ function! GetRazorIndent(lnum) abort
       let ind = cindent(a:lnum)
       let &shiftwidth = old_sw
 
+      echo "blerp"
       return ind
     endif
   endif
 
+  echo "default"
   return GetRazorHtmlIndent(a:lnum)
 endfunction
 
