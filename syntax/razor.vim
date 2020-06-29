@@ -149,8 +149,8 @@ if b:razor_highlight_cs !=# "none"
   let s:razor_inner_block_string .= " transparent"
 endif
 
-exec s:razor_block_string
-exec s:razor_inner_block_string
+execute s:razor_block_string
+execute s:razor_inner_block_string
 
 unlet s:razor_block_string
 unlet s:razor_inner_block_string
