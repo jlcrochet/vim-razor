@@ -119,9 +119,11 @@ function! GetRazorIndent(lnum) abort
 
       " If none of the above exceptions were encountered, then fall back
       " to C# indentation.
+      let old_sw = &shiftwidth
+
       execute "setlocal shiftwidth=".s:cs_sw
       let ind = GetCSIndent(a:lnum)
-      setlocal shiftwidth<
+      execute "setlocal shiftwidth=".old_sw
 
       return ind
     endif
