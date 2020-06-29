@@ -83,7 +83,7 @@ syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|inp
 syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display keepend
 
 " Implicit expressions:
-syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInjects,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
+syn cluster razorStatement contains=razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,razorModel,razorNamespace,razorPage,razorSection,razorBind
 
 syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
@@ -103,7 +103,7 @@ syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
 syn keyword razorInherits inherits contained nextgroup=razorIdentifier skipwhite
-syn keyword razorInjects injects contained nextgroup=razorInjectExpression skipwhite
+syn keyword razorInject inject contained nextgroup=razorInjectExpression skipwhite
 syn keyword razorLayout layout contained nextgroup=razorExpression skipwhite
 syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
@@ -138,79 +138,79 @@ syn match razorEscapedDelimiter /@@/ containedin=@razorAllowed display
 " Default highlighting {{{1
 " ====================
 
-hi def link razorExpression PreProc
-hi def link razorDelimiter razorExpression
+hi def link razorExpression       PreProc
+hi def link razorDelimiter        razorExpression
 hi def link razorEscapedDelimiter PreProc
-hi def link razorComment Comment
+hi def link razorComment          Comment
 
 if b:razor_highlight_cs ==# "full"
-  hi def link razorAsync csAsync
+  hi def link razorAsync       csAsync
   hi def link razorConditional csConditional
-  hi def link razorRepeat csRepeat
-  hi def link razorUsing csUnspecifiedStatement
-  hi def link razorException csException
-  hi def link razorLock csUnspecifiedStatement
-  hi def link razorAttribute csUnspecifiedStatement
-  hi def link razorCode csUnspecifiedStatement
-  hi def link razorFunctions csUnspecifiedStatement
-  hi def link razorImplements csUnspecifiedStatement
-  hi def link razorInherits csUnspecifiedStatement
-  hi def link razorInjects csUnspecifiedStatement
-  hi def link razorLayout csUnspecifiedStatement
-  hi def link razorModel csUnspecifiedStatement
-  hi def link razorNamespace csStorage
-  hi def link razorPage csUnspecifiedStatement
-  hi def link razorSection csUnspecifiedStatement
-  hi def link razorBind csUnspecifiedStatement
+  hi def link razorRepeat      csRepeat
+  hi def link razorUsing       csUnspecifiedStatement
+  hi def link razorException   csException
+  hi def link razorLock        csUnspecifiedStatement
+  hi def link razorAttribute   csUnspecifiedStatement
+  hi def link razorCode        csUnspecifiedStatement
+  hi def link razorFunctions   csUnspecifiedStatement
+  hi def link razorImplements  csUnspecifiedStatement
+  hi def link razorInherits    csUnspecifiedStatement
+  hi def link razorInject      csUnspecifiedStatement
+  hi def link razorLayout      csUnspecifiedStatement
+  hi def link razorModel       csUnspecifiedStatement
+  hi def link razorNamespace   csStorage
+  hi def link razorPage        csUnspecifiedStatement
+  hi def link razorSection     csUnspecifiedStatement
+  hi def link razorBind        csUnspecifiedStatement
 
-  hi def link razorIdentifier razorExpression
+  hi def link razorIdentifier       razorExpression
   hi def link razorInjectExpression razorExpression
 elseif b:razor_highlight_cs ==# "half"
-  hi def link razorAsync razorExpression
+  hi def link razorAsync       razorExpression
   hi def link razorConditional razorExpression
-  hi def link razorRepeat razorExpression
-  hi def link razorUsing razorExpression
-  hi def link razorException razorExpression
-  hi def link razorLock razorExpression
-  hi def link razorAttribute razorExpression
-  hi def link razorCode razorExpression
-  hi def link razorFunctions razorExpression
-  hi def link razorImplements razorExpression
-  hi def link razorInherits razorExpression
-  hi def link razorInjects razorExpression
-  hi def link razorLayout razorExpression
-  hi def link razorModel razorExpression
-  hi def link razorNamespace razorExpression
-  hi def link razorPage razorExpression
-  hi def link razorSection razorExpression
-  hi def link razorBind razorExpression
+  hi def link razorRepeat      razorExpression
+  hi def link razorUsing       razorExpression
+  hi def link razorException   razorExpression
+  hi def link razorLock        razorExpression
+  hi def link razorAttribute   razorExpression
+  hi def link razorCode        razorExpression
+  hi def link razorFunctions   razorExpression
+  hi def link razorImplements  razorExpression
+  hi def link razorInherits    razorExpression
+  hi def link razorInject      razorExpression
+  hi def link razorLayout      razorExpression
+  hi def link razorModel       razorExpression
+  hi def link razorNamespace   razorExpression
+  hi def link razorPage        razorExpression
+  hi def link razorSection     razorExpression
+  hi def link razorBind        razorExpression
 
-  hi def link razorIdentifier razorExpression
+  hi def link razorIdentifier       razorExpression
   hi def link razorInjectExpression razorExpression
 else
-  hi def link razorAsync razorExpression
+  hi def link razorAsync       razorExpression
   hi def link razorConditional razorExpression
-  hi def link razorRepeat razorExpression
-  hi def link razorUsing razorExpression
-  hi def link razorException razorExpression
-  hi def link razorLock razorExpression
-  hi def link razorAttribute razorExpression
-  hi def link razorCode razorExpression
-  hi def link razorFunctions razorExpression
-  hi def link razorImplements razorExpression
-  hi def link razorInherits razorExpression
-  hi def link razorInjects razorExpression
-  hi def link razorLayout razorExpression
-  hi def link razorModel razorExpression
-  hi def link razorNamespace razorExpression
-  hi def link razorPage razorExpression
-  hi def link razorSection razorExpression
-  hi def link razorBind razorExpression
+  hi def link razorRepeat      razorExpression
+  hi def link razorUsing       razorExpression
+  hi def link razorException   razorExpression
+  hi def link razorLock        razorExpression
+  hi def link razorAttribute   razorExpression
+  hi def link razorCode        razorExpression
+  hi def link razorFunctions   razorExpression
+  hi def link razorImplements  razorExpression
+  hi def link razorInherits    razorExpression
+  hi def link razorInject      razorExpression
+  hi def link razorLayout      razorExpression
+  hi def link razorModel       razorExpression
+  hi def link razorNamespace   razorExpression
+  hi def link razorPage        razorExpression
+  hi def link razorSection     razorExpression
+  hi def link razorBind        razorExpression
 
-  hi def link razorIdentifier razorExpression
+  hi def link razorIdentifier       razorExpression
   hi def link razorInjectExpression razorExpression
 
-  hi def link razorBlock razorExpression
+  hi def link razorBlock      razorExpression
   hi def link razorInnerBlock razorBlock
 
   hi def link csParens razorDelimiter
