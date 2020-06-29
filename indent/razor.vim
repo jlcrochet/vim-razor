@@ -47,7 +47,7 @@ function! s:ignored_tag() abort
     return 1
   endif
 
-  if getline(".")[col("."):] =~ '.*/>'
+  if getline(".")[col("."):] =~ '^.*/>'
     return 1
   endif
 
