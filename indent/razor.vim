@@ -151,8 +151,6 @@ function! GetRazorHtmlIndent(lnum) abort
   let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag()", a:lnum)
         \ ? 1 : 0
 
-  echom shift
-
   return ind + s:sw() * shift
 endfunction
 
