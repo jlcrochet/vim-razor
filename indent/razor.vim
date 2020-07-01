@@ -10,10 +10,10 @@ if exists("b:did_indent")
   finish
 endif
 
+let b:did_indent = 1
+
 setlocal indentexpr=GetRazorIndent(v:lnum)
 execute "setlocal indentkeys=<>>,".&cinkeys
-
-let b:did_indent = 1
 
 " Only define the function once per session
 if exists("*GetRazorIndent")
