@@ -34,9 +34,8 @@ syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=@razorAllowed display keepend
 syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 
-" Unlike in plain HTML, the <text> tag means something in Razor, so
-" let's highlight it like a proper tag.
-syn keyword htmlTagName text contained
+" HTML args for Razor
+syn keyword htmlTagName text app component contained
 
 " HTML args for ASP.NET
 syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
