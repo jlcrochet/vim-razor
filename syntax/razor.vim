@@ -156,7 +156,7 @@ unlet s:razor_block_string
 unlet s:razor_inner_block_string
 
 " Explicit expressions:
-syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains=@razorInsideExpression containedin=@razorAllowed oneline display
+syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains=@razorInsideExpression containedin=@razorAllowed,htmlString oneline display
 
 " This is defined late in order to take precedence over other patterns
 " that start with a @
