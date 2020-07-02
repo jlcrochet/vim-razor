@@ -21,7 +21,6 @@ let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
 
 if type(b:razor_highlight_cs) != 1
   echoerr 'Valid values for razor_highlight_cs are "full", "half", "none"'
-  let b:razor_highlight_cs = "full"
 endif
 
 " Syntax groups {{{1
@@ -34,7 +33,7 @@ syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=@razorAllowed display keepend
 syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 
-" HTML args for Razor
+" HTML tags for Razor
 syn keyword htmlTagName text app component contained
 
 " HTML args for ASP.NET
@@ -46,16 +45,16 @@ syn region htmlString contained start=/'/ end=/'/ contains=htmlSpecialChar,javaS
 
 if b:razor_highlight_cs !=# "none"
   syn include @razorCS syntax/cs.vim
-else
-  " HACK: Some C# groups will need to be redefined in order for Razor
-  " expression highlighting to work properly in regions where we aren't
-  " highlighting C# tokens.
-  syn region csBracketed matchgroup=csParens start=/(/ end=/)/ contains=csBracketed contained transparent
 endif
+
+" HACK: Some C# groups will need to be redefined in order for Razor
+" expression highlighting to work properly in regions where we aren't
+" highlighting C# tokens.
+syn region csBracketed matchgroup=csParens start=/(/ end=/)/ contains=@razorCS,csBracketed contained display transparent
 
 " HACK: We need to define another csBracketed region for square brackets
 " so that they will be highlighted properly inside of expressions.
-syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contained display transparent contains=@razorCS,csBracketed
+syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contains=@razorCS,csBracketed contained display transparent
 
 " Alternative for csBracketed to use inside of regions where we aren't
 " highlighting C#.
