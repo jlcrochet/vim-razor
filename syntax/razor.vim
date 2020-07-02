@@ -30,7 +30,7 @@ syn cluster razorHTML contains=TOP
 
 syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
 
-syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=@razorAllowed display keepend
+syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=ALL display keepend
 syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 
 " HTML tags for Razor
