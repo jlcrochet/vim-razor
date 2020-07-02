@@ -10,7 +10,7 @@ endif
 
 runtime! ftplugin/html.vim
 
-setlocal comments=s1:@*,mb:*,ex:*@
+setlocal comments=sr:@*,mb:*,ex:*@
 setlocal commentstring=@*\ %s\ *@
 
 " Change the :browse e filter to primarily show HTML-related files.
