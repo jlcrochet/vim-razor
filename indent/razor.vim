@@ -34,10 +34,18 @@ let s:cs_sw = get(g:, "razor_indent_shiftwidth", s:sw())
 " Helper functions and variables {{{1
 " ==============================
 
+function! s:syngroup_at(lnum, col) abort
+  return synIDattr(synID(a:lnum, a:col, 1), "name")
+endfunction
+
+function! s:syngroup_at_cursor() abort
+  return s:syngroup_at(line("."), col("."))
+endfunction
+
 " Determine whether or not the character at the cursor position should
 " be ignored when searching for Razor block delimiters.
 function! s:ignored_brace() abort
-  return synIDattr(synID(line("."), col("."), 1), "name") !~# '^\%(razorDelimiter\|csBraces\)$'
+  return s:syngroup_at_cursor() !~# '^\%(razorDelimiter\|csBraces\)$'
 endfunction
 
 " Determine whether or not the character at the cursor position should
@@ -51,7 +59,7 @@ function! s:ignored_tag() abort
     return 1
   endif
 
-  let syn_name = synIDattr(synID(line("."), col("."), 1), "name")
+  let syn_name = s:syngroup_at_cursor()
 
   return strpart(syn_name, 0, 4) !=# "html" ||
         \ syn_name ==# "htmlComment" ||
@@ -85,8 +93,6 @@ function! GetRazorIndent(lnum) abort
       " First line of the block
       return indent(open_lnum) + s:cs_sw
     else
-      let prev_line = getline(prev_lnum)
-
       " Otherwise, we need to check if we are inside of an embedded
       " multiline HTML block.
       call cursor(a:lnum, 1)
@@ -110,9 +116,16 @@ function! GetRazorIndent(lnum) abort
         return GetRazorHtmlIndent(a:lnum)
       endif
 
+      let prev_line = getline(prev_lnum)
+
       " Do not indent this line if the previous line was a oneline
       " embedded HTML line or a closing HTML tag.
       if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
+        return indent(prev_lnum)
+      endif
+
+      " Do not indent if the previous line was a Razor comment.
+      if s:syngroup_at(prev_lnum, strlen(prev_line)) ==# "razorComment"
         return indent(prev_lnum)
       endif
 

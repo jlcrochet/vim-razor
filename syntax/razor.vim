@@ -34,7 +34,7 @@ syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=ALL
 syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
 
 " HTML tags for Razor
-syn keyword htmlTagName text app component contained
+syn keyword htmlTagName text app component environment contained
 
 " HTML args for ASP.NET
 syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
