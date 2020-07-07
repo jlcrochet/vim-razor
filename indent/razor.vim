@@ -77,19 +77,25 @@ let s:void_elements = [
 " ==============
 
 function! GetRazorIndent(lnum) abort
+  let s:prev_lnum = prevnonblank(a:lnum - 1)
+
+  if s:prev_lnum == 0
+    return 0
+  endif
+
   let open_lnum = searchpair("{", "", "}", "bW", "s:ignored_brace()")
 
   if open_lnum
     " Inside of a Razor/C# block
 
+    let curr_line = getline(a:lnum)
+
     " If this line is the closing brace, do nothing.
-    if getline(a:lnum) =~# '\_^\s*}'
+    if curr_line =~# '\_^\s*}'
       return indent(open_lnum)
     endif
 
-    let prev_lnum = prevnonblank(a:lnum - 1)
-
-    if open_lnum == prev_lnum
+    if open_lnum == s:prev_lnum
       " First line of the block
       return indent(open_lnum) + s:cs_sw
     else
@@ -102,12 +108,12 @@ function! GetRazorIndent(lnum) abort
       if open_tag
         " Inside of an HTML block
 
-        if getline(a:lnum) =~# '\_^\s*</\a'
+        if curr_line =~# '\_^\s*</\a'
           " Closing tag
           return indent(open_tag)
         endif
 
-        if open_tag == prev_lnum
+        if open_tag == s:prev_lnum
           " First line of the block
           return indent(open_tag) + s:sw()
         endif
@@ -116,17 +122,17 @@ function! GetRazorIndent(lnum) abort
         return GetRazorHtmlIndent(a:lnum)
       endif
 
-      let prev_line = getline(prev_lnum)
+      let prev_line = getline(s:prev_lnum)
 
       " Do not indent this line if the previous line was a oneline
       " embedded HTML line or a closing HTML tag.
       if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
-        return indent(prev_lnum)
+        return indent(s:prev_lnum)
       endif
 
       " Do not indent if the previous line was a Razor comment.
-      if s:syngroup_at(prev_lnum, strlen(prev_line)) ==# "razorComment"
-        return indent(prev_lnum)
+      if s:syngroup_at(s:prev_lnum, strlen(prev_line)) ==# "razorComment"
+        return indent(s:prev_lnum)
       endif
 
       " If none of the above exceptions were encountered, then fall back
@@ -147,20 +153,13 @@ endfunction
 " GetRazorHtmlIndent {{{1
 " ==================
 
-" XXX: This is probably too naive, but it will work for now
 function! GetRazorHtmlIndent(lnum) abort
-  let prev_lnum = prevnonblank(a:lnum - 1)
+  let ind = indent(s:prev_lnum)
 
-  if prev_lnum == 0
-    return 0
-  endif
-
-  let ind = indent(prev_lnum)
-
-  call cursor(prev_lnum, 0)
+  call cursor(s:prev_lnum, 0)
   call cursor(0, col("$"))
 
-  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", prev_lnum)
+  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", s:prev_lnum)
         \ ? 1 : 0
 
   call cursor(a:lnum, 1)
