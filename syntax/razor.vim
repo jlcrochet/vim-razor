@@ -61,6 +61,14 @@ syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contains=@razorCS,
 syn region razorBracketed matchgroup=razorDelimiter start=/(/ end=/)/ contains=razorBracketed contained display transparent
 syn region razorBracketed matchgroup=razorDelimiter start=/\[/ end=/]/ contains=razorBracketed contained display transparent
 
+" HACK: The csNewType and csClassType groups delivered by the Vim's
+" syntax file are really slow and break Razor highlighting a lot, so we
+" are redefining them here.
+syn clear csNewType csClassType csNew csClass
+syn keyword csNew new nextgroup=csUserType skipwhite
+syn keyword csClass class
+syn cluster razorCS add=csNew,csClass
+
 if b:razor_highlight_cs ==# "full"
   syn cluster razorInsideExpression contains=@razorCS,csBracketed
   syn cluster razorInsideBlock contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter
@@ -87,7 +95,7 @@ syn cluster razorStatement contains=
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
       \ razorEventArg
 
-syn match razorDelimiter /\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
 syn region razorExpression start=/\S/ end=/\_$\|["'<>)\]}[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
 
