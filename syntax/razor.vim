@@ -45,6 +45,14 @@ syn region htmlString contained start=/'/ end=/'/ contains=htmlSpecialChar,javaS
 
 if b:razor_highlight_cs !=# "none"
   syn include @razorCS syntax/cs.vim
+
+  " HACK: The csNewType and csClassType groups delivered by the Vim's
+  " syntax file are really slow and break Razor highlighting a lot, so we
+  " are redefining them here.
+  syn clear csNewType csClassType csNew csClass
+  syn keyword csNew new nextgroup=csUserType skipwhite
+  syn keyword csClass class
+  syn cluster razorCS add=csNew,csClass
 endif
 
 " HACK: Some C# groups will need to be redefined in order for Razor
@@ -60,14 +68,6 @@ syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contains=@razorCS,
 " highlighting C#.
 syn region razorBracketed matchgroup=razorDelimiter start=/(/ end=/)/ contains=razorBracketed contained display transparent
 syn region razorBracketed matchgroup=razorDelimiter start=/\[/ end=/]/ contains=razorBracketed contained display transparent
-
-" HACK: The csNewType and csClassType groups delivered by the Vim's
-" syntax file are really slow and break Razor highlighting a lot, so we
-" are redefining them here.
-syn clear csNewType csClassType csNew csClass
-syn keyword csNew new nextgroup=csUserType skipwhite
-syn keyword csClass class
-syn cluster razorCS add=csNew,csClass
 
 if b:razor_highlight_cs ==# "full"
   syn cluster razorInsideExpression contains=@razorCS,csBracketed
