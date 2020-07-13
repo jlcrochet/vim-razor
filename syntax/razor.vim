@@ -55,30 +55,11 @@ if b:razor_highlight_cs !=# "none"
   syn cluster razorCS add=csNew,csClass
 endif
 
-" HACK: Some C# groups will need to be redefined in order for Razor
-" expression highlighting to work properly in regions where we aren't
-" highlighting C# tokens.
-syn region csBracketed matchgroup=csParens start=/(/ end=/)/ contains=@razorCS,csBracketed contained display transparent
-
 " HACK: We need to define another csBracketed region for square brackets
 " so that they will be highlighted properly inside of expressions.
 syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contains=@razorCS,csBracketed contained display transparent
 
-" Alternative for csBracketed to use inside of regions where we aren't
-" highlighting C#.
-syn region razorBracketed matchgroup=razorDelimiter start=/(/ end=/)/ contains=razorBracketed contained display transparent
-syn region razorBracketed matchgroup=razorDelimiter start=/\[/ end=/]/ contains=razorBracketed contained display transparent
-
-if b:razor_highlight_cs ==# "full"
-  syn cluster razorInsideExpression contains=@razorCS,csBracketed
-  syn cluster razorInsideBlock contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter
-elseif b:razor_highlight_cs ==# "half"
-  syn cluster razorInsideExpression contains=razorBracketed
-  syn cluster razorInsideBlock contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter
-else
-  syn cluster razorInsideExpression contains=razorBracketed
-  syn cluster razorInsideBlock contains=razorInnerBlock,razorInnerHTML,razorDelimiter
-endif
+syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ contains=@razorCS,csBracketed display contained nextgroup=razorBlock skipwhite skipnl
 
 " HACK: We need to define a fresh pattern for inner HTML regions so that
 " they don't get clobbered by C# patterns that involve < and >.
@@ -98,24 +79,24 @@ syn cluster razorStatement contains=
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn region razorExpression start=/\S/ end=/\_$\|["'<>)\]}[:space:]]\@=/ contains=@razorInsideExpression contained oneline display nextgroup=razorBlock skipwhite skipnl
+syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed,razorBrackets,razorBlock skipwhite skipnl
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
-syn keyword razorConditional if switch contained nextgroup=razorExpression skipwhite
+syn keyword razorConditional if switch contained nextgroup=razorParentheses skipwhite
 syn keyword razorConditional else contained nextgroup=razorConditional,razorBlock skipwhite skipnl
-syn keyword razorRepeat for foreach while contained nextgroup=razorExpression skipwhite
+syn keyword razorRepeat for foreach while contained nextgroup=razorParentheses skipwhite
 syn keyword razorRepeat do contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorUsing using contained nextgroup=razorExpression skipwhite
+syn keyword razorUsing using contained nextgroup=razorIdentifier skipwhite
 syn keyword razorException try finally contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorException catch contained nextgroup=razorExpression skipwhite
-syn keyword razorLock lock contained nextgroup=razorExpression skipwhite
-syn keyword razorAttribute attribute contained nextgroup=razorExpression skipwhite
+syn keyword razorException catch contained nextgroup=razorParentheses skipwhite
+syn keyword razorLock lock contained nextgroup=razorParentheses skipwhite
+syn keyword razorAttribute attribute contained nextgroup=razorBrackets skipwhite
 syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
 syn keyword razorInherits inherits contained nextgroup=razorIdentifier skipwhite
 syn keyword razorInject inject contained nextgroup=razorArea skipwhite
-syn keyword razorLayout layout contained nextgroup=razorExpression skipwhite
+syn keyword razorLayout layout contained nextgroup=razorIdentifier skipwhite
 syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
 syn keyword razorPage page contained nextgroup=csString skipwhite
@@ -144,11 +125,11 @@ syn keyword razorEventArg contained
       \ onloadend onloadstart onprogress ontimeout ontouchstart
       \ ontouchend ontouchmove ontouchcenter ontouchleave ontouchcancel
 
-syn match razorIdentifier /\<\u[[:alnum:].><]*/ contains=csGeneric contained display
+syn match razorIdentifier /\h\w*\%(\.\h\w*\)*/ display contained nextgroup=csGeneric
 
 syn region razorArea start=// end=/\_$/ display oneline contained
 
-let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorInsideBlock contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
+let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
 let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@razorCS,razorInnerHTML,razorInnerBlock contained display"
 
 if b:razor_highlight_cs !=# "none"
@@ -163,7 +144,7 @@ unlet s:razor_block_string
 unlet s:razor_inner_block_string
 
 " Explicit expressions:
-syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains=@razorInsideExpression containedin=@razorAllowed,htmlString oneline display
+syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains=@razorCS,csBracketed containedin=@razorAllowed,htmlString oneline display
 
 " This is defined late in order to take precedence over other patterns
 " that start with a @
@@ -178,6 +159,7 @@ hi def link razorEscapedDelimiter PreProc
 hi def link razorComment          Comment
 hi def link razorIdentifier       razorExpression
 hi def link razorArea             razorExpression
+hi def link razorParentheses      razorExpression
 
 if b:razor_highlight_cs ==# "full"
   hi def link razorAsync           csAsync
