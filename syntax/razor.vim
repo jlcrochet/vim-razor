@@ -75,7 +75,7 @@ syn cluster razorStatement contains=
       \ razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,
       \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
-      \ razorEventArg
+      \ razorTypeparam,razorEventArg
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
@@ -104,6 +104,7 @@ syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorBind bind contained
 syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
+syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
 
 syn keyword razorEventArg contained
       \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
@@ -182,6 +183,7 @@ if b:razor_highlight_cs ==# "full"
   hi def link razorBind            csUnspecifiedStatement
   hi def link razorAddTagHelper    csUnspecifiedStatement
   hi def link razorRemoveTagHelper csUnspecifiedStatement
+  hi def link razorTypeparam       csUnspecifiedStatement
   hi def link razorEventArg        csUnspecifiedStatement
 elseif b:razor_highlight_cs ==# "half"
   hi def link razorAsync           razorExpression
@@ -202,9 +204,10 @@ elseif b:razor_highlight_cs ==# "half"
   hi def link razorPage            razorExpression
   hi def link razorSection         razorExpression
   hi def link razorBind            razorExpression
-  hi def link razorAddTagHelper    csUnspecifiedStatement
-  hi def link razorRemoveTagHelper csUnspecifiedStatement
-  hi def link razorEventArg        csUnspecifiedStatement
+  hi def link razorAddTagHelper    razorExpression
+  hi def link razorRemoveTagHelper razorExpression
+  hi def link razorTypeparam       razorExpression
+  hi def link razorEventArg        razorExpression
 else
   hi def link razorAsync           razorExpression
   hi def link razorConditional     razorExpression
@@ -226,6 +229,7 @@ else
   hi def link razorBind            razorExpression
   hi def link razorAddTagHelper    razorExpression
   hi def link razorRemoveTagHelper razorExpression
+  hi def link razorTypeparam       razorExpression
   hi def link razorEventArg        razorExpression
 
   hi def link razorBlock      razorExpression
