@@ -45,7 +45,8 @@ endfunction
 " Determine whether or not the character at the cursor position should
 " be ignored when searching for Razor block delimiters.
 function! s:ignored_brace() abort
-  return s:syngroup_at_cursor() !~# '^\%(razorDelimiter\|csBraces\)$'
+  let syngroup = s:syngroup_at_cursor
+  return syngroup !=# "razorDelimiter" && syngroup !=# "csBraces"
 endfunction
 
 " Determine whether or not the character at the cursor position should
@@ -83,6 +84,11 @@ function! GetRazorIndent(lnum) abort
     return 0
   endif
 
+  " Do nothing if we are inside of a Razor comment.
+  if s:syngroup_at_cursor() ==# "razorComment"
+    return indent(".")
+  endif
+
   let open_lnum = searchpair("{", "", "}", "bW", "s:ignored_brace()")
 
   if open_lnum
@@ -92,7 +98,7 @@ function! GetRazorIndent(lnum) abort
 
     " If this line is a closing brace, align with the line that has the
     " opening brace.
-    if curr_line =~# '\_^\s*}'
+    if curr_line =~ '\_^\s*}'
       return indent(open_lnum)
     endif
 
@@ -123,30 +129,23 @@ function! GetRazorIndent(lnum) abort
         return GetRazorHtmlIndent(a:lnum)
       endif
 
-      " Do not indent if:
-
-      " The current line starts with @.
-      " NOTE: This is to handle an odd case that cindent doesn't seem to
-      " handle properly.
-      if curr_line =~ '\_^\s*@'
-        return indent(open_lnum) + s:cs_sw
-      endif
+      " If we have gotten this far, then we are not inside of HTML.
 
       let prev_line = getline(s:prev_lnum)
+      let idx = match(prev_line, '\S')
 
-      " The previous line was an attribute.
-      if prev_line =~ '\_^\s*\['
-        return indent(s:prev_lnum)
-      endif
-
-      " The previous line was a oneline embedded HTML line or a closing
-      " HTML tag.
-      if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
-        return indent(s:prev_lnum)
-      endif
-
-      " The previous line was a Razor comment.
-      if s:syngroup_at(s:prev_lnum, strlen(prev_line)) ==# "razorComment"
+      " Do not indent if the previous line was:
+      "
+      " 1. A closing brace.
+      " 2. An attribute.
+      " 3. A oneline embedded HTML line.
+      " 4. A closing HTML tag.
+      " 5. A Razor comment.
+      if prev_line[idx] == "}" ||
+            \ prev_line[idx] == "[" ||
+            \ strpart(prev_line, idx, 2) == "@:" ||
+            \ strpart(prev_line, idx, 3) =~ '^</\=\a' ||
+            \ prev_line =~ '\*@\s*\_$'
         return indent(s:prev_lnum)
       endif
 
