@@ -124,13 +124,20 @@ function! GetRazorIndent(lnum) abort
 
       let prev_line = getline(s:prev_lnum)
 
-      " Do not indent this line if the previous line was a oneline
-      " embedded HTML line or a closing HTML tag.
+      " Do not indent if:
+
+      " The previous line was an attribute.
+      if prev_line =~ '\_^\s*\['
+        return indent(s:prev_lnum)
+      endif
+
+      " The previous line was a oneline embedded HTML line or a closing
+      " HTML tag.
       if prev_line =~# '\_^\s*\%(@:\|</\=\a\)'
         return indent(s:prev_lnum)
       endif
 
-      " Do not indent if the previous line was a Razor comment.
+      " The previous line was a Razor comment.
       if s:syngroup_at(s:prev_lnum, strlen(prev_line)) ==# "razorComment"
         return indent(s:prev_lnum)
       endif
