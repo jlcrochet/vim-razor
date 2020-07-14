@@ -90,7 +90,8 @@ function! GetRazorIndent(lnum) abort
 
     let curr_line = getline(a:lnum)
 
-    " If this line is the closing brace, do nothing.
+    " If this line is a closing brace, align with the line that has the
+    " opening brace.
     if curr_line =~# '\_^\s*}'
       return indent(open_lnum)
     endif
@@ -122,9 +123,16 @@ function! GetRazorIndent(lnum) abort
         return GetRazorHtmlIndent(a:lnum)
       endif
 
-      let prev_line = getline(s:prev_lnum)
-
       " Do not indent if:
+
+      " The current line starts with @.
+      " NOTE: This is to handle an odd case that cindent doesn't seem to
+      " handle properly.
+      if curr_line =~ '\_^\s*@'
+        return indent(open_lnum) + s:cs_sw
+      endif
+
+      let prev_line = getline(s:prev_lnum)
 
       " The previous line was an attribute.
       if prev_line =~ '\_^\s*\['
