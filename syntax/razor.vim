@@ -101,10 +101,11 @@ syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
 syn keyword razorPage page contained nextgroup=csString skipwhite
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
-syn keyword razorBind bind contained
 syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
+
+syn match razorBind /bind\%(-\h\w*\)\=\>/ display contained nextgroup=razorEventAttribute
 
 syn keyword razorEventArg contained nextgroup=razorEventAttribute
       \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
@@ -126,6 +127,7 @@ syn keyword razorEventArg contained nextgroup=razorEventAttribute
       \ onloadend onloadstart onprogress ontimeout ontouchstart
       \ ontouchend ontouchmove ontouchcenter ontouchleave ontouchcancel
 
+syn match razorEventAttribute /:event\>/ display contained
 syn match razorEventAttribute /:preventDefault\>/ display contained
 syn match razorEventAttribute /:stopPropagation\>/ display contained
 
