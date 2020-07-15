@@ -106,7 +106,7 @@ syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhi
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
 
-syn keyword razorEventArg contained
+syn keyword razorEventArg contained nextgroup=razorEventAttribute
       \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
       \ ondragover ondrop ondragend onerror onactivate onbeforeactivate
       \ onbeforedeactivate ondeactive onfullscreenchange
@@ -125,6 +125,9 @@ syn keyword razorEventArg contained
       \ onlostpointercapture onwheel onmousewheel onabort onload
       \ onloadend onloadstart onprogress ontimeout ontouchstart
       \ ontouchend ontouchmove ontouchcenter ontouchleave ontouchcancel
+
+syn match razorEventAttribute /:preventDefault\>/ display contained
+syn match razorEventAttribute /:stopPropagation\>/ display contained
 
 syn match razorIdentifier /\h\w*\%(\.\h\w*\)*/ display contained nextgroup=csGeneric
 
@@ -161,6 +164,7 @@ hi def link razorComment          Comment
 hi def link razorIdentifier       razorExpression
 hi def link razorArea             razorExpression
 hi def link razorParentheses      razorExpression
+hi def link razorEventAttribute   razorEventArg
 
 if b:razor_highlight_cs ==# "full"
   hi def link razorAsync           csAsync
