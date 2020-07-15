@@ -140,12 +140,13 @@ function! GetRazorIndent(lnum) abort
       " 2. An attribute.
       " 3. A oneline embedded HTML line.
       " 4. A closing HTML tag.
-      " 5. A Razor comment.
+      " 5. A comment.
       if prev_line[idx] == "}" ||
             \ prev_line[idx] == "[" ||
             \ strpart(prev_line, idx, 2) == "@:" ||
             \ strpart(prev_line, idx, 3) =~ '^</\=\a' ||
-            \ prev_line =~ '\*@\s*\_$'
+            \ prev_line =~ '//.*\_$' ||
+            \ prev_line =~ '\*[/@]\s*\_$'
         return indent(s:prev_lnum)
       endif
 
