@@ -105,7 +105,8 @@ syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhi
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
 
-syn match razorBind /bind\%(-\h\w*\)\=\>/ display contained nextgroup=razorEventAttribute
+syn match razorBind /bind\>/ display contained
+syn match razorBind /bind\%(-\h\w*\)\>/ display contained nextgroup=razorEventAttribute
 
 syn keyword razorEventArg contained nextgroup=razorEventAttribute
       \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
