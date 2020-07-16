@@ -43,13 +43,6 @@ function! s:syngroup_at_cursor() abort
 endfunction
 
 " Determine whether or not the character at the cursor position should
-" be ignored when searching for Razor block delimiters.
-function! s:ignored_brace() abort
-  let syngroup = s:syngroup_at_cursor
-  return syngroup !=# "razorDelimiter" && syngroup !=# "csBraces"
-endfunction
-
-" Determine whether or not the character at the cursor position should
 " be ignored when searching for HTML tags.
 function! s:ignored_tag() abort
   if index(s:void_elements, expand("<cword>")) > -1
@@ -74,6 +67,9 @@ let s:void_elements = [
       \ "link", "meta", "param", "source", "track", "wbr"
       \ ]
 
+let s:sol = '\_^\s*'
+let s:eol = '\s*\%(\%(//\|[/@]\*\).*\)\=\_$'
+
 " GetRazorIndent {{{1
 " ==============
 
@@ -89,7 +85,8 @@ function! GetRazorIndent(lnum) abort
     return indent(".")
   endif
 
-  let open_lnum = searchpair("{", "", "}", "bW", "s:ignored_brace()")
+  call cursor(a:lnum, 1)
+  let open_lnum = searchpair("{".s:eol, "", s:sol."}", "bnW")
 
   if open_lnum
     " Inside of a Razor/C# block
@@ -98,7 +95,7 @@ function! GetRazorIndent(lnum) abort
 
     " If this line is a closing brace, align with the line that has the
     " opening brace.
-    if curr_line =~ '\_^\s*}'
+    if curr_line =~ s:sol."}"
       return indent(open_lnum)
     endif
 
@@ -108,14 +105,12 @@ function! GetRazorIndent(lnum) abort
     else
       " Otherwise, we need to check if we are inside of an embedded
       " multiline HTML block.
-      call cursor(a:lnum, 1)
-
       let open_tag = searchpair('<\zs\a', '', '</\a', "b", "s:ignored_tag()", open_lnum)
 
       if open_tag
         " Inside of an HTML block
 
-        if curr_line =~# '\_^\s*</\a'
+        if curr_line =~# s:sol.'</\a'
           " Closing tag
           return indent(open_tag)
         endif
