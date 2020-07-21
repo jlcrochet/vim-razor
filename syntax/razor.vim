@@ -79,7 +79,8 @@ syn cluster razorStatement contains=
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed,razorBrackets,razorBlock skipwhite skipnl
+syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
+syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorParentheses skipwhite
@@ -90,7 +91,7 @@ syn keyword razorUsing using contained nextgroup=razorIdentifier skipwhite
 syn keyword razorException try finally contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorException catch contained nextgroup=razorParentheses skipwhite
 syn keyword razorLock lock contained nextgroup=razorParentheses skipwhite
-syn keyword razorAttribute attribute contained nextgroup=razorBrackets skipwhite
+syn keyword razorAttribute attribute contained nextgroup=csBracketed skipwhite
 syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
