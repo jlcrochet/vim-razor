@@ -39,14 +39,10 @@ syn keyword htmlTagName text app component environment contained
 " HTML args for ASP.NET
 syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
 
-" HACK: Redefine htmlString so that it can contain Razor expressions
-syn region htmlString contained start=/"/ end=/"/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
-syn region htmlString contained start=/'/ end=/'/ contains=htmlSpecialChar,javaScriptExpression,@htmlPreproc,razorDelimiter
-
 if b:razor_highlight_cs !=# "none"
   syn include @razorCS syntax/cs.vim
 
-  " HACK: The csNewType and csClassType groups delivered by the Vim's
+  " HACK: The csNewType and csClassType groups delivered by Vim's
   " syntax file are really slow and break Razor highlighting a lot, so we
   " are redefining them here.
   syn clear csNewType csClassType csNew csClass
@@ -77,7 +73,7 @@ syn cluster razorStatement contains=
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
       \ razorTypeparam,razorEventArg
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed,htmlValue display nextgroup=@razorStatement,razorBlock
 
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed
