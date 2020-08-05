@@ -73,7 +73,7 @@ syn cluster razorStatement contains=
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
       \ razorTypeparam,razorEventArg
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed,htmlValue display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%#=1\w\@1<!@"\@!/ containedin=@razorAllowed,htmlValue display nextgroup=@razorStatement,razorBlock
 
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed
@@ -83,7 +83,7 @@ syn keyword razorConditional if switch contained nextgroup=razorParentheses skip
 syn keyword razorConditional else contained nextgroup=razorConditional,razorBlock skipwhite skipnl
 syn keyword razorRepeat for foreach while contained nextgroup=razorParentheses skipwhite
 syn keyword razorRepeat do contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorUsing using contained nextgroup=razorIdentifier skipwhite
+syn keyword razorUsing using contained nextgroup=razorIdentifier,razorParentheses skipwhite
 syn keyword razorException try finally contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorException catch contained nextgroup=razorParentheses skipwhite
 syn keyword razorLock lock contained nextgroup=razorParentheses skipwhite
