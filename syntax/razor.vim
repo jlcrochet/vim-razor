@@ -152,7 +152,7 @@ syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains
 
 " This is defined late in order to take precedence over other patterns
 " that start with a @
-syn match razorEscapedDelimiter /@@/ containedin=@razorAllowed display
+syn match razorEscapedDelimiter /@@/ containedin=@razorAllowed,htmlString display
 
 " Default highlighting {{{1
 " ====================
