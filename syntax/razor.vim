@@ -73,7 +73,7 @@ syn cluster razorStatement contains=
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
       \ razorTypeparam,razorEventArg
 
-syn match razorDelimiter /\%#=1\w\@1<!@"\@!/ containedin=@razorAllowed,htmlValue display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%#=1\w\@1<!@"\@!/ containedin=@razorAllowed,htmlString,htmlValue display nextgroup=@razorStatement,razorBlock
 
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
 syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed
