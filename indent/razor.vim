@@ -34,37 +34,31 @@ let s:cs_sw = get(g:, "razor_indent_shiftwidth", s:sw())
 " Helper functions and variables {{{1
 " ==============================
 
-function! s:syngroup_at(lnum, col) abort
-  return synIDattr(synID(a:lnum, a:col, 1), "name")
-endfunction
-
-function! s:syngroup_at_cursor() abort
-  return s:syngroup_at(line("."), col("."))
-endfunction
-
-" Determine whether or not the character at the cursor position should
-" be ignored when searching for HTML tags.
-function! s:ignored_tag() abort
-  if index(s:void_elements, expand("<cword>")) > -1
+function! s:ignored_tag(ignore_void) abort
+  if a:ignore_void && s:is_void(expand("<cword>"))
     return 1
   endif
 
-  if getline(".")[col("."):] =~ '^.*/>'
+  let lnum = line(".")
+  let col = col(".")
+
+  if getline(lnum)[col:] =~ '^.*/>'
     return 1
   endif
 
-  let syn_name = s:syngroup_at_cursor()
+  return synIDattr(synID(lnum, col, 1), "name") !=# "razorHTMLTag"
+endfunction
 
-  return strpart(syn_name, 0, 4) !=# "html" ||
-        \ syn_name ==# "htmlComment" ||
-        \ syn_name ==# "htmlString"
+function! s:is_void(tag_name) abort
+  return index(s:void_elements, a:tag_name) > -1
 endfunction
 
 " List of void elements retrieved from
 " <https://html.spec.whatwg.org/multipage/syntax.html#void-elements>.
 let s:void_elements = [
-      \ "area", "base", "br", "col", "embed", "hr", "img", "input",
-      \ "link", "meta", "param", "source", "track", "wbr"
+      \ "area", "base", "br", "col", "command", "embed", "hr", "img",
+      \ "input", "keygen", "link", "meta", "param", "source", "track",
+      \ "wbr"
       \ ]
 
 let s:sol = '\_^\s*'
@@ -74,7 +68,8 @@ let s:eol = '\s*\%(\%(//\|[/@]\*\).*\)\=\_$'
 " ==============
 
 function! GetRazorIndent(lnum) abort
-  let s:prev_lnum = prevnonblank(a:lnum - 1)
+  let v:lnum = a:lnum
+  let s:prev_lnum = prevnonblank(v:lnum - 1)
 
   if s:prev_lnum == 0
     return 0
@@ -85,13 +80,13 @@ function! GetRazorIndent(lnum) abort
     return indent(".")
   endif
 
-  call cursor(a:lnum, 1)
+  call cursor(v:lnum, 1)
   let open_lnum = searchpair("{".s:eol, "", s:sol."}", "bnW")
 
   if open_lnum
     " Inside of a Razor/C# block
 
-    let curr_line = getline(a:lnum)
+    let curr_line = getline(v:lnum)
 
     " If this line is a closing brace, align with the line that has the
     " opening brace.
@@ -105,7 +100,7 @@ function! GetRazorIndent(lnum) abort
     else
       " Otherwise, we need to check if we are inside of an embedded
       " multiline HTML block.
-      let open_tag = searchpair('<\zs\a', '', '</\a', "b", "s:ignored_tag()", open_lnum)
+      let open_tag = searchpair('<\zs\a', '', '</\a', "b", "s:ignored_tag(1)", open_lnum)
 
       if open_tag
         " Inside of an HTML block
@@ -121,7 +116,7 @@ function! GetRazorIndent(lnum) abort
         endif
 
         " Use HTML indentation
-        return GetRazorHtmlIndent(a:lnum)
+        return s:get_razor_html_indent()
       endif
 
       " If we have gotten this far, then we are not inside of HTML.
@@ -150,31 +145,65 @@ function! GetRazorIndent(lnum) abort
       let old_sw = &shiftwidth
 
       let &shiftwidth = s:cs_sw
-      let ind = cindent(a:lnum)
+      let ind = cindent(v:lnum)
       let &shiftwidth = old_sw
 
       return ind
     endif
   endif
 
-  return GetRazorHtmlIndent(a:lnum)
+  return s:get_razor_html_indent()
 endfunction
 
-" GetRazorHtmlIndent {{{1
-" ==================
-
-function! GetRazorHtmlIndent(lnum) abort
+function! s:get_razor_html_indent() abort
   let ind = indent(s:prev_lnum)
+
+  " First, check for a line continuation
 
   call cursor(s:prev_lnum, 0)
   call cursor(0, col("$"))
 
-  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag()", s:prev_lnum)
+  if searchpair('<', "", '>', "bz", "s:ignored_tag(0)", s:prev_lnum)
+    normal! ww
+    return col(".") - 1
+  endif
+
+  " Next, check if we are after a line continuation
+
+  call cursor(s:prev_lnum, 1)
+
+  let [lnum, col] = searchpairpos('<', "", '>', "c", "s:ignored_tag(0)", s:prev_lnum)
+
+  if lnum
+    let self_closing_tag = getline(lnum)[col - 2] == "/"
+
+    let lnum = searchpair('<\zs\a', "", '>', "bzW", "s:ignored_tag(0)")
+
+    if self_closing_tag
+      return indent(lnum)
+    else
+      let tag_name = expand("<cword>")
+
+      if s:is_void(tag_name)
+        return indent(lnum)
+      else
+        return indent(lnum) + s:sw()
+      endif
+    endif
+  endif
+
+  " If no line continuations were found, proceed normally
+
+  let ind = indent(s:prev_lnum)
+
+  call cursor(0, col("$"))
+
+  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag(1)", s:prev_lnum)
         \ ? 1 : 0
 
-  call cursor(a:lnum, 1)
+  call cursor(v:lnum, 1)
 
-  let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag()", a:lnum)
+  let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag(1)", v:lnum)
         \ ? 1 : 0
 
   return ind + s:sw() * shift

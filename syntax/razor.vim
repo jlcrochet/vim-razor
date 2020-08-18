@@ -10,73 +10,37 @@ if exists("b:current_syntax")
   finish
 endif
 
+let s:include_path = expand("<sfile>:p:h")."/../include"
+
 if get(g:, "razor_fold")
   setlocal foldmethod=syntax
-endif
-
-runtime! syntax/html.vim
-unlet! b:current_syntax
-
-let b:razor_highlight_cs = get(g:, "razor_highlight_cs", "full")
-
-if type(b:razor_highlight_cs) != 1
-  echoerr 'Valid values for razor_highlight_cs are "full", "half", "none"'
 endif
 
 " Syntax groups {{{1
 " =============
 
-syn cluster razorHTML contains=TOP
+" The syntax files for C# and HTML are being kept in a separate
+" directory so that they don't get picked up by Vim in other contexts
+execute "syn include @razorCS ".s:include_path."/cs.vim"
+execute "source ".s:include_path."/html.vim"
 
-syn cluster razorAllowed contains=TOP,razorEscapedDelimiter,razorComment
+syn cluster razorTop contains=TOP,razorComment,razorEscapedDelimiter
+syn cluster razorAllowed contains=@razorTop,razorHTMLValue
 
-syn region razorComment start=/@\*/ end=/\*@/ contains=razorTODO containedin=ALL display keepend
-syn keyword razorTODO TODO NOTE XXX FIXME HACK TBD
-
-" HTML tags for Razor
-syn keyword htmlTagName text app component environment contained
-
-" HTML args for ASP.NET
-syn match htmlArg /\<asp-\a[[:alnum:]-]*/ display contained
-
-if b:razor_highlight_cs !=# "none"
-  syn include @razorCS syntax/cs.vim
-
-  " HACK: The csNewType and csClassType groups delivered by Vim's
-  " syntax file are really slow and break Razor highlighting a lot, so we
-  " are redefining them here.
-  syn clear csNewType csClassType csNew csClass
-  syn keyword csNew new nextgroup=csUserType skipwhite
-  syn keyword csClass class
-  syn cluster razorCS add=csNew,csClass
-endif
-
-" HACK: We need to define another csBracketed region for square brackets
-" so that they will be highlighted properly inside of expressions.
-syn region csBracketed matchgroup=csBraces start=/\[/ end=/]/ contains=@razorCS,csBracketed contained display transparent
-
-syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ contains=@razorCS,csBracketed display contained nextgroup=razorBlock skipwhite skipnl
-
-" HACK: We need to define a fresh pattern for inner HTML regions so that
-" they don't get clobbered by C# patterns that involve < and >.
-"
-" TODO: This could probably be improved
-syn region razorInnerHTML start=/\_^\s*\zs<\z(\a[[:alnum:]-]*\)\>/ end=/<\/\z1>/ contains=@razorHTML,razorInnerHTML display contained transparent keepend extend
-syn match  razorInnerHTML /\_^\s*\zs<\%(area\|base\|br\|col\|embed\|hr\|img\|input\|link\|meta\|param\|source\|track\|wbr\)\>.\{-}>/ display contained contains=htmlTag
-syn match  razorInnerHTML /\_^\s*\zs<.\{-}\/>/ display contained contains=htmlTag
-syn region razorInnerHTML matchgroup=razorDelimiter start=/@:/ end=/\_$/ contains=TOP containedin=@razorAllowed display oneline contained keepend
+syn region razorComment start=/\%#=1@\*/ end=/\*@/ contains=razorTodo containedin=ALL display keepend
+syn keyword razorTodo TODO NOTE XXX FIXME HACK TBD
 
 " Implicit expressions:
 syn cluster razorStatement contains=
       \ razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,
       \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,
       \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
-      \ razorTypeparam,razorEventArg
+      \ razorTypeparam,razorEventAttribute,razorAttributes
 
-syn match razorDelimiter /\%#=1\w\@1<!@"\@!/ containedin=@razorAllowed,htmlString,htmlValue display nextgroup=@razorStatement,razorBlock
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
 
-syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
-syn match razorExpression /\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=csBracketed
+syn match razorExpression /\%#=1\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorBlock skipwhite skipnl
+syn match razorExpression /\%#=1\h\w*\%(\.\h\w*\)*/ contains=@razorCS display contained nextgroup=razorParentheses,razorBrackets
 
 syn keyword razorAsync await contained nextgroup=razorExpression skipwhite
 syn keyword razorConditional if switch contained nextgroup=razorParentheses skipwhite
@@ -87,7 +51,7 @@ syn keyword razorUsing using contained nextgroup=razorIdentifier,razorParenthese
 syn keyword razorException try finally contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorException catch contained nextgroup=razorParentheses skipwhite
 syn keyword razorLock lock contained nextgroup=razorParentheses skipwhite
-syn keyword razorAttribute attribute contained nextgroup=csBracketed skipwhite
+syn keyword razorAttribute attribute contained nextgroup=razorCSBracketed skipwhite
 syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
@@ -96,16 +60,20 @@ syn keyword razorInject inject contained nextgroup=razorArea skipwhite
 syn keyword razorLayout layout contained nextgroup=razorIdentifier skipwhite
 syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
-syn keyword razorPage page contained nextgroup=csString skipwhite
+syn keyword razorPage page contained nextgroup=razorCSString skipwhite
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
 
-syn match razorBind /bind\>/ display contained
-syn match razorBind /bind\%(-\h\w*\)\>/ display contained nextgroup=razorEventAttribute
+syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained contains=@razorCS nextgroup=razorBlock skipwhite skipnl
+syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators,razorHTMLTag skipwhite skipnl
 
-syn keyword razorEventArg contained nextgroup=razorEventAttribute
+syn match razorIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgroup=razorCSGeneric
+
+syn match razorBind /bind\%(-\h\w*\)\=\>/ display contained nextgroup=razorEventArg,razorHTMLAttributeOperator
+
+syn keyword razorEventAttribute contained nextgroup=razorEventArg,razorHTMLAttributeOperator
       \ oncut oncopy onpaste ondrag ondragstart ondragenter ondragleave
       \ ondragover ondrop ondragend onerror onactivate onbeforeactivate
       \ onbeforedeactivate ondeactive onfullscreenchange
@@ -125,124 +93,61 @@ syn keyword razorEventArg contained nextgroup=razorEventAttribute
       \ onloadend onloadstart onprogress ontimeout ontouchstart
       \ ontouchend ontouchmove ontouchcenter ontouchleave ontouchcancel
 
-syn match razorEventAttribute /:event\>/ display contained
-syn match razorEventAttribute /:preventDefault\>/ display contained
-syn match razorEventAttribute /:stopPropagation\>/ display contained
+syn match razorEventArg /:\%(event\|preventDefault\|stopPropagation\)\>/ display contained nextgroup=razorHTMLAttributeOperator
 
-syn match razorIdentifier /\h\w*\%(\.\h\w*\)*/ display contained nextgroup=csGeneric
+syn match razorAttributes /attributes\>/ display contained nextgroup=razorHTMLAttributeOperator
 
 syn region razorArea start=// end=/\_$/ display oneline contained
 
-let s:razor_block_string = "syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorCS,razorInnerBlock,razorInnerHTML,razorDelimiter contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl"
-let s:razor_inner_block_string = "syn region razorInnerBlock matchgroup=csBraces start=/{/ end=/}/ contains=@razorCS,razorInnerHTML,razorInnerBlock contained display"
+syn region razorInnerHTML start=/\%#=1<\z(\a\+\)/ end=/\%#=1<\/\z1>/ contained transparent keepend extend contains=@razorTop,razorInnerHTML
+syn match razorInnerHTML /\%#=1<\a.*\/>/ contained transparent contains=@razorTop
+syn match razorInnerHTML /\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>.*>/ contained transparent contains=@razorTop
+syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\_$/ display contains=@razorTop
 
-if b:razor_highlight_cs !=# "none"
-  let s:razor_block_string .= " transparent"
-  let s:razor_inner_block_string .= " transparent"
-endif
-
-execute s:razor_block_string
-execute s:razor_inner_block_string
-
-unlet s:razor_block_string
-unlet s:razor_inner_block_string
+syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorTop,@razorCS,razorDelimiter,razorCSBlock,razorInnerHTML contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
 
 " Explicit expressions:
-syn region razorExpression matchgroup=razorDelimiter start=/@(/ end=/)/ contains=@razorCS,csBracketed containedin=@razorAllowed,htmlString oneline display
+syn region razorExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/)/ contains=@razorCS containedin=@razorAllowed oneline display
 
 " This is defined late in order to take precedence over other patterns
 " that start with a @
-syn match razorEscapedDelimiter /@@/ containedin=@razorAllowed,htmlString display
+syn match razorEscapedDelimiter /\%#=1@@/ containedin=@razorAllowed display
 
 " Default highlighting {{{1
 " ====================
 
 hi def link razorExpression       PreProc
 hi def link razorDelimiter        razorExpression
-hi def link razorEscapedDelimiter PreProc
-hi def link razorComment          Comment
 hi def link razorIdentifier       razorExpression
+hi def link razorEscapedDelimiter razorExpression
+hi def link razorComment          Comment
 hi def link razorArea             razorExpression
 hi def link razorParentheses      razorExpression
-hi def link razorEventAttribute   razorEventArg
-
-if b:razor_highlight_cs ==# "full"
-  hi def link razorAsync           csAsync
-  hi def link razorConditional     csConditional
-  hi def link razorRepeat          csRepeat
-  hi def link razorUsing           csUnspecifiedStatement
-  hi def link razorException       csException
-  hi def link razorLock            csUnspecifiedStatement
-  hi def link razorAttribute       csUnspecifiedStatement
-  hi def link razorCode            csUnspecifiedStatement
-  hi def link razorFunctions       csUnspecifiedStatement
-  hi def link razorImplements      csUnspecifiedStatement
-  hi def link razorInherits        csUnspecifiedStatement
-  hi def link razorInject          csUnspecifiedStatement
-  hi def link razorLayout          csUnspecifiedStatement
-  hi def link razorModel           csUnspecifiedStatement
-  hi def link razorNamespace       csStorage
-  hi def link razorPage            csUnspecifiedStatement
-  hi def link razorSection         csUnspecifiedStatement
-  hi def link razorBind            csUnspecifiedStatement
-  hi def link razorAddTagHelper    csUnspecifiedStatement
-  hi def link razorRemoveTagHelper csUnspecifiedStatement
-  hi def link razorTypeparam       csUnspecifiedStatement
-  hi def link razorEventArg        csUnspecifiedStatement
-elseif b:razor_highlight_cs ==# "half"
-  hi def link razorAsync           razorExpression
-  hi def link razorConditional     razorExpression
-  hi def link razorRepeat          razorExpression
-  hi def link razorUsing           razorExpression
-  hi def link razorException       razorExpression
-  hi def link razorLock            razorExpression
-  hi def link razorAttribute       razorExpression
-  hi def link razorCode            razorExpression
-  hi def link razorFunctions       razorExpression
-  hi def link razorImplements      razorExpression
-  hi def link razorInherits        razorExpression
-  hi def link razorInject          razorExpression
-  hi def link razorLayout          razorExpression
-  hi def link razorModel           razorExpression
-  hi def link razorNamespace       razorExpression
-  hi def link razorPage            razorExpression
-  hi def link razorSection         razorExpression
-  hi def link razorBind            razorExpression
-  hi def link razorAddTagHelper    razorExpression
-  hi def link razorRemoveTagHelper razorExpression
-  hi def link razorTypeparam       razorExpression
-  hi def link razorEventArg        razorExpression
-else
-  hi def link razorAsync           razorExpression
-  hi def link razorConditional     razorExpression
-  hi def link razorRepeat          razorExpression
-  hi def link razorUsing           razorExpression
-  hi def link razorException       razorExpression
-  hi def link razorLock            razorExpression
-  hi def link razorAttribute       razorExpression
-  hi def link razorCode            razorExpression
-  hi def link razorFunctions       razorExpression
-  hi def link razorImplements      razorExpression
-  hi def link razorInherits        razorExpression
-  hi def link razorInject          razorExpression
-  hi def link razorLayout          razorExpression
-  hi def link razorModel           razorExpression
-  hi def link razorNamespace       razorExpression
-  hi def link razorPage            razorExpression
-  hi def link razorSection         razorExpression
-  hi def link razorBind            razorExpression
-  hi def link razorAddTagHelper    razorExpression
-  hi def link razorRemoveTagHelper razorExpression
-  hi def link razorTypeparam       razorExpression
-  hi def link razorEventArg        razorExpression
-
-  hi def link razorBlock      razorExpression
-  hi def link razorInnerBlock razorBlock
-
-  hi def link csParens razorDelimiter
-  hi def link csBraces razorDelimiter
-endif
-
+hi def link razorEventArg         razorEventAttribute
+hi def link razorKeyword          Keyword
+hi def link razorAsync            razorKeyword
+hi def link razorConditional      razorKeyword
+hi def link razorRepeat           razorKeyword
+hi def link razorUsing            razorKeyword
+hi def link razorException        razorKeyword
+hi def link razorLock             razorKeyword
+hi def link razorAttribute        razorKeyword
+hi def link razorCode             razorKeyword
+hi def link razorFunctions        razorKeyword
+hi def link razorImplements       razorKeyword
+hi def link razorInherits         razorKeyword
+hi def link razorInject           razorKeyword
+hi def link razorLayout           razorKeyword
+hi def link razorModel            razorKeyword
+hi def link razorNamespace        razorKeyword
+hi def link razorPage             razorKeyword
+hi def link razorSection          razorKeyword
+hi def link razorBind             razorKeyword
+hi def link razorAddTagHelper     razorKeyword
+hi def link razorRemoveTagHelper  razorKeyword
+hi def link razorTypeparam        razorKeyword
+hi def link razorEventAttribute   razorKeyword
+hi def link razorAttributes       razorKeyword
 " }}}
 
 let b:current_syntax = "razor"
