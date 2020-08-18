@@ -156,8 +156,6 @@ function! GetRazorIndent(lnum) abort
 endfunction
 
 function! s:get_razor_html_indent() abort
-  let ind = indent(s:prev_lnum)
-
   " First, check for a line continuation
 
   call cursor(s:prev_lnum, 0)
