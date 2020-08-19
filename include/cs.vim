@@ -3,11 +3,11 @@ syn keyword razorCSModifier nextgroup=razorCSModifier,razorCSType,razorCSDefine,
       \ extern internal event explicit implicit override new out params
       \ readonly ref stackalloc using volatile async
 
-syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSNullableType,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
+syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSNullableType,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
       \ bool byte char decimal object string delegate dynamic double
       \ enum void float int long sbyte short uint ulong ushort var
 
-syn match razorCSUserType /\%#=1\h\w*/ display nextgroup=razorCSGeneric,razorCSArrayType,razorCSNullableType,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
+syn match razorCSUserType /\%#=1\h\w*/ display nextgroup=razorCSGeneric,razorCSArrayType,razorCSNullableType,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
 
 syn match razorCSArrayType /\[]/ display contained nextgroup=razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 syn match razorCSNullableType /?/ display contained nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
