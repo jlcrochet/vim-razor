@@ -129,7 +129,7 @@ function! GetRazorIndent(lnum) abort
   if first_char == "}"
     let synid = synID(a:lnum, first_idx + 1, 1)
 
-    if synid == g:razor#hl_razorDelimiter || synid == g:razor#hl_razorCSBrace
+    if synid == g:razor#hl_razorDelimiter
       return indent(plnum) - s:cs_sw
     endif
   elseif first_char == "<" && line[first_idx + 1] == "/"
