@@ -1,6 +1,6 @@
 syn keyword razorCSModifier nextgroup=razorCSModifier,razorCSType,razorCSDefine,razorCSUserType,razorCSNew,razorCSFunctionDefinition skipwhite skipnl
       \ public private protected abstract const static virtual sealed
-      \ extern internal event explicit implicit override new out params
+      \ extern internal event explicit implicit override new params
       \ readonly ref stackalloc using volatile async
 
 syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSNullableType,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
@@ -24,7 +24,7 @@ syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorInnerHTML
+syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock,razorInnerHTML
 
 syn keyword razorCSOperatorDefine operator contained nextgroup=razorCSUnaryOperator,razorCSBinaryOperator,razorCSType,razorCSUserType,razorCSBoolean skipwhite skipnl
 
@@ -63,7 +63,7 @@ syn cluster razorCSContainedOperators contains=
 
 syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition skipwhite skipnl
 
-syn keyword razorCSKeywordOperator where sizeof typeof await using
+syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
 syn keyword razorCSAs as nextgroup=razorCSType,razorCSUserType skipwhite skipnl
 syn keyword razorCSIs is nextgroup=razorCSType,razorCSUserType skipwhite skipnl

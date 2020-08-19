@@ -19,18 +19,14 @@ endif
 " Syntax groups {{{1
 " =============
 
-" The syntax files for C# and HTML are being kept in a separate
-" directory so that they don't get picked up by Vim in other contexts
+" The syntax files for C# and HTML are kept in a separate directory so
+" that they don't get picked up by Vim in other contexts.
 execute "syn include @razorCS ".s:include_path."/cs.vim"
 execute "source ".s:include_path."/html.vim"
 
 syn cluster razorTop contains=TOP,razorComment,razorEscapedDelimiter
 syn cluster razorAllowed contains=@razorTop,razorHTMLValue
 
-syn region razorComment start=/\%#=1@\*/ end=/\*@/ contains=razorTodo containedin=ALL display keepend
-syn keyword razorTodo TODO NOTE XXX FIXME HACK TBD
-
-" Implicit expressions:
 syn cluster razorStatement contains=
       \ razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,
       \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,
@@ -99,19 +95,19 @@ syn match razorAttributes /attributes\>/ display contained nextgroup=razorHTMLAt
 
 syn region razorArea start=// end=/\_$/ display oneline contained
 
-syn region razorInnerHTML start=/\%#=1<\z(\a\+\)/ end=/\%#=1<\/\z1>/ contained transparent keepend extend contains=@razorTop,razorInnerHTML
-syn match razorInnerHTML /\%#=1<\a.*\/>/ contained transparent contains=@razorTop
-syn match razorInnerHTML /\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>.*>/ contained transparent contains=@razorTop
-syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\_$/ display contains=@razorTop
+syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a.*>/ display contained keepend extend contains=@razorTop,razorInnerHTML
+syn match razorInnerHTML /\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>.*>/ display contained contains=TOP
+syn match razorInnerHTML /\%#=1<\a.*\/>/ display contained contains=TOP
+syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\_$/ display contained contains=TOP
 
-syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorTop,@razorCS,razorDelimiter,razorCSBlock,razorInnerHTML contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
+syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ contains=@razorTop,@razorCS,razorCSBlock,razorInnerHTML contained display fold nextgroup=razorConditional,razorRepeat,razorException skipwhite skipnl
 
-" Explicit expressions:
 syn region razorExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/)/ contains=@razorCS containedin=@razorAllowed oneline display
 
-" This is defined late in order to take precedence over other patterns
-" that start with a @
 syn match razorEscapedDelimiter /\%#=1@@/ containedin=@razorAllowed display
+
+syn region razorComment start=/\%#=1@\*/ end=/\*@/ contains=razorTodo containedin=ALL display keepend
+syn keyword razorTodo TODO NOTE XXX FIXME HACK TBD
 
 " Default highlighting {{{1
 " ====================

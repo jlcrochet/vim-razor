@@ -20,193 +20,197 @@ if exists("*GetRazorIndent")
   finish
 endif
 
-" Return the value of a single shift-width
-if exists("*shiftwidth")
-  let s:sw = function("shiftwidth")
-else
-  function! s:sw() abort
-    return &shiftwidth
-  endfunction
-endif
+let s:cs_sw = get(g:, "razor_indent_shiftwidth", &shiftwidth)
 
-let s:cs_sw = get(g:, "razor_indent_shiftwidth", s:sw())
+" Helper variables and function {{{1
+" =============================
 
-" Helper functions and variables {{{1
-" ==============================
+let b:skip_bracket =
+      \ "synID(line('.'), col('.'), 1) != g:razor#hl_razorHTMLTag"
 
-function! s:ignored_tag(ignore_void) abort
-  if a:ignore_void && s:is_void(expand("<cword>"))
-    return 1
-  endif
+let b:skip_tag = b:skip_bracket .
+      \ " || index(s:void_elements, expand('<cword>')) > -1" .
+      \ " || searchpair('<', '', '/>', 'z', b:skip_bracket, line('.'))"
 
-  let lnum = line(".")
-  let col = col(".")
-
-  if getline(lnum)[col:] =~ '^.*/>'
-    return 1
-  endif
-
-  return synIDattr(synID(lnum, col, 1), "name") !=# "razorHTMLTag"
-endfunction
-
-function! s:is_void(tag_name) abort
-  return index(s:void_elements, a:tag_name) > -1
-endfunction
-
-" List of void elements retrieved from
-" <https://html.spec.whatwg.org/multipage/syntax.html#void-elements>.
 let s:void_elements = [
       \ "area", "base", "br", "col", "command", "embed", "hr", "img",
       \ "input", "keygen", "link", "meta", "param", "source", "track",
       \ "wbr"
       \ ]
 
-let s:sol = '\_^\s*'
-let s:eol = '\s*\%(\%(//\|[/@]\*\).*\)\=\_$'
+function! s:skip_brace(lnum, col) abort
+  let synid = synID(a:lnum, a:col, 1)
+  return synid != g:razor#hl_razorDelimiter && synid != g:razor#hl_razorCSBrace
+endfunction
+
+" " Given a line range, determine whether or not the tags in that range
+" " will produce an indent on the following line.
+" function! s:html_shift(start, end) abort
+"   let shift = 0
+
+"   " Count the opening tags:
+
+"   call cursor(a:start, 1)
+
+"   while search('<\zs\a', "cz", a:end)
+"     " Do not count this match unless:
+"     "
+"     " 1. It is an actual HTML tag
+"     " 2. It is not a void element
+"     " 3. It is not a self-closing tag
+"     if synID(line("."), col("."), 1) == g:razor#hl_razorHTMLTag &&
+"           \ index(s:void_elements, expand("<cword>")) == -1 &&
+"           \ !searchpair("<", "", "/>", "z", b:skip_bracket)
+"       let shift += 1
+"     endif
+"   endwhile
+
+"   " Count the closing tags:
+
+"   call cursor(a:end, 0)
+"   call cursor(0, col("$"))
+
+"   while shift > 0 && search("</", "b", a:start)
+"     " Do not count this match unless it is an actual HTML tag.
+"     if synID(line("."), col("."), 1) == g:razor#hl_razorHTMLTag
+"       let shift -= 1
+"     endif
+"   endwhile
+
+"   return shift > 0
+" endfunction
 
 " GetRazorIndent {{{1
 " ==============
 
-function! GetRazorIndent(lnum) abort
-  let v:lnum = a:lnum
-  let s:prev_lnum = prevnonblank(v:lnum - 1)
+" TODO: Add support for embedded JS/CSS
 
-  if s:prev_lnum == 0
+" If the current line is inside a Razor or HTML comment, do nothing.
+"
+" If the current line is:
+"   1. a closing Razor or C# brace
+"   2. an ending HTML tag
+" remove an indent.
+"
+" If the previous line is:
+"   1. a closing brace
+"   2. an ending tag
+"   3. a one-line Razor-style HTML line (@:)
+" do nothing.
+"
+" If the previous line is an opening tag and is:
+"   1. not a void element
+"   2. not a self-closing tag
+"   3. not followed by an ending tag on the same line
+" add an indent; else, do nothing.
+"
+" If the current line is inside of a Razor block but is *not* inside of
+" an inner HTML block, use C indentation.
+
+function! GetRazorIndent(lnum) abort
+  let plnum = prevnonblank(a:lnum - 1)
+
+  if !plnum
     return 0
   endif
 
-  " Do nothing if we are inside of a Razor comment.
-  if s:syngroup_at_cursor() ==# "razorComment"
+  " Current line {{{2
+  " ------------
+
+  let line = getline(a:lnum)
+  let first_idx = match(line, '\S')
+  let first_char = line[first_idx]
+  let synid = synID(a:lnum, first_idx + 1, 1)
+
+  if synid == g:razor#hl_razorComment || synid == g:razor#hl_razorHTMLComment
     return indent(".")
   endif
 
-  call cursor(v:lnum, 1)
-  let open_lnum = searchpair("{".s:eol, "", s:sol."}", "bnW")
+  if first_char == "}"
+    let synid = synID(a:lnum, first_idx + 1, 1)
 
-  if open_lnum
-    " Inside of a Razor/C# block
-
-    let curr_line = getline(v:lnum)
-
-    " If this line is a closing brace, align with the line that has the
-    " opening brace.
-    if curr_line =~ s:sol."}"
-      return indent(open_lnum)
+    if synid == g:razor#hl_razorDelimiter || synid == g:razor#hl_razorCSBrace
+      return indent(plnum) - s:cs_sw
     endif
-
-    if open_lnum == s:prev_lnum
-      " First line of the block
-      return indent(open_lnum) + s:cs_sw
-    else
-      " Otherwise, we need to check if we are inside of an embedded
-      " multiline HTML block.
-      let open_tag = searchpair('<\zs\a', '', '</\a', "b", "s:ignored_tag(1)", open_lnum)
-
-      if open_tag
-        " Inside of an HTML block
-
-        if curr_line =~# s:sol.'</\a'
-          " Closing tag
-          return indent(open_tag)
-        endif
-
-        if open_tag == s:prev_lnum
-          " First line of the block
-          return indent(open_tag) + s:sw()
-        endif
-
-        " Use HTML indentation
-        return s:get_razor_html_indent()
-      endif
-
-      " If we have gotten this far, then we are not inside of HTML.
-
-      let prev_line = getline(s:prev_lnum)
-      let idx = match(prev_line, '\S')
-
-      " Do not indent if the previous line was:
-      "
-      " 1. A closing brace.
-      " 2. An attribute.
-      " 3. A oneline embedded HTML line.
-      " 4. A closing HTML tag.
-      " 5. A comment.
-      if prev_line[idx] == "}" ||
-            \ prev_line[idx] == "[" ||
-            \ strpart(prev_line, idx, 2) == "@:" ||
-            \ strpart(prev_line, idx, 3) =~ '^</\=\a' ||
-            \ prev_line =~ '//.*\_$' ||
-            \ prev_line =~ '\*[/@]\s*\_$'
-        return indent(s:prev_lnum)
-      endif
-
-      " If none of the above exceptions were encountered, then fall back
-      " to C# indentation.
-      let old_sw = &shiftwidth
-
-      let &shiftwidth = s:cs_sw
-      let ind = cindent(v:lnum)
-      let &shiftwidth = old_sw
-
-      return ind
+  elseif first_char == "<" && line[first_idx + 1] == "/"
+    if synID(a:lnum, first_idx + 1, 1) == g:razor#hl_razorHTMLTag
+      return indent(plnum) - &shiftwidth
     endif
   endif
 
-  return s:get_razor_html_indent()
-endfunction
+  " Previous line {{{2
+  " -------------
 
-function! s:get_razor_html_indent() abort
-  " First, check for a line continuation
+  let pline = getline(plnum)
+  let first_idx = match(pline, '\S')
+  let synid = synID(plnum, first_idx + 1, 1)
 
-  call cursor(s:prev_lnum, 0)
+  while synid == g:razor#hl_razorComment || synid == g:razor#hl_razorCSComment || synid == g:razor#hl_razorHTMLComment
+    let plnum = prevnonblank(plnum - 1)
+
+    if !plnum
+      return 0
+    endif
+
+    let pline = getline(plnum)
+    let first_idx = match(pline, '\S')
+    let synid = synID(plnum, first_idx + 1, 1)
+  endwhile
+
+  let first_char = pline[first_idx]
+
+  if first_char == "<"
+    if pline[first_idx + 1] == "/"
+      return indent(plnum)
+    endif
+
+    call cursor(plnum, first_idx + 2)
+
+    if index(s:void_elements, expand("<cword>")) == -1 &&
+          \ !searchpair("<", "", "/>", "z", b:skip_bracket, plnum) &&
+          \ !searchpair('<\zs\a', "", '</\zs\a', "z", b:skip_tag, plnum)
+      return indent(plnum) + &shiftwidth
+    else
+      return indent(plnum)
+    endif
+  endif
+
+  call cursor(plnum, 0)
   call cursor(0, col("$"))
 
-  if searchpair('<', "", '>', "bz", "s:ignored_tag(0)", s:prev_lnum)
-    normal! ww
-    return col(".") - 1
+  if searchpair("}", "", "{", "b", "s:skip_brace(line('.'), col('.'))", plnum)
+    return indent(plnum)
   endif
 
-  " Next, check if we are after a line continuation
+  " C# {{{2
+  " --
 
-  call cursor(s:prev_lnum, 1)
+  call cursor(a:lnum, 1)
 
-  let [lnum, col] = searchpairpos('<', "", '>', "c", "s:ignored_tag(0)", s:prev_lnum)
+  let in_cs = searchpair("{", "", "}", "bW", "s:skip_brace(line('.'), col('.'))")
 
-  if lnum
-    let self_closing_tag = getline(lnum)[col - 2] == "/"
-
-    let lnum = searchpair('<\zs\a', "", '>', "bzW", "s:ignored_tag(0)")
-
-    if self_closing_tag
-      return indent(lnum)
-    else
-      let tag_name = expand("<cword>")
-
-      if s:is_void(tag_name)
-        return indent(lnum)
-      else
-        return indent(lnum) + s:sw()
-      endif
+  if in_cs
+    if in_cs == plnum
+      return indent(plnum) + s:cs_sw
     endif
+
+    if first_char == "@" && pline[first_idx + 1] == ":"
+      return indent(plnum)
+    endif
+
+    if first_char == "["
+      return indent(plnum)
+    endif
+
+    let old_sw = &shiftwidth
+    let &shiftwidth = s:cs_sw
+    let ind = cindent(a:lnum)
+    let &shiftwidth = old_sw
+
+    return ind
   endif
 
-  " If no line continuations were found, proceed normally
+  " }}}2
 
-  let ind = indent(s:prev_lnum)
-
-  call cursor(0, col("$"))
-
-  let shift = searchpair('<\zs\a', "", '</\a', "bz", "s:ignored_tag(1)", s:prev_lnum)
-        \ ? 1 : 0
-
-  call cursor(v:lnum, 1)
-
-  let shift -= searchpair('<\zs\a', "", '</\a', "c", "s:ignored_tag(1)", v:lnum)
-        \ ? 1 : 0
-
-  return ind + s:sw() * shift
+  return indent(plnum)
 endfunction
-
-" }}}
-
-" vim:fdm=marker
