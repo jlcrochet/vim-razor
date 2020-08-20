@@ -87,15 +87,11 @@ endfunction
 
 " If the current line is inside a Razor or HTML comment, do nothing.
 "
-" If the current line is:
-"   1. a closing Razor or C# brace
-"   2. an ending HTML tag
-" remove an indent.
+" If the current line is an ending HTML tag, remove an indent.
 "
 " If the previous line is:
-"   1. a closing brace
-"   2. an ending tag
-"   3. a one-line Razor-style HTML line (@:)
+"   1. an ending tag
+"   2. a one-line Razor-style HTML line (@:)
 " do nothing.
 "
 " If the previous line is an opening tag and is:
@@ -104,8 +100,7 @@ endfunction
 "   3. not followed by an ending tag on the same line
 " add an indent; else, do nothing.
 "
-" If the current line is inside of a Razor block but is *not* inside of
-" an inner HTML block, use C indentation.
+" If the current line is inside of a Razor/C# block, use C indentation.
 
 function! GetRazorIndent(lnum) abort
   let plnum = prevnonblank(a:lnum - 1)
@@ -118,22 +113,18 @@ function! GetRazorIndent(lnum) abort
   " ------------
 
   let line = getline(a:lnum)
-  let first_idx = match(line, '\S')
-  let first_char = line[first_idx]
-  let synid = synID(a:lnum, first_idx + 1, 1)
+  let curr_first_idx = match(line, '\S')
+  let curr_first_char = line[curr_first_idx]
+  let curr_synid = synID(a:lnum, curr_first_idx + 1, 1)
 
-  if synid == g:razor#hl_razorComment || synid == g:razor#hl_razorHTMLComment
+  if curr_synid == g:razor#hl_razorComment || curr_synid == g:razor#hl_razorHTMLComment
     return indent(".")
   endif
 
-  if first_char == "}"
-    let synid = synID(a:lnum, first_idx + 1, 1)
-
-    if synid == g:razor#hl_razorDelimiter
-      return indent(plnum) - s:cs_sw
-    endif
-  elseif first_char == "<" && line[first_idx + 1] == "/"
-    if synID(a:lnum, first_idx + 1, 1) == g:razor#hl_razorHTMLTag
+  if curr_first_char == "<" && line[curr_first_idx + 1] == "/"
+    echom "foo"
+    if synID(a:lnum, curr_first_idx + 1, 1) == g:razor#hl_razorHTMLTag
+      echom "bar"
       return indent(plnum) - &shiftwidth
     endif
   endif
@@ -142,10 +133,10 @@ function! GetRazorIndent(lnum) abort
   " -------------
 
   let pline = getline(plnum)
-  let first_idx = match(pline, '\S')
-  let synid = synID(plnum, first_idx + 1, 1)
+  let prev_first_idx = match(pline, '\S')
+  let prev_synid = synID(plnum, prev_first_idx + 1, 1)
 
-  while synid == g:razor#hl_razorComment || synid == g:razor#hl_razorCSComment || synid == g:razor#hl_razorHTMLComment
+  while prev_synid == g:razor#hl_razorComment || prev_synid == g:razor#hl_razorCSComment || prev_synid == g:razor#hl_razorHTMLComment
     let plnum = prevnonblank(plnum - 1)
 
     if !plnum
@@ -153,18 +144,18 @@ function! GetRazorIndent(lnum) abort
     endif
 
     let pline = getline(plnum)
-    let first_idx = match(pline, '\S')
-    let synid = synID(plnum, first_idx + 1, 1)
+    let prev_first_idx = match(pline, '\S')
+    let prev_synid = synID(plnum, prev_first_idx + 1, 1)
   endwhile
 
-  let first_char = pline[first_idx]
+  let prev_first_char = pline[prev_first_idx]
 
-  if first_char == "<"
-    if pline[first_idx + 1] == "/"
+  if prev_first_char == "<"
+    if pline[prev_first_idx + 1] == "/"
       return indent(plnum)
     endif
 
-    call cursor(plnum, first_idx + 2)
+    call cursor(plnum, prev_first_idx + 2)
 
     if index(s:void_elements, expand("<cword>")) == -1 &&
           \ !searchpair("<", "", "/>", "z", s:skip_bracket, plnum) &&
@@ -173,13 +164,6 @@ function! GetRazorIndent(lnum) abort
     else
       return indent(plnum)
     endif
-  endif
-
-  call cursor(plnum, 0)
-  call cursor(0, col("$"))
-
-  if searchpair("}", "", "{", "b", "s:skip_brace(line('.'), col('.'))", plnum)
-    return indent(plnum)
   endif
 
   " C# {{{2
@@ -194,11 +178,15 @@ function! GetRazorIndent(lnum) abort
       return indent(plnum) + s:cs_sw
     endif
 
-    if first_char == "@" && pline[first_idx + 1] == ":"
+    if curr_first_char == "}" && (curr_synid == g:razor#hl_razorDelimiter || curr_synid == g:razor#hl_razorCSBrace)
+      return indent(in_cs)
+    endif
+
+    if prev_first_char == "@" && pline[first_idx + 1] == ":"
       return indent(plnum)
     endif
 
-    if first_char == "["
+    if prev_first_char == "["
       return indent(plnum)
     endif
 
