@@ -140,7 +140,7 @@ syn region razorCSString start=/@"/  end=/"/ display nextgroup=@razorCSContained
 syn region razorCSString start=/$@"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
 syn region razorCSString start=/@$"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn match razorCSCharacter /'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorCSEscapeSequence nextgroup=@razorCSConditional skipwhite skipnl
+syn match razorCSCharacter /'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
 
 syn match razorCSEscapeSequence /\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)/ display contained
 
