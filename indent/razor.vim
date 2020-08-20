@@ -25,12 +25,12 @@ let s:cs_sw = get(g:, "razor_indent_shiftwidth", &shiftwidth)
 " Helper variables and function {{{1
 " =============================
 
-let b:skip_bracket =
+let s:skip_bracket =
       \ "synID(line('.'), col('.'), 1) != g:razor#hl_razorHTMLTag"
 
-let b:skip_tag = b:skip_bracket .
+let s:skip_tag = s:skip_bracket .
       \ " || index(s:void_elements, expand('<cword>')) > -1" .
-      \ " || searchpair('<', '', '/>', 'z', b:skip_bracket, line('.'))"
+      \ " || searchpair('<', '', '/>', 'z', s:skip_bracket, line('.'))"
 
 let s:void_elements = [
       \ "area", "base", "br", "col", "command", "embed", "hr", "img",
@@ -60,7 +60,7 @@ endfunction
 "     " 3. It is not a self-closing tag
 "     if synID(line("."), col("."), 1) == g:razor#hl_razorHTMLTag &&
 "           \ index(s:void_elements, expand("<cword>")) == -1 &&
-"           \ !searchpair("<", "", "/>", "z", b:skip_bracket)
+"           \ !searchpair("<", "", "/>", "z", s:skip_bracket)
 "       let shift += 1
 "     endif
 "   endwhile
@@ -129,7 +129,7 @@ function! GetRazorIndent(lnum) abort
   if first_char == "}"
     let synid = synID(a:lnum, first_idx + 1, 1)
 
-    if synid == g:razor#hl_razorDelimiter || synid == g:razor#hl_razorCSBrace
+    if synid == g:razor#hl_razorDelimiter
       return indent(plnum) - s:cs_sw
     endif
   elseif first_char == "<" && line[first_idx + 1] == "/"
@@ -167,8 +167,8 @@ function! GetRazorIndent(lnum) abort
     call cursor(plnum, first_idx + 2)
 
     if index(s:void_elements, expand("<cword>")) == -1 &&
-          \ !searchpair("<", "", "/>", "z", b:skip_bracket, plnum) &&
-          \ !searchpair('<\zs\a', "", '</\zs\a', "z", b:skip_tag, plnum)
+          \ !searchpair("<", "", "/>", "z", s:skip_bracket, plnum) &&
+          \ !searchpair('<\zs\a', "", '</\zs\a', "z", s:skip_tag, plnum)
       return indent(plnum) + &shiftwidth
     else
       return indent(plnum)
