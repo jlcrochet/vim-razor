@@ -172,12 +172,12 @@ function! GetRazorIndent(lnum) abort
   let in_cs = searchpair("{", "", "}", "bW", "s:skip_brace(line('.'), col('.'))")
 
   if in_cs
-    if in_cs == plnum
-      return indent(plnum) + s:cs_sw
-    endif
-
     if curr_first_char == "}" && (curr_synid == g:razor#hl_razorDelimiter || curr_synid == g:razor#hl_razorCSBrace)
       return indent(in_cs)
+    endif
+
+    if in_cs == plnum
+      return indent(plnum) + s:cs_sw
     endif
 
     if prev_first_char == "@" && pline[first_idx + 1] == ":"
