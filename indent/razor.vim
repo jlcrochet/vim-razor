@@ -30,7 +30,7 @@ let s:skip_bracket =
 
 let s:skip_tag = s:skip_bracket .
       \ " || index(s:void_elements, expand('<cword>')) > -1" .
-      \ " || searchpair('<', '', '/>', 'z', s:skip_bracket, line('.'))"
+      \ " || searchpair('<', '', '/>', 'nz', s:skip_bracket, line('.'))"
 
 let s:void_elements = [
       \ "area", "base", "br", "col", "command", "embed", "hr", "img",
@@ -43,149 +43,63 @@ function! s:skip_brace(lnum, col) abort
   return synid != g:razor#hl_razorDelimiter && synid != g:razor#hl_razorCSBrace
 endfunction
 
-" " Given a line range, determine whether or not the tags in that range
-" " will produce an indent on the following line.
-" function! s:html_shift(start, end) abort
-"   let shift = 0
-
-"   " Count the opening tags:
-
-"   call cursor(a:start, 1)
-
-"   while search('<\zs\a', "cz", a:end)
-"     " Do not count this match unless:
-"     "
-"     " 1. It is an actual HTML tag
-"     " 2. It is not a void element
-"     " 3. It is not a self-closing tag
-"     if synID(line("."), col("."), 1) == g:razor#hl_razorHTMLTag &&
-"           \ index(s:void_elements, expand("<cword>")) == -1 &&
-"           \ !searchpair("<", "", "/>", "z", s:skip_bracket)
-"       let shift += 1
-"     endif
-"   endwhile
-
-"   " Count the closing tags:
-
-"   call cursor(a:end, 0)
-"   call cursor(0, col("$"))
-
-"   while shift > 0 && search("</", "b", a:start)
-"     " Do not count this match unless it is an actual HTML tag.
-"     if synID(line("."), col("."), 1) == g:razor#hl_razorHTMLTag
-"       let shift -= 1
-"     endif
-"   endwhile
-
-"   return shift > 0
-" endfunction
-
 " GetRazorIndent {{{1
 " ==============
 
 " TODO: Add support for embedded JS/CSS
 
-" If the current line is inside a Razor or HTML comment, do nothing.
-"
-" If the current line is an ending HTML tag, remove an indent.
-"
-" If the previous line is:
-"   1. an ending tag
-"   2. a one-line Razor-style HTML line (@:)
-" do nothing.
-"
-" If the previous line is an opening tag and is:
-"   1. not a void element
-"   2. not a self-closing tag
-"   3. not followed by an ending tag on the same line
-" add an indent; else, do nothing.
-"
-" If the current line is inside of a Razor/C# block, use C indentation.
-
+" If the current line is inside a Razor or C# block:
+"   If it is between a pair of HTML tags, use HTML indentation.
+"   Else, use C indentation.
+" Else, use HTML indentation.
 function! GetRazorIndent(lnum) abort
-  let plnum = prevnonblank(a:lnum - 1)
+  let s:plnum = prevnonblank(a:lnum - 1)
 
-  if !plnum
+  if !s:plnum
     return 0
   endif
 
-  " Current line {{{2
-  " ------------
+  let s:line = getline(a:lnum)
+  let s:first_idx = match(s:line, '\S')
+  let s:first_char = s:line[s:first_idx]
 
-  let line = getline(a:lnum)
-  let curr_first_idx = match(line, '\S')
-  let curr_first_char = line[curr_first_idx]
-  let curr_synid = synID(a:lnum, curr_first_idx + 1, 1)
+  let in_razor = searchpair("{", "", "}", "bnW", "s:skip_brace(line('.'), col('.'))")
 
-  if curr_synid == g:razor#hl_razorComment || curr_synid == g:razor#hl_razorHTMLComment
-    return indent(".")
-  endif
-
-  if curr_first_char == "<" && line[curr_first_idx + 1] == "/"
-    if synID(a:lnum, curr_first_idx + 1, 1) == g:razor#hl_razorHTMLTag
-      return indent(plnum) - &shiftwidth
-    endif
-  endif
-
-  " Previous line {{{2
-  " -------------
-
-  let pline = getline(plnum)
-  let prev_first_idx = match(pline, '\S')
-  let prev_synid = synID(plnum, prev_first_idx + 1, 1)
-
-  while prev_synid == g:razor#hl_razorComment || prev_synid == g:razor#hl_razorCSComment || prev_synid == g:razor#hl_razorHTMLComment
-    let plnum = prevnonblank(plnum - 1)
-
-    if !plnum
-      return 0
+  if in_razor
+    if s:first_char == "}"
+      return indent(in_razor)
     endif
 
-    let pline = getline(plnum)
-    let prev_first_idx = match(pline, '\S')
-    let prev_synid = synID(plnum, prev_first_idx + 1, 1)
-  endwhile
-
-  let prev_first_char = pline[prev_first_idx]
-
-  if prev_first_char == "<"
-    if pline[prev_first_idx + 1] == "/"
-      return indent(plnum)
+    if in_razor == s:plnum
+      return indent(s:plnum) + s:cs_sw
     endif
 
-    call cursor(plnum, prev_first_idx + 2)
+    let in_html = searchpair('<\zs\a', "", '</\zs\a', "bn", s:skip_tag, in_razor)
 
-    if index(s:void_elements, expand("<cword>")) == -1 &&
-          \ !searchpair("<", "", "/>", "z", s:skip_bracket, plnum) &&
-          \ !searchpair('<\zs\a', "", '</\zs\a', "z", s:skip_tag, plnum)
-      return indent(plnum) + &shiftwidth
-    else
-      return indent(plnum)
-    endif
-  endif
+    if in_html
+      if s:first_char == "<" && s:line[s:first_idx + 1] == "/"
+        return indent(in_html)
+      endif
 
-  " C# {{{2
-  " --
+      if in_html == s:plnum
+        return indent(s:plnum) + &shiftwidth
+      endif
 
-  call cursor(a:lnum, 1)
-
-  let in_cs = searchpair("{", "", "}", "bW", "s:skip_brace(line('.'), col('.'))")
-
-  if in_cs
-    if curr_first_char == "}" && (curr_synid == g:razor#hl_razorDelimiter || curr_synid == g:razor#hl_razorCSBrace)
-      return indent(in_cs)
+      return s:get_html_indent(a:lnum)
     endif
 
-    if in_cs == plnum
-      return indent(plnum) + s:cs_sw
+    let pline = getline(s:plnum)
+    let first_idx = match(pline, '\S')
+    let first_char = pline[first_idx]
+
+    if first_char == "["
+      " After attribute
+      return indent(s:plnum)
     endif
 
-    if prev_first_char == "@" && pline[first_idx + 1] == ":"
-      return indent(plnum)
-    endif
-
-    if prev_first_char == "["
-      return indent(plnum)
+    if first_char == "@" && pline[first_idx + 1] == ":"
+      " After HTML escape sequence
+      return indent(s:plnum)
     endif
 
     let old_sw = &shiftwidth
@@ -196,7 +110,22 @@ function! GetRazorIndent(lnum) abort
     return ind
   endif
 
-  " }}}2
+  return s:get_html_indent(a:lnum)
+endfunction
 
-  return indent(plnum)
+function! s:get_html_indent(lnum) abort
+  let shift = 0
+
+  call cursor(s:plnum, 0)
+  call cursor(0, col("$"))
+
+  if searchpair('<\zs\a', "", '</\zs\a', "b", s:skip_tag, s:plnum)
+    let shift = 1
+  endif
+
+  if s:first_char == "<" && s:line[s:first_idx + 1] == "/"
+    let shift -= 1
+  endif
+
+  return indent(s:plnum) + &shiftwidth * shift
 endfunction

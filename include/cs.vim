@@ -67,7 +67,7 @@ syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
 syn keyword razorCSAs as nextgroup=razorCSType,razorCSUserType skipwhite skipnl
 syn keyword razorCSIs is nextgroup=razorCSType,razorCSUserType skipwhite skipnl
-syn keyword razorCSNew new nextgroup=razorCSType,razorCSUserType,razorCSNewArray skipwhite skipnl
+syn keyword razorCSNew new nextgroup=razorCSType,razorCSUserType,razorCSNewArray,razorCSBlock skipwhite skipnl
 syn match razorCSNewArray /\[]/ display contained nextgroup=razorCSBlock skipwhite skipnl
 
 syn keyword razorCSBoolean true false nextgroup=@razorCSContainedOperators skipwhite skipnl
