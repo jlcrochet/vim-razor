@@ -7,7 +7,7 @@ syn region razorHTMLTag start=/\%#=1<\// end=/>/ display
 syn match razorHTMLAttribute /\%#=1\a[[:alnum:]-]*/ display contained nextgroup=razorHTMLAttribute,razorHTMLAttributeOperator skipwhite skipnl
 syn match razorHTMLAttributeOperator /=/ display contained nextgroup=razorHTMLValue skipwhite skipnl
 
-syn match razorHTMLValue /\%#=1[^[:blank:]>]\+/ display contained contains=razorHTMLCharacterReference
+syn match razorHTMLValue /\%#=1[^[:space:]>]\+/ display contained contains=razorHTMLCharacterReference
 
 syn region razorHTMLValue start=/"/ end=/"/ display contained contains=razorHTMLCharacterReference
 syn region razorHTMLValue start=/'/ end=/'/ display contained contains=razorHTMLCharacterReference
