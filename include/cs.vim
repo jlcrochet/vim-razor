@@ -20,7 +20,7 @@ syn match razorCSDefinition /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgrou
 syn match razorCSVariable /\%#=1\<\h\w*/ transparent contains=NONE nextgroup=@razorCSContainedOperators,razorCSGeneric skipwhite skipnl
 
 syn match razorCSFunctionDefinition /\%#=1\h\w*(.*)/ display contained contains=razorCSFunctionParameters
-syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSModifier,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
+syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
