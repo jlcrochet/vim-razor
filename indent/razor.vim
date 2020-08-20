@@ -122,9 +122,7 @@ function! GetRazorIndent(lnum) abort
   endif
 
   if curr_first_char == "<" && line[curr_first_idx + 1] == "/"
-    echom "foo"
     if synID(a:lnum, curr_first_idx + 1, 1) == g:razor#hl_razorHTMLTag
-      echom "bar"
       return indent(plnum) - &shiftwidth
     endif
   endif
