@@ -30,7 +30,7 @@ syn cluster razorAllowed contains=@razorTop,razorHTMLValue
 syn cluster razorStatement contains=
       \ razorAsync,razorExpression,razorConditional,razorRepeat,razorUsing,razorException,razorLock,
       \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorInject,razorLayout,
-      \ razorModel,razorNamespace,razorPage,razorSection,razorBind,razorAddTagHelper,razorRemoveTagHelper,
+      \ razorModel,razorNamespace,razorPage,razorSection,razorRef,razorBind,razorAddTagHelper,razorRemoveTagHelper,
       \ razorTypeparam,razorEventAttribute,razorAttributes
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=@razorAllowed display nextgroup=@razorStatement,razorBlock
@@ -66,6 +66,8 @@ syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display 
 syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators,razorHTMLTag skipwhite skipnl
 
 syn match razorIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgroup=razorCSGeneric
+
+syn keyword razorRef ref contained nextgroup=razorHTMLAttributeOperator
 
 syn match razorBind /bind\%(-\h\w*\)\=\>/ display contained nextgroup=razorEventArg,razorHTMLAttributeOperator
 
@@ -138,6 +140,7 @@ hi def link razorModel            razorKeyword
 hi def link razorNamespace        razorKeyword
 hi def link razorPage             razorKeyword
 hi def link razorSection          razorKeyword
+hi def link razorRef              razorKeyword
 hi def link razorBind             razorKeyword
 hi def link razorAddTagHelper     razorKeyword
 hi def link razorRemoveTagHelper  razorKeyword

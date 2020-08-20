@@ -83,10 +83,56 @@ syn keyword razorCSStatement checked unchecked fixed unsafe
 
 syn keyword razorCSRepeat do for foreach in while
 
-syn match razorCSInteger /\%#=1\d\%(_*\d\)*[uU]\=[lL]\=/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn match razorCSFloat   /\%#=1\d\%(_*\d\)*\%(\.\d\%(_*\d\)*\)\=[eE][+-]\=\d\%(_*\d\)*[fFmM]\=/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn match razorCSFloat   /\%#=1\d\%(_*\d\)*\.\d\%(_*\d\)*[fFmM]\=/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn match razorCSFloat   /\%#=1\d\%(_*\d\)*[fFmM]/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
+function s:or(...)
+  return '\%('.join(a:000, '\|').'\)'
+endfunction
+
+function s:optional(re)
+  return '\%('.a:re.'\)\='
+endfunction
+
+let s:decimal = '\d\%(_*\d\)*'
+let s:binary = '0[bB][01]\%(_*[01]\)*'
+let s:hexadecimal = '0[xX]\x\%(_*\x\)*'
+
+let s:unsigned_suffix = '[uU]'
+let s:long_suffix = '[lL]'
+let s:integer_suffix = s:or(s:unsigned_suffix.s:long_suffix, s:long_suffix.s:unsigned_suffix)
+let s:float_suffix = '[fF]'
+let s:decimal_suffix = '[mM]'
+let s:exponent_suffix = '[eE][+-]\='.s:decimal
+
+let s:syn_match_template = 'syn match razorCSNumber /\%%#=1%s/ display nextgroup=@razorCSContainedOperators skipwhite skipnl'
+
+let s:decimal_re = s:decimal . s:or(
+      \ s:integer_suffix,
+      \ s:float_suffix,
+      \ s:decimal_suffix,
+      \ s:exponent_suffix . s:or(s:float_suffix, s:decimal_suffix).'\=',
+      \ '\.'.s:decimal . s:optional(s:exponent_suffix) . s:or(s:float_suffix, s:decimal_suffix).'\='
+      \ ) . '\='
+
+let s:binary_re = s:binary . s:integer_suffix.'\='
+
+let s:hexadecimal_re = s:hexadecimal . s:or(
+      \ s:integer_suffix,
+      \ s:float_suffix,
+      \ s:exponent_suffix . s:float_suffix.'\='
+      \ ) . '\='
+
+execute printf(s:syn_match_template, s:decimal_re)
+execute printf(s:syn_match_template, s:binary_re)
+execute printf(s:syn_match_template, s:hexadecimal_re)
+
+delfunction s:or
+delfunction s:optional
+
+unlet
+      \ s:decimal s:binary s:hexadecimal
+      \ s:unsigned_suffix s:long_suffix s:integer_suffix
+      \ s:float_suffix s:decimal_suffix s:exponent_suffix
+      \ s:decimal_re s:binary_re s:hexadecimal_re
+      \ s:syn_match_template
 
 syn region razorCSString start=/"/   end=/"/ display oneline contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
 syn region razorCSString start=/$"/  end=/"/ display oneline contains=razorCSEscapeSequence,razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
@@ -139,8 +185,7 @@ hi def link razorCSStatement Statement
 hi def link razorCSRepeat Repeat
 hi def link razorCSString String
 hi def link razorCSCharacter Character
-hi def link razorCSInteger Number
-hi def link razorCSFloat Float
+hi def link razorCSNumber Number
 hi def link razorCSEscapeSequence SpecialChar
 hi def link razorCSStringInterpolationDelimiter PreProc
 hi def link razorCSComment Comment
