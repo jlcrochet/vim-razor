@@ -149,6 +149,8 @@ hi def link razorEventAttribute   razorKeyword
 hi def link razorAttributes       razorKeyword
 " }}}
 
+unlet s:include_path
+
 let b:current_syntax = "razor"
 
 " vim:fdm=marker

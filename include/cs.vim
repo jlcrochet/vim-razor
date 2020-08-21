@@ -97,7 +97,7 @@ let s:hexadecimal = '0[xX]\x\%(_*\x\)*'
 
 let s:unsigned_suffix = '[uU]'
 let s:long_suffix = '[lL]'
-let s:integer_suffix = s:or(s:unsigned_suffix.s:long_suffix, s:long_suffix.s:unsigned_suffix)
+let s:integer_suffix = s:or(s:unsigned_suffix.s:long_suffix.'\=', s:long_suffix.s:unsigned_suffix.'\=')
 let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
