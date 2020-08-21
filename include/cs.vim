@@ -9,6 +9,8 @@ syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCS
 
 syn match razorCSUserType /\%#=1\h\w*/ display nextgroup=razorCSGeneric,razorCSArrayType,razorCSNullableType,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
 
+hi def link razorCSDeclaration Identifier
+
 syn match razorCSArrayType /\[]/ display contained nextgroup=razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 syn match razorCSNullableType /?/ display contained nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 
@@ -61,7 +63,7 @@ syn cluster razorCSContainedOperators contains=
       \ razorCSModifiedAssignmentOperator,razorCSMemberAccessOperator,
       \ razorCSPointerMemberAccessOperator,razorCSIndexOperator,razorCSLambdaOperator
 
-syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition skipwhite skipnl
+syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSNullableType,razorCSArrayType skipwhite skipnl
 
 syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
@@ -134,11 +136,11 @@ unlet
       \ s:decimal_re s:binary_re s:hexadecimal_re
       \ s:syn_match_template
 
-syn region razorCSString start=/"/   end=/"/ display oneline contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString start=/$"/  end=/"/ display oneline contains=razorCSEscapeSequence,razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString start=/@"/  end=/"/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString start=/$@"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString start=/@$"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/"/   end=/"/ display oneline contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/$"/  end=/"/ display oneline contains=razorCSEscapeSequence,razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/@"/  end=/"/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/$@"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/@$"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
 
 syn match razorCSCharacter /'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
 
@@ -184,6 +186,7 @@ hi def link razorCSConditional Conditional
 hi def link razorCSStatement Statement
 hi def link razorCSRepeat Repeat
 hi def link razorCSString String
+hi def link razorCSStringDelimiter razorCSString
 hi def link razorCSCharacter Character
 hi def link razorCSNumber Number
 hi def link razorCSEscapeSequence SpecialChar

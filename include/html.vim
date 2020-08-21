@@ -9,8 +9,8 @@ syn match razorHTMLAttributeOperator /=/ display contained nextgroup=razorHTMLVa
 
 syn match razorHTMLValue /\%#=1[^[:space:]>]\+/ display contained contains=razorHTMLCharacterReference
 
-syn region razorHTMLValue start=/"/ end=/"/ display contained contains=razorHTMLCharacterReference
-syn region razorHTMLValue start=/'/ end=/'/ display contained contains=razorHTMLCharacterReference
+syn region razorHTMLValue matchgroup=razorHTMLValueDelimiter start=/"/ end=/"/ display contained contains=razorHTMLCharacterReference
+syn region razorHTMLValue matchgroup=razorHTMLValueDelimiter start=/'/ end=/'/ display contained contains=razorHTMLCharacterReference
 
 syn match razorHTMLCharacterReference /\%#=1&#\d\+;/ display
 syn match razorHTMLCharacterReference /\%#=1&#x\x\+;/ display
@@ -33,6 +33,7 @@ hi def link razorHTMLTag Identifier
 hi def link razorHTMLAttribute Keyword
 hi def link razorHTMLAttributeOperator Operator
 hi def link razorHTMLValue String
+hi def link razorHTMLValueDelimiter razorHTMLValue
 hi def link razorHTMLScriptError Error
 hi def link razorHTMLCharacterReference SpecialChar
 hi def link razorHTMLComment Comment
