@@ -14,7 +14,7 @@ syn region razorHTMLValue matchgroup=razorHTMLValueDelimiter start=/'/ end=/'/ d
 
 syn match razorHTMLCharacterReference /\%#=1&#\d\+;/ display
 syn match razorHTMLCharacterReference /\%#=1&#x\x\+;/ display
-syn match razorHTMLCharacterReference /\%#=1&\a[[:alnum:]]\+;/ display
+syn match razorHTMLCharacterReference /\%#=1&\a[[:alnum:]]*;/ display
 
 syn region razorHTMLTag matchgroup=razorHTMLTag start=/\%#=1<script\>/ end=/>/ display contains=razorHTMLAttribute nextgroup=razorHTMLTag,razorHTMLScript skipnl
 syn region razorHTMLScript start=// matchgroup=razorHTMLTag end=/\%#=1<\/script>/ display contained transparent contains=@razorHTMLJS

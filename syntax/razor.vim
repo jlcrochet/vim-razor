@@ -21,8 +21,8 @@ endif
 
 " The syntax files for C# and HTML are kept in a separate directory so
 " that they don't get picked up by Vim in other contexts.
-execute "syn include @razorCS ".s:include_path."/cs.vim"
 execute "source ".s:include_path."/html.vim"
+execute "syn include @razorCS ".s:include_path."/cs.vim"
 
 syn cluster razorTop contains=TOP,razorComment,razorEscapedDelimiter
 syn cluster razorAllowed contains=@razorTop,razorHTMLValue

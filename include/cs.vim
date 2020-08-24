@@ -1,18 +1,17 @@
 syn keyword razorCSModifier nextgroup=razorCSModifier,razorCSType,razorCSDefine,razorCSUserType,razorCSNew,razorCSFunctionDefinition skipwhite skipnl
       \ public private protected abstract const static virtual sealed
-      \ extern internal event explicit implicit override new params
+      \ extern internal event explicit implicit override params
       \ readonly ref stackalloc using volatile async
 
-syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSNullableType,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
+syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSTypeModifier,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
       \ bool byte char decimal object string delegate dynamic double
       \ enum void float int long sbyte short uint ulong ushort var
 
-syn match razorCSUserType /\%#=1\h\w*/ display contained nextgroup=razorCSGeneric,razorCSArrayType,razorCSNullableType,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
+syn match razorCSUserType /\%#=1\h\w*/ display contained nextgroup=razorCSGeneric,razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
 
 hi def link razorCSDeclaration Identifier
 
-syn match razorCSArrayType /\[]/ display contained nextgroup=razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
-syn match razorCSNullableType /?/ display contained nextgroup=razorCSOperatorDefine,razorCSArrayType,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
+syn match razorCSTypeModifier /\%(\[]\|?\|\*\)*/ display contained nextgroup=razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 
 syn keyword razorCSDefine nextgroup=razorCSDefinition skipwhite skipnl
       \ class namespace struct interface alias
@@ -30,40 +29,38 @@ syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contai
 
 syn keyword razorCSOperatorDefine operator contained nextgroup=razorCSUnaryOperator,razorCSBinaryOperator,razorCSType,razorCSUserType,razorCSBoolean skipwhite skipnl
 
-syn match razorCSUnaryOperator /\%#=1[+\-!~^]/ display
-
 " The nextgroup argument here is intended to allow optional parameters
 " inside razorCSFunctionParameters
 syn match razorCSAssignmentOperator /\%#=1=/ display contained nextgroup=@razorCS skipwhite skipnl
 
-syn match razorCSBinaryOperator /\%#=1[+\-*/%&|^<>]/ display contained
-syn match razorCSBinaryOperator /\%#=1[!=]=/ display contained
-syn match razorCSBinaryOperator /\%#=1<[<=]/ display contained
-syn match razorCSBinaryOperator /\%#=1>[>=]/ display contained
-syn match razorCSBinaryOperator /\%#=1&&/ display contained
-syn match razorCSBinaryOperator /\%#=1||/ display contained
-syn match razorCSBinaryOperator /\%#=1??/ display contained
-syn match razorCSBinaryOperator /\%#=1\.\./ display contained
+syn match razorCSUnaryOperator /\%#=1\*/ display nextgroup=razorCSVariable
+syn match razorCSUnaryOperator /\%#=1[!~]/ display
+syn match razorCSUnaryOperator /\%#=1++\=/ display
+syn match razorCSUnaryOperator /\%#=1--\=/ display
+
+syn match razorCSBinaryOperator /\%#=1[*+\-/%&|^]=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1[=!]=/ display contained
+syn match razorCSBinaryOperator /\%#=1[<>]=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1&&=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1||=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1<<=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1>>=\=/ display contained
+syn match razorCSBinaryOperator /\%#=1??=/ display contained
 
 syn match razorCSTernaryOperator /\%#=1[?:]/ display contained
 
-syn match razorCSModifiedAssignmentOperator /\%#=1[+\-*/%&|^]=/ display contained
-syn match razorCSModifiedAssignmentOperator /\%#=1<<=/ display contained
-syn match razorCSModifiedAssignmentOperator /\%#=1>>=/ display contained
-syn match razorCSModifiedAssignmentOperator /\%#=1??=/ display contained
-
 syn match razorCSMemberAccessOperator /\%#=1?\=\./ display contained nextgroup=razorCSVariable skipwhite skipnl
-syn match razorCSPointerMemberAccessOperator /\%#=1->/ display contained nextgroup=razorCSVariable skipwhite skipnl
-syn region razorCSIndexOperator matchgroup=Operator start=/\%#=1?\=\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn match razorCSMemberAccessOperator /\%#=1->/ display contained nextgroup=razorCSVariable skipwhite skipnl
+syn region razorCSIndexOperator matchgroup=razorCSIndexBrackets start=/\%#=1?\=\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
 syn match razorCSLambdaOperator /\%#=1=>/ display contained nextgroup=razorCSBlock skipwhite skipnl
 
 syn cluster razorCSContainedOperators contains=
       \ razorCSBinaryOperator,razorCSTernaryOperator,razorCSAssignmentOperator,
-      \ razorCSModifiedAssignmentOperator,razorCSMemberAccessOperator,
-      \ razorCSPointerMemberAccessOperator,razorCSIndexOperator,razorCSLambdaOperator
+      \ razorCSMemberAccessOperator,
+      \ razorCSIndexOperator,razorCSLambdaOperator
 
-syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSNullableType,razorCSArrayType skipwhite skipnl
+syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier skipwhite skipnl
 
 syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
@@ -104,7 +101,7 @@ let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
 
-let s:syn_match_template = 'syn match razorCSNumber /\%%#=1%s/ display nextgroup=@razorCSContainedOperators skipwhite skipnl'
+let s:syn_match_template = 'syn match razorCSNumber /\%%#=1%s/ display nextgroup=razorCSBinaryOperator,razorCSTernaryOperator skipwhite skipnl'
 
 let s:decimal_re = s:decimal . s:or(
       \ s:integer_suffix,
@@ -136,13 +133,13 @@ unlet
       \ s:decimal_re s:binary_re s:hexadecimal_re
       \ s:syn_match_template
 
-syn region razorCSString matchgroup=razorCSStringDelimiter start=/"/   end=/"/ display oneline contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString matchgroup=razorCSStringDelimiter start=/$"/  end=/"/ display oneline contains=razorCSEscapeSequence,razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString matchgroup=razorCSStringDelimiter start=/@"/  end=/"/ display nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString matchgroup=razorCSStringDelimiter start=/$@"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
-syn region razorCSString matchgroup=razorCSStringDelimiter start=/@$"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/"/   end=/"/ display oneline contains=razorCSEscapeSequence nextgroup=razorCSBinaryOperator,razorCSTernaryOperator,razorCSIndexOperator skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/$"/  end=/"/ display oneline contains=razorCSEscapeSequence,razorCSStringInterpolation nextgroup=razorCSBinaryOperator,razorCSTernaryOperator,razorCSIndexOperator skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/@"/  end=/"/ display nextgroup=razorCSBinaryOperator,razorCSTernaryOperator,razorCSIndexOperator skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/$@"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=razorCSBinaryOperator,razorCSTernaryOperator,razorCSIndexOperator skipwhite skipnl
+syn region razorCSString matchgroup=razorCSStringDelimiter start=/@$"/ end=/"/ display contains=razorCSStringInterpolation nextgroup=razorCSBinaryOperator,razorCSTernaryOperator,razorCSIndexOperator skipwhite skipnl
 
-syn match razorCSCharacter /'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorCSEscapeSequence nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn match razorCSCharacter /'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorCSEscapeSequence nextgroup=razorCSBinaryOperator,razorCSTernaryOperator skipwhite skipnl
 
 syn match razorCSEscapeSequence /\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)/ display contained
 
@@ -151,17 +148,14 @@ syn region razorCSStringInterpolation matchgroup=razorCSStringInterpolationDelim
 syn region razorCSComment start=/\/\// end=/\_$/ display
 syn region razorCSComment start=/\/\*/ end=/\*\// display
 
-syn sync ccomment razorCSComment
-
 hi def link razorCSModifier Keyword
 hi def link razorCSType Type
 hi def link razorCSUserType razorCSType
+hi def link razorCSTypeModifier razorCSType
 hi def link razorCSFunctionDefinition Typedef
 hi def link razorCSGenericBracket Delimiter
 hi def link razorCSParenthesis Delimiter
 hi def link razorCSBrace Delimiter
-hi def link razorCSArrayType razorCSType
-hi def link razorCSNullableType razorCSType
 hi def link razorCSDefine Statement
 hi def link razorCSDefinition Typedef
 hi def link razorCSOperatorDefine Statement
@@ -170,8 +164,7 @@ hi def link razorCSBinaryOperator Operator
 hi def link razorCSTernaryOperator Operator
 hi def link razorCSAssignmentOperator Operator
 hi def link razorCSMemberAccessOperator Operator
-hi def link razorCSPointerMemberAccessOperator Operator
-hi def link razorCSIndexOperator Operator
+hi def link razorCSIndexBrackets Operator
 hi def link razorCSLambdaOperator Operator
 hi def link razorCSKeywordOperator Keyword
 hi def link razorCSAs Keyword
