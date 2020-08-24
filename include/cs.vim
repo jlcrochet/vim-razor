@@ -60,7 +60,7 @@ syn cluster razorCSContainedOperators contains=
       \ razorCSMemberAccessOperator,
       \ razorCSIndexOperator,razorCSLambdaOperator
 
-syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier skipwhite skipnl
+syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
 
 syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
