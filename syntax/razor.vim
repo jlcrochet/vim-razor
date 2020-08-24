@@ -43,29 +43,27 @@ syn keyword razorConditional if switch contained nextgroup=razorParentheses skip
 syn keyword razorConditional else contained nextgroup=razorConditional,razorBlock skipwhite skipnl
 syn keyword razorRepeat for foreach while contained nextgroup=razorParentheses skipwhite
 syn keyword razorRepeat do contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorUsing using contained nextgroup=razorIdentifier,razorParentheses skipwhite
+syn keyword razorUsing using contained nextgroup=razorArea,razorParentheses skipwhite
 syn keyword razorException try finally contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorException catch contained nextgroup=razorParentheses skipwhite
 syn keyword razorLock lock contained nextgroup=razorParentheses skipwhite
 syn keyword razorAttribute attribute contained nextgroup=razorCSBracketed skipwhite
 syn keyword razorCode code contained nextgroup=razorBlock skipwhite skipnl
 syn keyword razorFunctions functions contained nextgroup=razorBlock skipwhite skipnl
-syn keyword razorImplements implements contained nextgroup=razorIdentifier skipwhite
-syn keyword razorInherits inherits contained nextgroup=razorIdentifier skipwhite
+syn keyword razorImplements implements contained nextgroup=razorArea skipwhite
+syn keyword razorInherits inherits contained nextgroup=razorArea skipwhite
 syn keyword razorInject inject contained nextgroup=razorArea skipwhite
-syn keyword razorLayout layout contained nextgroup=razorIdentifier skipwhite
-syn keyword razorModel model contained nextgroup=razorIdentifier skipwhite
-syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
+syn keyword razorLayout layout contained nextgroup=razorArea skipwhite
+syn keyword razorModel model contained nextgroup=razorArea skipwhite
+syn keyword razorNamespace namespace contained nextgroup=razorArea skipwhite
 syn keyword razorPage page contained nextgroup=razorCSString skipwhite
 syn keyword razorSection section contained nextgroup=razorExpression skipwhite
 syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorArea skipwhite
 syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorArea skipwhite
-syn keyword razorTypeparam typeparam contained nextgroup=razorIdentifier skipwhite
+syn keyword razorTypeparam typeparam contained nextgroup=razorArea skipwhite
 
 syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained contains=@razorCS nextgroup=razorBlock skipwhite skipnl
 syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators,razorHTMLTag skipwhite skipnl
-
-syn match razorIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgroup=razorCSGeneric
 
 syn keyword razorRef ref contained nextgroup=razorHTMLAttributeOperator
 
@@ -116,7 +114,6 @@ syn keyword razorTodo TODO NOTE XXX FIXME HACK TBD
 
 hi def link razorExpression       PreProc
 hi def link razorDelimiter        razorExpression
-hi def link razorIdentifier       razorExpression
 hi def link razorEscapedDelimiter razorExpression
 hi def link razorComment          Comment
 hi def link razorArea             razorExpression
