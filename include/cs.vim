@@ -171,7 +171,7 @@ hi def link razorCSAs Keyword
 hi def link razorCSIs Keyword
 hi def link razorCSNew Keyword
 hi def link razorCSNewArray razorCSNew
-hi def link razorCSBoolean Constant
+hi def link razorCSBoolean Boolean
 hi def link razorCSNull Constant
 hi def link razorCSPseudoVariable Constant
 hi def link razorCSControl Statement

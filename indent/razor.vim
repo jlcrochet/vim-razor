@@ -20,7 +20,7 @@ if exists("*GetRazorIndent")
   finish
 endif
 
-let s:cs_sw = get(g:, "razor_indent_shiftwidth", &shiftwidth)
+let s:cs_sw = get(g:, "razor_indent_shiftwidth", shiftwidth())
 
 " Helper variables and function {{{1
 " =============================
@@ -82,7 +82,7 @@ function! GetRazorIndent(lnum) abort
       endif
 
       if in_html == s:plnum
-        return indent(s:plnum) + &shiftwidth
+        return indent(s:plnum) + shiftwidth()
       endif
 
       return s:get_html_indent(a:lnum)
@@ -127,5 +127,5 @@ function! s:get_html_indent(lnum) abort
     let shift -= 1
   endif
 
-  return indent(s:plnum) + &shiftwidth * shift
+  return indent(s:plnum) + shiftwidth() * shift
 endfunction
