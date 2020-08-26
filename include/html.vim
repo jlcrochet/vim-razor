@@ -1,10 +1,10 @@
 syn include @razorHTMLJS syntax/javascript.vim
 syn include @razorHTMLCSS syntax/css.vim
 
-syn region razorHTMLTag matchgroup=razorHTMLTag start=/\%#=1<\a[[:alnum:]-]*/ end=/>/ display contains=razorHTMLAttribute
+syn region razorHTMLTag matchgroup=razorHTMLTag start=/\%#=1<\a[[:alnum:]-.]*/ end=/>/ display contains=razorHTMLAttribute
 syn region razorHTMLTag start=/\%#=1<\// end=/>/ display
 
-syn match razorHTMLAttribute /\%#=1\a[[:alnum:]-]*/ display contained nextgroup=razorHTMLAttribute,razorHTMLAttributeOperator skipwhite skipnl
+syn match razorHTMLAttribute /\%#=1\a[[:alnum:]-.]*/ display contained nextgroup=razorHTMLAttribute,razorHTMLAttributeOperator skipwhite skipnl
 syn match razorHTMLAttributeOperator /=/ display contained nextgroup=razorHTMLValue skipwhite skipnl
 
 syn match razorHTMLValue /\%#=1[^[:space:]>]\+/ display contained contains=razorHTMLCharacterReference
