@@ -25,7 +25,7 @@ syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock,razorInnerHTML
+syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock,razorInnerHTML,razorComment
 
 syn keyword razorCSOperatorDefine operator contained nextgroup=razorCSUnaryOperator,razorCSBinaryOperator,razorCSType,razorCSUserType,razorCSBoolean skipwhite skipnl
 
@@ -58,7 +58,8 @@ syn match razorCSLambdaOperator /\%#=1=>/ display contained nextgroup=razorCSBlo
 syn cluster razorCSContainedOperators contains=
       \ razorCSBinaryOperator,razorCSTernaryOperator,razorCSAssignmentOperator,
       \ razorCSMemberAccessOperator,
-      \ razorCSIndexOperator,razorCSLambdaOperator
+      \ razorCSIndexOperator,razorCSLambdaOperator,
+      \ razorCSComment  " This is to prevent slash operators from clobbering C# comments
 
 syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
 
