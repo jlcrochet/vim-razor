@@ -102,6 +102,11 @@ function! GetRazorIndent(lnum) abort
       return indent(s:plnum)
     endif
 
+    if synID(s:plnum, first_idx + 1, 1) == g:razor#hl_razorComment
+      " After Razor comment
+      return indent(s:plnum)
+    endif
+
     let old_sw = &shiftwidth
     let &shiftwidth = s:cs_sw
     let ind = cindent(a:lnum)
