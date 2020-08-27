@@ -11,7 +11,8 @@ syn match razorCSUserType /\%#=1\h\w*/ display contained nextgroup=razorCSGeneri
 
 hi def link razorCSDeclaration Identifier
 
-syn match razorCSTypeModifier /\%(\[]\|?\|\*\)*/ display contained nextgroup=razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
+syn match razorCSTypeModifier /[*?]/ display contained nextgroup=razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
+syn region razorCSTypeModifier start=/\[/ end=/]/ display transparent contained nextgroup=razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 
 syn keyword razorCSDefine nextgroup=razorCSDefinition skipwhite skipnl
       \ class namespace struct interface alias
@@ -21,7 +22,7 @@ syn match razorCSDefinition /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgrou
 syn match razorCSVariable /\%#=1\<\h\w*/ transparent contains=NONE nextgroup=@razorCSContainedOperators,razorCSGeneric skipwhite skipnl
 
 syn match razorCSFunctionDefinition /\%#=1\h\w*(.\{-})/ display contained contains=razorCSFunctionParameters
-syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
+syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
@@ -68,7 +69,7 @@ syn keyword razorCSKeywordOperator where sizeof typeof await using out
 syn keyword razorCSAs as nextgroup=razorCSType,razorCSUserType skipwhite skipnl
 syn keyword razorCSIs is nextgroup=razorCSType,razorCSUserType skipwhite skipnl
 syn keyword razorCSNew new nextgroup=razorCSType,razorCSUserType,razorCSNewArray,razorCSBlock skipwhite skipnl
-syn match razorCSNewArray /\[]/ display contained nextgroup=razorCSBlock skipwhite skipnl
+syn region razorCSNewArray start=/\[/ end=/]/ display transparent contained nextgroup=razorCSBlock skipwhite skipnl
 
 syn keyword razorCSBoolean true false nextgroup=@razorCSContainedOperators skipwhite skipnl
 syn keyword razorCSNull null nextgroup=@razorCSContainedOperators skipwhite skipnl
