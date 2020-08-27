@@ -21,7 +21,7 @@ syn match razorCSDefinition /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgrou
 syn match razorCSVariable /\%#=1\<\h\w*/ transparent contains=NONE nextgroup=@razorCSContainedOperators,razorCSGeneric skipwhite skipnl
 
 syn match razorCSFunctionDefinition /\%#=1\h\w*(.\{-})/ display contained contains=razorCSFunctionParameters
-syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
+syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
@@ -38,6 +38,8 @@ syn match razorCSUnaryOperator /\%#=1[!~]/ display
 syn match razorCSUnaryOperator /\%#=1++\=/ display
 syn match razorCSUnaryOperator /\%#=1--\=/ display
 
+syn match razorCSTernaryOperator /\%#=1[?:]/ display contained
+
 syn match razorCSBinaryOperator /\%#=1[*+\-/%&|^]=\=/ display contained
 syn match razorCSBinaryOperator /\%#=1[=!]=/ display contained
 syn match razorCSBinaryOperator /\%#=1[<>]=\=/ display contained
@@ -47,11 +49,9 @@ syn match razorCSBinaryOperator /\%#=1<<=\=/ display contained
 syn match razorCSBinaryOperator /\%#=1>>=\=/ display contained
 syn match razorCSBinaryOperator /\%#=1??=/ display contained
 
-syn match razorCSTernaryOperator /\%#=1[?:]/ display contained
-
 syn match razorCSMemberAccessOperator /\%#=1?\=\./ display contained nextgroup=razorCSVariable skipwhite skipnl
 syn match razorCSMemberAccessOperator /\%#=1->/ display contained nextgroup=razorCSVariable skipwhite skipnl
-syn region razorCSIndexOperator matchgroup=razorCSIndexBrackets start=/\%#=1?\=\[/ end=/]/ display contained contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSIndexOperator matchgroup=razorCSIndexBrackets start=/\%#=1?\=\[/ end=/]/ display transparent contained contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
 syn match razorCSLambdaOperator /\%#=1=>/ display contained nextgroup=razorCSBlock skipwhite skipnl
 
@@ -61,7 +61,7 @@ syn cluster razorCSContainedOperators contains=
       \ razorCSIndexOperator,razorCSLambdaOperator,
       \ razorCSComment  " This is to prevent slash operators from clobbering C# comments
 
-syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
+syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display transparent oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
 
 syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
