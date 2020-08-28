@@ -24,7 +24,7 @@ syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end
 
 syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock
+syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock,razorComment
 
 syn keyword razorCSOperatorDefine operator contained nextgroup=razorCSUnaryOperator,razorCSBinaryOperator,razorCSType,razorCSUserType,razorCSBoolean skipwhite skipnl
 
