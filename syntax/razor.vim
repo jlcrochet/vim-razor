@@ -34,9 +34,9 @@ syn match razorDelimiterEscape /\%#=1@/ display contained
 
 syn match razorImplicitExpression /\%#=1\h\w*/ display contained nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn match  razorDot /\./ display contained nextgroup=razorImplicitExpression
-syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline nextgroup=razorDot,razorBrackets
-syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained oneline nextgroup=razorDot,razorBrackets
+syn match  razorDot /?\=\./ display contained nextgroup=razorImplicitExpression
+syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorBrackets matchgroup=razorDelimiter start=/?\=\[/ end=/]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=@razorCS
 
