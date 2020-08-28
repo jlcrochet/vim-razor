@@ -97,8 +97,8 @@ function! GetRazorIndent(lnum) abort
       return indent(s:plnum)
     endif
 
-    if first_char == "@" && pline[first_idx + 1] == ":"
-      " After HTML escape sequence
+    if first_char == "@"
+      " After Razor line
       return indent(s:plnum)
     endif
 
