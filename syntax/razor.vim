@@ -32,11 +32,13 @@ syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorHTML
 
 syn match razorDelimiterEscape /\%#=1@/ display contained
 
-syn match razorImplicitExpression /\%#=1\h[[:alnum:].]*/ display contained nextgroup=razorParentheses,razorBrackets
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=@razorCS
+syn match razorImplicitExpression /\%#=1\h\w*/ display contained nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline nextgroup=razorBrackets
-syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained oneline nextgroup=razorBrackets
+syn match  razorDot /\./ display contained nextgroup=razorImplicitExpression
+syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline nextgroup=razorDot,razorBrackets
+syn region razorBrackets matchgroup=razorDelimiter start=/\[/ end=/]/ display contained oneline nextgroup=razorDot,razorBrackets
+
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=@razorCS
 
 syn region razorLine start=// end=/\_$/ display contained oneline
 
@@ -138,11 +140,12 @@ hi def link razorDefault PreProc
 hi def link razorDelimiter razorDefault
 hi def link razorKeyword razorDefault
 
-hi def link razorParentheses razorDefault
-hi def link razorBrackets razorDefault
+hi def link razorImplicitExpression razorDefault
+hi def link razorDot razorImplicitExpression
+hi def link razorParentheses razorImplicitExpression
+hi def link razorBrackets razorImplicitExpression
 hi def link razorCondition razorParentheses
 hi def link razorLine razorDefault
-hi def link razorImplicitExpression razorDefault
 hi def link razorDelimiterEscape razorDelimiter
 hi def link razorComment Comment
 hi def link razorAwait razorKeyword
