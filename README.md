@@ -15,8 +15,3 @@ This plugin is likely incomplete in its current state, but it is already better 
 
 `g:razor_fold`:
 * If defined, Razor blocks will be folded.
-
-## TODO
-
-* Improve highlighting and indentation to cover more cases
-* Add option to limit C# higlighting

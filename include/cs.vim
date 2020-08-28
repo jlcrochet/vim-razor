@@ -9,8 +9,6 @@ syn keyword razorCSType nextgroup=razorCSOperatorDefine,razorCSTypeModifier,razo
 
 syn match razorCSUserType /\%#=1\h\w*/ display contained nextgroup=razorCSGeneric,razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable,razorCSMemberAccessOperator skipwhite skipnl
 
-hi def link razorCSDeclaration Identifier
-
 syn match razorCSTypeModifier /[*?]/ display contained nextgroup=razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 syn region razorCSTypeModifier start=/\[/ end=/]/ display transparent contained nextgroup=razorCSTypeModifier,razorCSOperatorDefine,razorCSFunctionDefinition,razorCSVariable skipwhite skipnl
 
@@ -19,14 +17,14 @@ syn keyword razorCSDefine nextgroup=razorCSDefinition skipwhite skipnl
 
 syn match razorCSDefinition /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgroup=razorCSBlock skipwhite skipnl
 
-syn match razorCSVariable /\%#=1\<\h\w*/ transparent contains=NONE nextgroup=@razorCSContainedOperators,razorCSGeneric skipwhite skipnl
+syn match razorCSVariable /\%#=1\<\h\w*/ display nextgroup=@razorCSContainedOperators,razorCSGeneric skipwhite skipnl
 
 syn match razorCSFunctionDefinition /\%#=1\h\w*(.\{-})/ display contained contains=razorCSFunctionParameters
 syn region razorCSFunctionParameters matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSModifier,razorCSKeywordOperator,razorCSType,razorCSUserType,razorCSPseudoVariable nextgroup=razorCSBlock,razorCSLambdaOperator skipwhite skipnl
 
-syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display transparent contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
+syn region razorCSParentheses matchgroup=razorCSParenthesis start=/(/ end=/)/ display contains=@razorCS nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock,razorInnerHTML,razorComment
+syn region razorCSBlock matchgroup=razorCSBrace start=/{/ end=/}/ display contained contains=@razorCS,razorCSBlock
 
 syn keyword razorCSOperatorDefine operator contained nextgroup=razorCSUnaryOperator,razorCSBinaryOperator,razorCSType,razorCSUserType,razorCSBoolean skipwhite skipnl
 
@@ -62,7 +60,7 @@ syn cluster razorCSContainedOperators contains=
       \ razorCSIndexOperator,razorCSLambdaOperator,
       \ razorCSComment  " This is to prevent slash operators from clobbering C# comments
 
-syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display transparent oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
+syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
 
 syn keyword razorCSKeywordOperator where sizeof typeof await using out
 
@@ -147,8 +145,10 @@ syn match razorCSEscapeSequence /\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)/ display con
 
 syn region razorCSStringInterpolation matchgroup=razorCSStringInterpolationDelimiter start=/{/ end=/}/ display oneline contained contains=@razorCS
 
-syn region razorCSComment start=/\/\// end=/\_$/ display
-syn region razorCSComment start=/\/\*/ end=/\*\// display
+syn region razorCSComment start=/\/\// end=/\_$/ display contains=razorTodo
+syn region razorCSComment start=/\/\*/ end=/\*\// display keepend contains=razorTodo
+
+syn keyword razorCSTodo TODO NOTE XXX FIXME HACK TBD
 
 hi def link razorCSModifier Keyword
 hi def link razorCSType Type
