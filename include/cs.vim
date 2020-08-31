@@ -62,7 +62,10 @@ syn cluster razorCSContainedOperators contains=
 
 syn region razorCSGeneric matchgroup=razorCSGenericBracket start=/</ end=/>/ display oneline contained contains=razorCSType,razorCSUserType nextgroup=razorCSFunctionDefinition,razorCSVariable,razorCSTypeModifier,razorCSParentheses skipwhite skipnl
 
-syn keyword razorCSKeywordOperator where sizeof typeof await using out
+syn keyword razorCSKeywordOperator where await using out
+syn keyword razorCSKeywordOperator typeof sizeof nextgroup=razorCSTypeExpression skipwhite
+
+syn region razorCSTypeExpression start=/(/ end=/)/ display contained contains=razorCSType,razorCSUserType
 
 syn keyword razorCSAs as nextgroup=razorCSType,razorCSUserType skipwhite skipnl
 syn keyword razorCSIs is nextgroup=razorCSType,razorCSUserType skipwhite skipnl
@@ -75,8 +78,7 @@ syn keyword razorCSNull null nextgroup=@razorCSContainedOperators skipwhite skip
 syn keyword razorCSPseudoVariable this base nextgroup=@razorCSContainedOperators skipwhite skipnl
 
 syn keyword razorCSControl break continue finally goto return throw try
-syn keyword razorCSControl catch nextgroup=razorCSCatchExpression skipwhite
-syn region razorCSCatchExpression matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSUserType
+syn keyword razorCSControl catch nextgroup=razorCSTypeExpression skipwhite
 
 syn keyword razorCSConditional case default else if switch
 
