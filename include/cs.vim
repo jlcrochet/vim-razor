@@ -74,7 +74,9 @@ syn keyword razorCSNull null nextgroup=@razorCSContainedOperators skipwhite skip
 
 syn keyword razorCSPseudoVariable this base nextgroup=@razorCSContainedOperators skipwhite skipnl
 
-syn keyword razorCSControl break catch continue finally goto return throw try
+syn keyword razorCSControl break continue finally goto return throw try
+syn keyword razorCSControl catch nextgroup=razorCSCatchExpression skipwhite
+syn region razorCSCatchExpression matchgroup=razorCSParenthesis start=/(/ end=/)/ display contained contains=razorCSUserType
 
 syn keyword razorCSConditional case default else if switch
 
