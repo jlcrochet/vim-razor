@@ -22,32 +22,32 @@ endif
 " The syntax files for C# and HTML are kept in a separate directory so
 " that they don't get picked up by Vim in other contexts.
 execute "source ".s:include_path."/html.vim"
-execute "syn include @razorCS ".s:include_path."/cs.vim"
+execute "syn include @razorcs ".s:include_path."/cs.vim"
 
 syn cluster razorTop contains=TOP
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements,razorDelimiterEscape
-syn match razorDelimiter /\%#=1@/ display contained containedin=razorHTMLTag nextgroup=razorExplicitExpression,@razorDirectiveAttributes,razorDelimiterEscape
-syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorHTMLValue nextgroup=razorImplicitExpression,razorExplicitExpression,razorDelimiterEscape
+syn match razorDelimiter /\%#=1@/ display contained containedin=razorhtmlTag nextgroup=razorExplicitExpression,@razorDirectiveAttributes,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorExplicitExpression,razorDelimiterEscape
 
 syn match razorDelimiterEscape /\%#=1@/ display contained
 
 syn match razorImplicitExpression /\%#=1\h\w*/ display contained nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn match  razorDot /?\=\./ display contained nextgroup=razorImplicitExpression
-syn region razorParentheses matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
-syn region razorBrackets matchgroup=razorDelimiter start=/?\=\[/ end=/]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn match  razorDot /\%#=1?\=\./ display contained nextgroup=razorImplicitExpression
+syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=@razorCS
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline contains=@razorcs
 
-syn region razorLine start=// end=/\_$/ display contained oneline
+syn region razorLine start=// end=/\%#=1\_$/ display contained oneline
 
-syn region razorBlock matchgroup=razorDelimiter start=/{/ end=/}/ display contained contains=@razorTop,@razorCS,razorCSBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
+syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ display contained contains=@razorTop,@razorcs,razorcsBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
-syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\_$/ display contained oneline containedin=razorBlock,razorCSBlock contains=TOP
+syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ display contained oneline containedin=razorBlock,razorcsBlock contains=TOP
 syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ display contained keepend extend contains=@razorTop,razorInnerHTML
-syn match  razorInnerHTML /\%#=1<\a[^<]\{-}\/>/ display contained contains=razorHTMLTag
-syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/>/ display contained oneline contains=razorHTMLTag
+syn match  razorInnerHTML /\%#=1<\a[^<]\{-}\/>/ display contained contains=razorhtmlTag
+syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/>/ display contained oneline contains=razorhtmlTag
 
 syn region razorCondition matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
 
@@ -78,10 +78,10 @@ syn cluster razorStatements contains=
 
 syn match razorIdentifier /\%#=1\h[[:alnum:].]*/ display contained nextgroup=razorBlock skipwhite skipnl
 
-syn keyword razorAttributes attributes contained nextgroup=razorHTMLAttributeOperator
-syn match razorBind /bind\%(-\h\w*\)\=\%(:event\)\=\>/ display contained nextgroup=razorHTMLAttributeOperator
+syn keyword razorAttributes attributes contained nextgroup=razorhtmlAttributeOperator
+syn match razorBind /\%#=1bind\%(-\h\w*\)\=\%(:\%(event\|format\)\)\=\>/ display contained nextgroup=razorhtmlAttributeOperator
 
-syn keyword razorEventAttribute contained nextgroup=razorHTMLAttributeOperator,razorEventModifier
+syn keyword razorEventAttribute contained nextgroup=razorhtmlAttributeOperator,razorEventModifier
       \ oncut oncopy onpaste
       \
       \ ondrag ondragstart ondragenter ondragleave ondargover ondrop
@@ -123,14 +123,14 @@ syn keyword razorEventAttribute contained nextgroup=razorHTMLAttributeOperator,r
       \ ontouchstart ontouchend ontouchmove ontouchenter ontouchleave
       \ ontouchcancel
 
-syn match razorEventModifier /:\%(preventDefault\|stopPropagation\)\>/ display contained nextgroup=razorHTMLAttributeOperator
-syn keyword razorKey key contained nextgroup=razorHTMLAttributeOperator
-syn keyword razorRef ref contained nextgroup=razorHTMLAttributeOperator
+syn match razorEventModifier /\%#=1:\%(preventDefault\|stopPropagation\)\>/ display contained nextgroup=razorhtmlAttributeOperator
+syn keyword razorKey key contained nextgroup=razorhtmlAttributeOperator
+syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\*@/ display keepend contains=razorCSTodo containedin=ALL
+syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ display keepend contains=razorcsTodo containedin=ALL
 
 " Default highlighting {{{1
 " ====================
