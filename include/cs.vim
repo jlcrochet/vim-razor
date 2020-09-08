@@ -1,89 +1,35 @@
-syn match razorcsUnicodeEscapeSequence /\%#=1\\u\x\{4}/ display containedin=ALL
-syn match razorcsUnicodeEscapeSequence /\%#=1\\U\x\{8}/ display containedin=ALL
+" Syntax {{{
+syn region razorcsComment start=/\%#=1\/\// end=/\%#=1\_$/  display oneline contains=razorcsTodo
+syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// display keepend contains=razorcsTodo
 
-syn keyword razorcsModifier nextgroup=razorcsModifier,razorcsTypeExpression,razorcsType,razorcsDefine,razorcsNew,razorcsFunctionDefinition skipwhite skipnl
-      \ public private protected abstract const static virtual sealed
-      \ extern internal event explicit implicit override params
-      \ readonly ref stackalloc using volatile async
+syn region razorcsComment start=/\%#=1\/\/\// end=/\%#=1\_$/  display oneline contains=razorcsTodo,@razorcsxml
+syn region razorcsComment start=/\%#=1\/\*\*/ end=/\%#=1\*\// display keepend contains=razorcsTodo,@razorcsxml
 
-syn match razorcsTypeExpression /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=?\=\**\%(\[]\)*/ display contains=razorcsGeneric nextgroup=razorcsDeclarator,razorcsFunctionDefinition,razorcsOperatorDefinition skipwhite
-syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display transparent contained oneline contains=razorcsTypeExpression
+syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
+syn include @razorcsxml syntax/xml.vim
 
-syn match razorcsDeclarator /\%#=1\h\w*/ display contained nextgroup=razorcsAssignmentOperator skipwhite skipnl
+syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1\_$/ display oneline
 
-syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsOperatorDefinition,razorcsFunctionDefinition,razorcsMemberAccessOperator skipwhite skipnl
-      \ bool byte char decimal object string delegate dynamic double
-      \ enum void float int long sbyte short uint ulong ushort var
+syn keyword razorcsKeyword
+      \ abstract alias and as async await break case catch checked const
+      \ continue default delegate do else event explicit extern finally
+      \ fixed for foreach goto if implicit in internal is lock nameof
+      \ new operator or out override params private protected public
+      \ readonly ref return sealed sizeof stackalloc static switch throw
+      \ try typeof unchecked unsafe using virtual volatile when while
 
-syn keyword razorcsDefine nextgroup=razorcsDefinition skipwhite skipnl
-      \ class namespace struct interface alias
+syn keyword razorcsType
+      \ bool byte char decimal double dynamic float int long object
+      \ sbyte short string uint ulong ushort var void
 
-syn match razorcsDefinition /\%#=1\h\w*\%(\.\h\w*\)*/ display contained nextgroup=razorcsBlock skipwhite skipnl
+syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite skipnl
+      \ class enum interface namespace struct record
+syn match razorcsTypeDefinition /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ display contained
 
-syn match razorcsVariable /\%#=1\h\w*/ display contained nextgroup=@razorcsContainedOperators,razorcsGeneric skipwhite skipnl
+syn keyword razorcsBoolean true false
+syn keyword razorcsNull null
 
-syn match razorcsFunctionDefinition /\%#=1\h\w*(\_.\{-})/ display contained contains=razorcsFunctionParameters
-syn region razorcsFunctionParameters matchgroup=razorcsParenthesis start=/\%#=1(/ end=/\%#=1)/ display contained contains=razorcsModifier,razorcsKeywordOperator,razorcsTypeExpression,razorcsPseudoVariable nextgroup=razorcsBlock,razorcsLambdaOperator skipwhite skipnl
-
-syn region razorcsParentheses matchgroup=razorcsParenthesis start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs nextgroup=@razorcsContainedOperators skipwhite skipnl
-
-syn region razorcsBlock matchgroup=razorcsBrace start=/\%#=1{/ end=/\%#=1}/ display contained contains=@razorcs,razorcsBlock,razorComment
-
-syn keyword razorcsOperatorDefinition operator contained nextgroup=razorcsUnaryOperator,razorcsBinaryOperator,razorcsTypeExpression,razorcsBoolean skipwhite skipnl
-
-" The nextgroup argument here is intended to allow optional parameters
-" inside razorcsFunctionParameters
-syn match razorcsAssignmentOperator /\%#=1=/ display contained nextgroup=@razorcs skipwhite skipnl
-
-syn match razorcsUnaryOperator /\%#=1\*/ display nextgroup=razorcsVariable
-syn match razorcsUnaryOperator /\%#=1[!~]/ display
-syn match razorcsUnaryOperator /\%#=1++\=/ display
-syn match razorcsUnaryOperator /\%#=1--\=/ display
-
-syn match razorcsTernaryOperator /\%#=1[?:]/ display contained
-
-syn match razorcsBinaryOperator /\%#=1[*+\-/%&|^]=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1[=!]=/ display contained
-syn match razorcsBinaryOperator /\%#=1[<>]=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1&&=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1||=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1<<=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1>>=\=/ display contained
-syn match razorcsBinaryOperator /\%#=1??=/ display contained
-
-syn match razorcsMemberAccessOperator /\%#=1?\=\./ display contained nextgroup=razorcsVariable skipwhite skipnl
-syn match razorcsMemberAccessOperator /\%#=1->/ display contained nextgroup=razorcsVariable skipwhite skipnl
-syn region razorcsIndexOperator matchgroup=razorcsIndexBrackets start=/\%#=1?\=\[/ end=/\%#=1]/ display transparent contained contains=@razorcs nextgroup=@razorcsContainedOperators skipwhite skipnl
-
-syn match razorcsLambdaOperator /\%#=1=>/ display contained nextgroup=razorcsBlock skipwhite skipnl
-
-syn cluster razorcsContainedOperators contains=
-      \ razorcsBinaryOperator,razorcsTernaryOperator,razorcsAssignmentOperator,
-      \ razorcsMemberAccessOperator,
-      \ razorcsIndexOperator,razorcsLambdaOperator,
-      \ razorcsComment  " This is to prevent slash operators from clobbering C# comments
-
-syn keyword razorcsKeywordOperator where await using out
-syn keyword razorcsKeywordOperator typeof sizeof
-
-syn keyword razorcsAs as nextgroup=razorcsTypeExpression skipwhite skipnl
-syn keyword razorcsIs is nextgroup=razorcsTypeExpression skipwhite skipnl
-syn keyword razorcsNew new nextgroup=razorcsTypeExpression,razorcsNewArray,razorcsBlock skipwhite skipnl
-syn region razorcsNewArray start=/\%#=1\[/ end=/\%#=1]/ display transparent contained nextgroup=razorcsBlock skipwhite skipnl
-
-syn keyword razorcsBoolean true false nextgroup=@razorcsContainedOperators skipwhite skipnl
-syn keyword razorcsNull null nextgroup=@razorcsContainedOperators skipwhite skipnl
-
-syn keyword razorcsPseudoVariable this base nextgroup=@razorcsContainedOperators skipwhite skipnl
-
-syn keyword razorcsControl break continue finally goto return throw try
-syn keyword razorcsControl catch
-
-syn keyword razorcsConditional case default else if switch
-
-syn keyword razorcsStatement checked unchecked fixed unsafe
-
-syn keyword razorcsRepeat do for foreach in while
+syn keyword razorcsConstant base this
 
 function s:or(...)
   return '\%('.join(a:000, '\|').'\)'
@@ -93,18 +39,16 @@ function s:optional(re)
   return '\%('.a:re.'\)\='
 endfunction
 
-let s:decimal = '\d\%(_*\d\)*'
-let s:binary = '0[bB][01]\%(_*[01]\)*'
-let s:hexadecimal = '0[xX]\x\%(_*\x\)*'
+let s:decimal = '\d[[:digit:]_]*'
+let s:binary = '0[bB][01][01_]*'
+let s:hexadecimal = '0[xX]\x[[:xdigit:]_]*'
 
-let s:unsigned_suffix = '[uU]'
-let s:long_suffix = '[lL]'
-let s:integer_suffix = s:or(s:unsigned_suffix.s:long_suffix.'\=', s:long_suffix.s:unsigned_suffix.'\=')
+let s:integer_suffix = '\%([uU][lL]\=\|[lL][uU]\=\)'
 let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
 
-let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/ display nextgroup=razorcsBinaryOperator,razorcsTernaryOperator skipwhite skipnl'
+let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/ display'
 
 let s:decimal_re = s:decimal . s:or(
       \ s:integer_suffix,
@@ -131,67 +75,47 @@ delfunction s:optional
 
 unlet
       \ s:decimal s:binary s:hexadecimal
-      \ s:unsigned_suffix s:long_suffix s:integer_suffix
-      \ s:float_suffix s:decimal_suffix s:exponent_suffix
+      \ s:integer_suffix s:float_suffix s:decimal_suffix s:exponent_suffix
       \ s:decimal_re s:binary_re s:hexadecimal_re
       \ s:syn_match_template
 
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ display oneline contains=razorcsEscapeSequence nextgroup=razorcsBinaryOperator,razorcsTernaryOperator,razorcsIndexOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation nextgroup=razorcsBinaryOperator,razorcsTernaryOperator,razorcsIndexOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ display nextgroup=razorcsBinaryOperator,razorcsTernaryOperator,razorcsIndexOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation nextgroup=razorcsBinaryOperator,razorcsTernaryOperator,razorcsIndexOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@$"/ end=/\%#=1"/ display contains=razorcsStringInterpolation nextgroup=razorcsBinaryOperator,razorcsTernaryOperator,razorcsIndexOperator skipwhite skipnl
+syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ display contains=razorcsEscapeSequence
 
-syn match razorcsCharacter /\%#=1'\%(\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)\|.\)'/ display contains=razorcsEscapeSequence nextgroup=razorcsBinaryOperator,razorcsTernaryOperator skipwhite skipnl
-
-syn match razorcsEscapeSequence /\%#=1\\\%(\o\o\o\|x\x\x\|x\x\x\x\x\|.\)/ display contained
+syn region razorcsString start=/\%#=1"/   end=/\%#=1"/ display oneline contains=razorcsEscapeSequence
+syn region razorcsString start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
+syn region razorcsString start=/\%#=1@"/  end=/\%#=1"/ display
+syn region razorcsString start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
+syn region razorcsString start=/\%#=1@$"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
 
 syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ display oneline contained contains=@razorcs
 
-syn region razorcsComment start=/\%#=1\/\// end=/\%#=1\_$/ display contains=razorTodo
-syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// display keepend contains=razorTodo
+syn match razorcsEscapeSequence /\%#=1\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)/ display contained
 
-syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD
+syn region razorcsBlock matchgroup=razorcsBrace start=/\%#=1{/ end=/\%#=1}/ display transparent
 
-hi def link razorcsUnicodeEscapeSequence PreProc
-hi def link razorcsModifier Keyword
-" hi def link razorcsType Type
-" hi def link razorcsTypeExpression razorcsType
-hi def link razorcsTypeExpression Underlined
-hi def link razorcsFunctionDefinition Typedef
-hi def link razorcsGenericBracket Delimiter
-hi def link razorcsParenthesis Delimiter
-hi def link razorcsBrace Delimiter
-hi def link razorcsDefine Statement
-hi def link razorcsDefinition Typedef
-hi def link razorcsOperatorDefinition Statement
-hi def link razorcsUnaryOperator Operator
-hi def link razorcsBinaryOperator Operator
-hi def link razorcsTernaryOperator Operator
-hi def link razorcsAssignmentOperator Operator
-hi def link razorcsMemberAccessOperator Operator
-hi def link razorcsIndexBrackets Operator
-hi def link razorcsLambdaOperator Operator
-hi def link razorcsKeywordOperator Keyword
-hi def link razorcsAs Keyword
-hi def link razorcsIs Keyword
-hi def link razorcsNew Keyword
-hi def link razorcsNewArray razorcsNew
+syn match razorcsVariable /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric
+syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsGeneric
+
+syn region razorcsParentheses matchgroup=razorcsParenthesis start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs
+" }}}
+
+" Highlighting {{{
+hi def link razorcsComment Comment
+hi def link razorcsPreprocessor PreProc
+hi def link razorcsTodo Todo
+hi def link razorcsIdentifier Identifier
+hi def link razorcsKeyword Keyword
+hi def link razorcsType Type
+hi def link razorcsTypeDefinition Typedef
 hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant
-hi def link razorcsPseudoVariable Constant
-hi def link razorcsControl Statement
-hi def link razorcsConditional Conditional
-hi def link razorcsStatement Statement
-hi def link razorcsRepeat Repeat
-hi def link razorcsString String
-hi def link razorcsStringDelimiter razorcsString
-hi def link razorcsCharacter Character
+hi def link razorcsConstant Constant
 hi def link razorcsNumber Number
-hi def link razorcsEscapeSequence SpecialChar
+hi def link razorcsCharacter Character
+hi def link razorcsString String
 hi def link razorcsStringInterpolationDelimiter PreProc
-hi def link razorcsComment Comment
-hi def link razorcsTodo Todo
+hi def link razorcsEscapeSequence SpecialChar
+hi def link razorcsGeneric razorcsType
+" }}}
 
-hi def link razorcsDeclarator Identifier
-hi Operator guifg=orange
+" vim:fdm=marker

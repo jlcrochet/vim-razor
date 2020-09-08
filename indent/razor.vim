@@ -26,7 +26,7 @@ let s:cs_sw = get(g:, "razor_indent_shiftwidth", shiftwidth())
 " =============================
 
 let s:skip_bracket =
-      \ "synID(line('.'), col('.'), 1) != g:razor#hl_razorHTMLTag"
+      \ "synID(line('.'), col('.'), 1) != g:razor#hl_razorhtmlTag"
 
 let s:skip_tag = s:skip_bracket .
       \ " || index(s:void_elements, expand('<cword>')) > -1" .
@@ -40,7 +40,7 @@ let s:void_elements = [
 
 function! s:skip_brace(lnum, col) abort
   let synid = synID(a:lnum, a:col, 1)
-  return synid != g:razor#hl_razorDelimiter && synid != g:razor#hl_razorCSBrace
+  return synid != g:razor#hl_razorDelimiter && synid != g:razor#hl_razorcsBrace
 endfunction
 
 " GetRazorIndent {{{1
@@ -88,24 +88,30 @@ function! GetRazorIndent(lnum) abort
       return s:get_html_indent(a:lnum)
     endif
 
+    " If we are not in HTML, align with the previous line if:
+    "
+    " 1. The previous line started with:
+    "   a. a closing brace
+    "   b. an opening bracket (for an attribute)
+    "   c. a "<" (one-line HTML tag)
+    "   d. a "@" (one-line Razor expression of some kind)
+    " 2. The previous line is a comment
+
     let pline = getline(s:plnum)
     let first_idx = match(pline, '\S')
     let first_char = pline[first_idx]
 
-    if first_char == "["
-      " After attribute
+    if first_char == "}" || first_char == "[" || first_char == "<" || first_char == "@"
       return indent(s:plnum)
     endif
 
-    if first_char == "@"
-      " After Razor line
+    let synid = synID(s:plnum, first_idx + 1, 1)
+
+    if synid == g:razor#hl_razorComment || synid == g:razor#hl_razorcsComment
       return indent(s:plnum)
     endif
 
-    if synID(s:plnum, first_idx + 1, 1) == g:razor#hl_razorComment
-      " After Razor comment
-      return indent(s:plnum)
-    endif
+    " Otherwise, fall back to C indentation
 
     let old_sw = &shiftwidth
     let &shiftwidth = s:cs_sw
@@ -134,3 +140,5 @@ function! s:get_html_indent(lnum) abort
 
   return indent(s:plnum) + shiftwidth() * shift
 endfunction
+
+" vim:fdm=marker

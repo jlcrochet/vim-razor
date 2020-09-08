@@ -6,7 +6,7 @@
 " Setup {{{1
 " =====
 
-if exists("b:current_syntax")
+if get(b:, "current_syntax")
   finish
 endif
 
@@ -26,9 +26,9 @@ execute "syn include @razorcs ".s:include_path."/cs.vim"
 
 syn cluster razorTop contains=TOP
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements,razorDelimiterEscape
-syn match razorDelimiter /\%#=1@/ display contained containedin=razorhtmlTag nextgroup=razorExplicitExpression,@razorDirectiveAttributes,razorDelimiterEscape
-syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorExplicitExpression,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorBlock,@razorStatements,razorDelimiterEscape
+syn match razorDelimiter /\%#=1@/ display contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorDelimiterEscape
 
 syn match razorDelimiterEscape /\%#=1@/ display contained
 
@@ -38,7 +38,7 @@ syn match  razorDot /\%#=1?\=\./ display contained nextgroup=razorImplicitExpres
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline contains=@razorcs
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ display oneline contains=@razorcs containedin=ALL
 
 syn region razorLine start=// end=/\%#=1\_$/ display contained oneline
 
@@ -73,7 +73,7 @@ syn keyword razorDirective contained nextgroup=razorLine
 
 syn cluster razorStatements contains=
       \ razorAwait,razorIf,razorElse,razorSwitch,razorFor,razorWhile,razorDo,
-      \ razorUsing,razorTry,razorCatch,razorFinally,
+      \ razorUsing,razorTry,razorCatch,razorFinally,razorLock,
       \ razorCode,razorFunctions,razorSection,razorDirective
 
 syn match razorIdentifier /\%#=1\h[[:alnum:].]*/ display contained nextgroup=razorBlock skipwhite skipnl
