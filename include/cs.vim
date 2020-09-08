@@ -60,7 +60,7 @@ let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
 
-let s:syn_match_template = 'syn match razorcsNumber /\%%#=1\<%s/ display'
+let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/ display'
 
 let s:decimal_re = s:decimal . s:or(
       \ s:integer_suffix,
