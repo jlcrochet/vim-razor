@@ -140,5 +140,6 @@ function! s:get_html_indent(lnum) abort
 
   return indent(s:plnum) + shiftwidth() * shift
 endfunction
+" }}}1
 
 " vim:fdm=marker

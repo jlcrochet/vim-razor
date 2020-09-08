@@ -1,4 +1,4 @@
-" Syntax {{{
+" Syntax {{{1
 syn region razorcsComment start=/\%#=1\/\// end=/\%#=1\_$/  display oneline contains=razorcsTodo
 syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// display keepend contains=razorcsTodo
 
@@ -14,15 +14,29 @@ syn keyword razorcsKeyword
       \ abstract alias and as async await break case catch checked const
       \ continue default delegate do else event explicit extern finally
       \ fixed for foreach goto if implicit in internal is lock nameof
-      \ new operator or out override params private protected public
+      \ new not operator or out override params private protected public
       \ readonly ref return sealed sizeof stackalloc static switch throw
       \ try typeof unchecked unsafe using virtual volatile when while
+      \ yield
 
-syn keyword razorcsType
+syn keyword razorcsKeyword where nextgroup=razorcsDeclarator skipwhite
+
+syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsTypeModifier,razorcsConstant skipwhite
       \ bool byte char decimal double dynamic float int long object
       \ sbyte short string uint ulong ushort var void
 
-syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite skipnl
+syn match razorcsTypeModifier /\%#=1?\=\**\%(\[.\{-}]\)*/ display transparent contained nextgroup=razorcsDeclarator,razorcsConstant skipwhite
+
+syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant skipwhite
+syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsIdentifier,razorcsType
+
+syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword nextgroup=razorcsDeclarator skipwhite
+
+syn region razorcsClosedExpression start=/\%#=1(/ end=/\%#=1)/ display transparent nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
+
+syn match razorcsRawIdentifier /\%#=1@\h\w*/ display
+
+syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite
       \ class enum interface namespace struct record
 syn match razorcsTypeDefinition /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ display contained
 
@@ -48,7 +62,7 @@ let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
 
-let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/ display'
+let s:syn_match_template = 'syn match razorcsNumber /\%%#=1\<%s/ display'
 
 let s:decimal_re = s:decimal . s:or(
       \ s:integer_suffix,
@@ -93,19 +107,14 @@ syn match razorcsEscapeSequence /\%#=1\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)/ dis
 
 syn region razorcsBlock matchgroup=razorcsBrace start=/\%#=1{/ end=/\%#=1}/ display transparent
 
-syn match razorcsVariable /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric
-syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsGeneric
-
-syn region razorcsParentheses matchgroup=razorcsParenthesis start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs
-" }}}
-
-" Highlighting {{{
+" Highlighting {{{1
 hi def link razorcsComment Comment
 hi def link razorcsPreprocessor PreProc
 hi def link razorcsTodo Todo
-hi def link razorcsIdentifier Identifier
 hi def link razorcsKeyword Keyword
 hi def link razorcsType Type
+hi def link razorcsDeclarator Identifier
+hi def link razorcsRawIdentifier Identifier
 hi def link razorcsTypeDefinition Typedef
 hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant
@@ -115,7 +124,6 @@ hi def link razorcsCharacter Character
 hi def link razorcsString String
 hi def link razorcsStringInterpolationDelimiter PreProc
 hi def link razorcsEscapeSequence SpecialChar
-hi def link razorcsGeneric razorcsType
-" }}}
+" }}}1
 
 " vim:fdm=marker
