@@ -27,14 +27,12 @@ syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsTypeModifier,razorcsC
 
 syn match razorcsTypeModifier /\%#=1?\=\**\%(\[.\{-}]\)*/ display transparent contained nextgroup=razorcsDeclarator,razorcsConstant skipwhite
 
-syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant skipwhite
+syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant,razorcsClosedExpression skipwhite
 syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsIdentifier,razorcsType
 
 syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword nextgroup=razorcsDeclarator skipwhite
 
-syn region razorcsClosedExpression start=/\%#=1(/ end=/\%#=1)/ display transparent nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
-
-syn match razorcsRawIdentifier /\%#=1@\h\w*/ display
+syn region razorcsClosedExpression start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
 
 syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite
       \ class enum interface namespace struct record
@@ -114,7 +112,6 @@ hi def link razorcsTodo Todo
 hi def link razorcsKeyword Keyword
 hi def link razorcsType Type
 hi def link razorcsDeclarator Identifier
-hi def link razorcsRawIdentifier Identifier
 hi def link razorcsTypeDefinition Typedef
 hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant

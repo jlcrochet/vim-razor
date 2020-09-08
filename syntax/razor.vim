@@ -3,9 +3,6 @@
 " Author: Jeffrey Crochet <jlcrochet@pm.me>
 " URL: github.com/jlcrochet/vim-razor
 
-" Setup {{{1
-" =====
-
 if get(b:, "current_syntax")
   finish
 endif
@@ -16,21 +13,16 @@ if get(g:, "razor_fold")
   setlocal foldmethod=syntax
 endif
 
-" Syntax groups {{{1
-" =============
-
-" The syntax files for C# and HTML are kept in a separate directory so
-" that they don't get picked up by Vim in other contexts.
+" Syntax {{{1
+" NOTE: The syntax files for C# and HTML are kept in a separate
+" directory so that they don't get picked up by Vim in other contexts.
 execute "source ".s:include_path."/html.vim"
-execute "syn include @razorcs ".s:include_path."/cs.vim"
 
 syn cluster razorTop contains=TOP
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorBlock,@razorStatements,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorBlock,@razorStatements
 syn match razorDelimiter /\%#=1@/ display contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes,razorDelimiterEscape
 syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorDelimiterEscape
-
-syn match razorDelimiterEscape /\%#=1@/ display contained
 
 syn match razorImplicitExpression /\%#=1\h\w*/ display contained nextgroup=razorDot,razorParentheses,razorBrackets
 
@@ -38,7 +30,9 @@ syn match  razorDot /\%#=1?\=\./ display contained nextgroup=razorImplicitExpres
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ display oneline contains=@razorcs containedin=ALL
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ display oneline contains=@razorcs containedin=razorhtmlValue
+
+syn match razorDelimiterEscape /\%#=1@@/ display
 
 syn region razorLine start=// end=/\%#=1\_$/ display contained oneline
 
@@ -132,9 +126,11 @@ syn cluster razorDirectiveAttributes contains=
 
 syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ display keepend contains=razorcsTodo containedin=ALL
 
-" Default highlighting {{{1
-" ====================
+" NOTE: The C# file is included last in order to take precedence over
+" other patterns.
+execute "syn include @razorcs ".s:include_path."/cs.vim"
 
+" Highlighting {{{1
 hi def link razorDefault PreProc
 
 hi def link razorDelimiter razorDefault
@@ -171,8 +167,7 @@ hi def link razorEventAttribute razorKeyword
 hi def link razorEventModifier razorEventAttribute
 hi def link razorKey razorKeyword
 hi def link razorRef razorKeyword
-
-" }}}
+" }}}1
 
 unlet s:include_path
 
