@@ -93,11 +93,11 @@ unlet
 
 syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ display contains=razorcsEscapeSequence
 
-syn region razorcsString start=/\%#=1"/   end=/\%#=1"/ display oneline contains=razorcsEscapeSequence
-syn region razorcsString start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
-syn region razorcsString start=/\%#=1@"/  end=/\%#=1"/ display
-syn region razorcsString start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
-syn region razorcsString start=/\%#=1@$"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ display oneline contains=razorcsEscapeSequence
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ display
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@$"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
 
 syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ display oneline contained contains=@razorcs
 
@@ -119,6 +119,7 @@ hi def link razorcsConstant Constant
 hi def link razorcsNumber Number
 hi def link razorcsCharacter Character
 hi def link razorcsString String
+hi def link razorcsStringDelimiter razorcsString
 hi def link razorcsStringInterpolationDelimiter PreProc
 hi def link razorcsEscapeSequence SpecialChar
 " }}}1

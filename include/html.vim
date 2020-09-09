@@ -9,8 +9,8 @@ syn match razorhtmlAttributeOperator /\%#=1=/ display contained nextgroup=razorh
 
 syn match razorhtmlValue /\%#=1[^[:space:]>]\+/ display contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
-syn region razorhtmlValue start=/\%#=1"/ end=/\%#=1"/ display contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
-syn region razorhtmlValue start=/\%#=1'/ end=/\%#=1'/ display contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ display contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ display contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
 syn match razorhtmlEntityReference /\%#=1&\a[[:alnum:]]*;/ display
 syn match razorhtmlCharacterReference /\%#=1&#\d\+;/ display
@@ -32,6 +32,7 @@ syn keyword razorhtmlDoctype DOCTYPE contained
 hi def link razorhtmlTag Identifier
 hi def link razorhtmlAttribute Keyword
 hi def link razorhtmlValue String
+hi def link razorhtmlValueDelimiter razorhtmlValue
 hi def link razorhtmlScriptError Error
 hi def link razorhtmlCharacterReference SpecialChar
 hi def link razorhtmlSpecialTag Comment
