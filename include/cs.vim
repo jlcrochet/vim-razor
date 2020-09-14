@@ -14,10 +14,10 @@ syn keyword razorcsKeyword
       \ abstract alias and as async await break case catch checked const
       \ continue default delegate do else event explicit extern finally
       \ fixed for foreach goto if implicit in internal is lock nameof
-      \ new not operator or out override params private protected public
-      \ readonly ref return sealed sizeof stackalloc static switch throw
-      \ try typeof unchecked unsafe using virtual volatile when while
-      \ yield
+      \ new not operator or out override params partial private
+      \ protected public readonly ref return sealed sizeof stackalloc
+      \ static switch throw try typeof unchecked unsafe using virtual
+      \ volatile when while yield
 
 syn keyword razorcsKeyword where nextgroup=razorcsDeclarator skipwhite
 
