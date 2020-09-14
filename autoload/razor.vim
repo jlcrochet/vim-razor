@@ -5,8 +5,8 @@
 
 " Caching important highlight ID's for faster lookup
 
-const g:razor#hl_razorhtmlTag = hlID("razorhtmlTag")
-const g:razor#hl_razorDelimiter = hlID("razorDelimiter")
-const g:razor#hl_razorcsBrace = hlID("razorcsBrace")
-const g:razor#hl_razorComment = hlID("razorComment")
-const g:razor#hl_razorcsComment = hlID("razorcsComment")
+const g:razor#razorhtmlTag = hlID("razorhtmlTag")
+const g:razor#razorDelimiter = hlID("razorDelimiter")
+const g:razor#razorcsBrace = hlID("razorcsBrace")
+const g:razor#razorComment = hlID("razorComment")
+const g:razor#razorcsComment = hlID("razorcsComment")

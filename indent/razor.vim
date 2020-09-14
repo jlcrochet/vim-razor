@@ -26,7 +26,7 @@ let s:cs_sw = get(g:, "razor_indent_shiftwidth", shiftwidth())
 " =============================
 
 let s:skip_bracket =
-      \ "synID(line('.'), col('.'), 1) != g:razor#hl_razorhtmlTag"
+      \ "synID(line('.'), col('.'), 1) != g:razor#razorhtmlTag"
 
 let s:skip_tag = s:skip_bracket .
       \ " || index(s:void_elements, expand('<cword>')) > -1" .
@@ -40,7 +40,7 @@ let s:void_elements = [
 
 function! s:skip_brace(lnum, col) abort
   let synid = synID(a:lnum, a:col, 1)
-  return synid != g:razor#hl_razorDelimiter && synid != g:razor#hl_razorcsBrace
+  return synid != g:razor#razorDelimiter && synid != g:razor#razorcsBrace
 endfunction
 
 " GetRazorIndent {{{1
@@ -107,7 +107,7 @@ function! GetRazorIndent(lnum) abort
 
     let synid = synID(s:plnum, first_idx + 1, 1)
 
-    if synid == g:razor#hl_razorComment || synid == g:razor#hl_razorcsComment
+    if synid == g:razor#razorComment || synid == g:razor#razorcsComment
       return indent(s:plnum)
     endif
 
