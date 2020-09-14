@@ -7,6 +7,8 @@ if get(b:, "current_syntax")
   finish
 endif
 
+let b:current_syntax = "razor"
+
 let s:include_path = expand("<sfile>:p:h")."/../include"
 
 if get(g:, "razor_fold")
@@ -170,7 +172,5 @@ hi def link razorRef razorKeyword
 " }}}1
 
 unlet s:include_path
-
-let b:current_syntax = "razor"
 
 " vim:fdm=marker

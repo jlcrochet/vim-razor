@@ -34,7 +34,8 @@ hi def link razorhtmlAttribute Keyword
 hi def link razorhtmlValue String
 hi def link razorhtmlValueDelimiter razorhtmlValue
 hi def link razorhtmlScriptError Error
-hi def link razorhtmlCharacterReference SpecialChar
+hi def link razorhtmlEntityReference SpecialChar
+hi def link razorhtmlCharacterReference razorhtmlEntityReference
 hi def link razorhtmlSpecialTag Comment
 hi def link razorhtmlComment razorhtmlSpecialTag
 hi def link razorhtmlDoctype SpecialComment
