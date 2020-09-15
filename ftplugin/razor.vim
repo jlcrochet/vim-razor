@@ -4,13 +4,13 @@
 " URL: github.com/jlcrochet/vim-razor
 
 " Only do this when not done yet for this buffer
-if exists("b:did_ftplugin")
+if get(b:, "did_ftplugin")
   finish
 endif
 
-runtime! ftplugin/html.vim
-
 let b:did_ftplugin = 1
+
+runtime! ftplugin/html.vim
 
 setlocal comments=s1:@*,mb:*,ex:*@,://
 setlocal commentstring=@*\ %s\ *@

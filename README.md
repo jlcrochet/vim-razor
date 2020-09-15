@@ -4,14 +4,12 @@
 
 ## Description
 
-This plugin provides syntax highlighting and indentation for [Razor](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor) markup files. Out of the box, it detects `*.cshtml` and `*.razor` file extensions.
-
-This plugin is likely incomplete in its current state, but it is already better than any other Razor plugin I've found. I will continue to update it as I learn more about Razor.
+This plugin provides filetype support -- including syntax highlighting and indentation -- for [Razor](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor) markup files. Out of the box, it detects `*.cshtml` and `*.razor` file extensions.
 
 ## Configuration
 
 `g:razor_indent_shiftwidth`:
-* If defined, overrides `shiftwidth` for C# lines; this is useful if you want HTML and C# to be indented differently.
+* If defined, overrides `shiftwidth` for C# lines; this is useful if you want HTML and C# in the same file to be indented differently.
 
 `g:razor_fold`:
-* If defined, Razor blocks will be folded.
+* If true, Razor blocks will be folded.

@@ -6,7 +6,7 @@
 " Setup {{{1
 " =====
 
-if exists("b:did_indent")
+if get(b:, "did_indent")
   finish
 endif
 
