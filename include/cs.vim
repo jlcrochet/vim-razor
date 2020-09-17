@@ -27,12 +27,12 @@ syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsTypeModifier,razorcsC
 
 syn match razorcsTypeModifier /\%#=1?\=\**\%(\[.\{-}]\)*/ display transparent contained nextgroup=razorcsDeclarator,razorcsConstant skipwhite
 
-syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant,razorcsClosedExpression skipwhite
+syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant,razorcsTuple skipwhite
 syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsIdentifier,razorcsType
 
-syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword nextgroup=razorcsDeclarator skipwhite
+syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword
 
-syn region razorcsClosedExpression start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
+syn region razorcsTuple start=/\%#=1(/ end=/\%#=1)/ display transparent nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
 
 syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite
       \ class enum interface namespace struct record
