@@ -97,7 +97,6 @@ syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=
 syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
 syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ display
 syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@$"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
 
 syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ display oneline contained contains=@razorcs
 
