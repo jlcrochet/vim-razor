@@ -32,7 +32,7 @@ syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained 
 
 syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword
 
-syn region razorcsTuple start=/\%#=1(/ end=/\%#=1)/ display transparent nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
+syn region razorcsTuple start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
 
 syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite
       \ class enum interface namespace struct record
