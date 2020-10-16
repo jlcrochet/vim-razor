@@ -3,11 +3,9 @@
 " Author: Jeffrey Crochet <jlcrochet@pm.me>
 " URL: github.com/jlcrochet/vim-razor
 
-if get(b:, "current_syntax")
+if has_key(b:, "current_syntax")
   finish
 endif
-
-let b:current_syntax = "razor"
 
 let s:include_path = expand("<sfile>:p:h")."/../include"
 
@@ -172,5 +170,7 @@ hi def link razorRef razorKeyword
 " }}}1
 
 unlet s:include_path
+
+let b:current_syntax = "razor"
 
 " vim:fdm=marker
