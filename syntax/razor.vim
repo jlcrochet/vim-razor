@@ -34,16 +34,16 @@ syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end
 
 syn match razorDelimiterEscape /\%#=1@@/ display
 
-syn region razorLine start=// end=/\%#=1\_$/ display contained oneline
+syn region razorLine start=/\%#=1/ end=/\%#=1\_$/ display contained oneline
 
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ display contained contains=@razorTop,@razorcs,razorcsBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
 syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ display contained oneline containedin=razorBlock,razorcsBlock contains=TOP
 syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ display contained keepend extend contains=@razorTop,razorInnerHTML
-syn match  razorInnerHTML /\%#=1<\a[^<]\{-}\/>/ display contained contains=razorhtmlTag
-syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/>/ display contained oneline contains=razorhtmlTag
+syn match  razorInnerHTML /\%#=1<\a[[:alnum:]._-]*\s*\/>/ display contained contains=razorhtmlTag
+syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ display contained oneline contains=razorhtmlTag
 
-syn region razorCondition matchgroup=razorDelimiter start=/(/ end=/)/ display contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
+syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAwait     await       contained nextgroup=razorImplicitExpression  skipwhite
 syn keyword razorIf        if          contained nextgroup=razorCondition           skipwhite
