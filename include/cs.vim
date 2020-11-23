@@ -1,14 +1,14 @@
 " Syntax {{{1
-syn region razorcsComment start=/\%#=1\/\// end=/\%#=1\_$/  display oneline contains=razorcsTodo
-syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// display keepend contains=razorcsTodo
+syn region razorcsComment start=/\%#=1\/\// end=/\%#=1\_$/  oneline contains=razorcsTodo
+syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// keepend contains=razorcsTodo
 
-syn region razorcsComment start=/\%#=1\/\/\// end=/\%#=1\_$/  display oneline contains=razorcsTodo,@razorcsxml
-syn region razorcsComment start=/\%#=1\/\*\*/ end=/\%#=1\*\// display keepend contains=razorcsTodo,@razorcsxml
+syn region razorcsComment start=/\%#=1\/\/\// end=/\%#=1\_$/  oneline contains=razorcsTodo,@razorcsxml
+syn region razorcsComment start=/\%#=1\/\*\*/ end=/\%#=1\*\// keepend contains=razorcsTodo,@razorcsxml
 
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 syn include @razorcsxml syntax/xml.vim
 
-syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1\_$/ display oneline
+syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1\_$/ oneline
 
 syn keyword razorcsKeyword
       \ abstract alias and as async await break case catch checked const
@@ -25,18 +25,18 @@ syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsTypeModifier,razorcsC
       \ bool byte char decimal double dynamic float int long object
       \ sbyte short string uint ulong ushort var void
 
-syn match razorcsTypeModifier /\%#=1?\=\**\%(\[.\{-}]\)*/ display transparent contained nextgroup=razorcsDeclarator,razorcsConstant skipwhite
+syn match razorcsTypeModifier /\%#=1?\=\**\%(\[.\{-}]\)*/ transparent contained nextgroup=razorcsDeclarator,razorcsConstant skipwhite
 
-syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ display contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant,razorcsTuple skipwhite
-syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ display oneline contained contains=razorcsIdentifier,razorcsType
+syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contains=razorcsGeneric nextgroup=razorcsTypeModifier,razorcsDeclarator,razorcsKeyword,razorcsConstant,razorcsTuple skipwhite
+syn region razorcsGeneric start=/\%#=1</ end=/\%#=1>/ oneline contained contains=razorcsIdentifier,razorcsType
 
-syn match razorcsDeclarator /\%#=1\h\w*/ display contained contains=razorcsKeyword
+syn match razorcsDeclarator /\%#=1\h\w*/ contained contains=razorcsKeyword
 
-syn region razorcsTuple start=/\%#=1(/ end=/\%#=1)/ display contains=@razorcs nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
+syn region razorcsTuple start=/\%#=1(/ end=/\%#=1)/ contains=@razorcs nextgroup=razorcsDeclarator,razorcsKeyword skipwhite
 
 syn keyword razorcsKeyword nextgroup=razorcsTypeDefinition skipwhite
       \ class enum interface namespace struct record
-syn match razorcsTypeDefinition /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ display contained
+syn match razorcsTypeDefinition /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ contained
 
 syn keyword razorcsBoolean true false
 syn keyword razorcsNull null
@@ -60,7 +60,7 @@ let s:float_suffix = '[fF]'
 let s:decimal_suffix = '[mM]'
 let s:exponent_suffix = '[eE][+-]\='.s:decimal
 
-let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/ display'
+let s:syn_match_template = 'syn match razorcsNumber /\%%#=1%s/'
 
 let s:decimal_re = s:decimal . s:or(
       \ s:integer_suffix,
@@ -91,18 +91,18 @@ unlet
       \ s:decimal_re s:binary_re s:hexadecimal_re
       \ s:syn_match_template
 
-syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ display contains=razorcsEscapeSequence
+syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ contains=razorcsEscapeSequence
 
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ display oneline contains=razorcsEscapeSequence
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ display oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ display
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ display contains=razorcsStringInterpolation
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ oneline contains=razorcsEscapeSequence
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ oneline contains=razorcsEscapeSequence,razorcsStringInterpolation
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ contains=razorcsStringInterpolation
 
-syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ display oneline contained contains=@razorcs
+syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ oneline contained contains=@razorcs
 
-syn match razorcsEscapeSequence /\%#=1\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)/ display contained
+syn match razorcsEscapeSequence /\%#=1\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)/ contained
 
-syn region razorcsBlock matchgroup=razorcsBrace start=/\%#=1{/ end=/\%#=1}/ display transparent
+syn region razorcsBlock matchgroup=razorcsBrace start=/\%#=1{/ end=/\%#=1}/ transparent
 
 " Highlighting {{{1
 hi def link razorcsComment Comment

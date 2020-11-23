@@ -20,30 +20,30 @@ execute "source ".s:include_path."/html.vim"
 
 syn cluster razorTop contains=TOP
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ display nextgroup=razorImplicitExpression,razorBlock,@razorStatements
-syn match razorDelimiter /\%#=1@/ display contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes,razorDelimiterEscape
-syn match razorDelimiter /\%#=1\w\@1<!@/ display contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorBlock,@razorStatements
+syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes,razorDelimiterEscape
+syn match razorDelimiter /\%#=1\w\@1<!@/ contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorDelimiterEscape
 
-syn match razorImplicitExpression /\%#=1\h\w*/ display contained nextgroup=razorDot,razorParentheses,razorBrackets
+syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn match  razorDot /\%#=1?\=\./ display contained nextgroup=razorImplicitExpression
-syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
-syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ display contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
+syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ display oneline contains=@razorcs containedin=razorhtmlValue
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ oneline contains=@razorcs containedin=razorhtmlValue
 
-syn match razorDelimiterEscape /\%#=1@@/ display
+syn match razorDelimiterEscape /\%#=1@@/
 
-syn region razorLine start=/\%#=1/ end=/\%#=1\_$/ display contained oneline
+syn region razorLine start=/\%#=1/ end=/\%#=1\_$/ contained oneline
 
-syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ display contained contains=@razorTop,@razorcs,razorcsBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
+syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
-syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ display contained oneline containedin=razorBlock,razorcsBlock contains=TOP
-syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ display contained keepend extend contains=@razorTop,razorInnerHTML
-syn match  razorInnerHTML /\%#=1<\a[[:alnum:]._-]*\s*\/>/ display contained contains=razorhtmlTag
-syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ display contained oneline contains=razorhtmlTag
+syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ contained oneline containedin=razorBlock,razorcsBlock contains=TOP
+syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ contained keepend extend contains=@razorTop,razorInnerHTML
+syn match  razorInnerHTML /\%#=1<\a[[:alnum:]._-]*\s*\/>/ contained contains=razorhtmlTag
+syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ contained oneline contains=razorhtmlTag
 
-syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ display contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
+syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAwait     await       contained nextgroup=razorImplicitExpression  skipwhite
 syn keyword razorIf        if          contained nextgroup=razorCondition           skipwhite
@@ -70,10 +70,10 @@ syn cluster razorStatements contains=
       \ razorUsing,razorTry,razorCatch,razorFinally,razorLock,
       \ razorCode,razorFunctions,razorSection,razorDirective
 
-syn match razorIdentifier /\%#=1\h[[:alnum:].]*/ display contained nextgroup=razorBlock skipwhite skipnl
+syn match razorIdentifier /\%#=1\h[[:alnum:].]*/ contained nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAttributes attributes contained nextgroup=razorhtmlAttributeOperator
-syn match razorBind /\%#=1bind\%(-\h\w*\)\=\%(:\%(event\|format\)\)\=\>/ display contained nextgroup=razorhtmlAttributeOperator
+syn match razorBind /\%#=1bind\%(-\h\w*\)\=\%(:\%(event\|format\)\)\=\>/ contained nextgroup=razorhtmlAttributeOperator
 
 syn keyword razorEventAttribute contained nextgroup=razorhtmlAttributeOperator,razorEventModifier
       \ oncut oncopy onpaste
@@ -117,14 +117,14 @@ syn keyword razorEventAttribute contained nextgroup=razorhtmlAttributeOperator,r
       \ ontouchstart ontouchend ontouchmove ontouchenter ontouchleave
       \ ontouchcancel
 
-syn match razorEventModifier /\%#=1:\%(preventDefault\|stopPropagation\)\>/ display contained nextgroup=razorhtmlAttributeOperator
+syn match razorEventModifier /\%#=1:\%(preventDefault\|stopPropagation\)\>/ contained nextgroup=razorhtmlAttributeOperator
 syn keyword razorKey key contained nextgroup=razorhtmlAttributeOperator
 syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ display keepend contains=razorcsTodo containedin=ALL
+syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcsTodo containedin=ALL
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
