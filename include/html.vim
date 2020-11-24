@@ -27,8 +27,8 @@ syn match razorhtmlTag /\%#=1<\/style>/ contained
 syn region razorhtmlSpecialTag start=/\%#=1<!/ end=/\%#=1>/ contains=razorhtmlComment
 syn region razorhtmlComment start=/\%#=1--/ end=/\%#=1--/ keepend contained
 
-syn sync match razorhtmlSync groupthere razorhtmlScript /\%#=1<script\>/
-syn sync match razorhtmlSync groupthere razorhtmlStyle /\%#=1<style\>/
+syn sync match razorhtmlSync grouphere razorhtmlScript /\%#=1<script\>/
+syn sync match razorhtmlSync grouphere razorhtmlStyle /\%#=1<style\>/
 
 hi def link razorhtmlTag Identifier
 hi def link razorhtmlAttribute Keyword

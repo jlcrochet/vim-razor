@@ -131,7 +131,7 @@ syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcs
 execute "syn include @razorcs ".s:include_path."/cs.vim"
 
 " Synchronization {{{1
-syn sync match razorSync groupthere razorBlock /\%#=1{/
+syn sync match razorSync grouphere razorBlock /\%#=1{/
 
 " Highlighting {{{1
 hi def link razorDefault PreProc
