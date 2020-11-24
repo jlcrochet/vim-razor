@@ -40,7 +40,7 @@ syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ cont
 
 syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ contained oneline containedin=razorBlock,razorcsBlock contains=TOP
 syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ contained keepend extend contains=@razorTop,razorInnerHTML
-syn match  razorInnerHTML /\%#=1<\a[[:alnum:]._-]*\s*\/>/ contained contains=razorhtmlTag
+syn match  razorInnerHTML /\%#=1<\a[^<]*\/>/ contained contains=razorhtmlTag
 syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ contained oneline contains=razorhtmlTag
 
 syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
@@ -129,6 +129,9 @@ syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcs
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
 execute "syn include @razorcs ".s:include_path."/cs.vim"
+
+" Synchronization {{{1
+syn sync match razorSync groupthere razorBlock /\%#=1{/
 
 " Highlighting {{{1
 hi def link razorDefault PreProc
