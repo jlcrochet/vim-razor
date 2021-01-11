@@ -7,6 +7,8 @@ if has_key(b:, "current_syntax")
   finish
 endif
 
+let b:main_syntax = "razor"
+
 let s:include_path = expand("<sfile>:p:h")."/../include"
 
 if get(g:, "razor_fold")
@@ -20,28 +22,34 @@ execute "source ".s:include_path."/html.vim"
 
 syn cluster razorTop contains=TOP
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorBlock,@razorStatements
-syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes,razorDelimiterEscape
-syn match razorDelimiter /\%#=1\w\@1<!@/ contained containedin=razorhtmlValue nextgroup=razorImplicitExpression,razorDelimiterEscape
+" These are regions where Razor interpolation can occur:
+syn cluster razorInterpolation contains=razorhtmlValue,razorhtmlScript,razorhtmlStyle,javascriptString,cssValue
+
+syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements
+syn match razorDelimiter /\%#=1\w\@1<!@/ contained containedin=@razorInterpolation nextgroup=razorImplicitExpression,razorExplicitExpression
+syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes
+
+syn match razorDelimiterEscape /\%#=1@@/ containedin=@razorInterpolation
 
 syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS,razorcsRHSIdentifier
 
 syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ oneline contains=@razorcs containedin=razorhtmlValue
+syn region razorLine start=/\%#=1\S/ end=/\%#=1\_$/ contained oneline
 
-syn match razorDelimiterEscape /\%#=1@@/
+syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
-syn region razorLine start=/\%#=1/ end=/\%#=1\_$/ contained oneline
-
-syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorInnerHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
-
-syn region razorInnerHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ contained oneline containedin=razorBlock,razorcsBlock contains=TOP
-syn region razorInnerHTML start=/\%#=1<\a/ end=/\%#=1<\/\a[[:alnum:].-]*>/ contained keepend extend contains=@razorTop,razorInnerHTML
-syn match  razorInnerHTML /\%#=1<\a[^<]*\/>/ contained contains=razorhtmlTag
-syn region razorInnerHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ contained oneline contains=razorhtmlTag
+syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ contained oneline contains=TOP
+syn region razorHTML start=/\%#=1<\a/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
+syn region razorInnerHTML matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/.\{-}>/ contained contains=@razorTop,razorHTML
+syn match razorhtmlTag /\%#=1\/\@1<=>/ contained
+syn match razorhtmlTag /\%#=1><\/.\{-}>/ contained contains=razorhtmlEndTag
+syn region razorHTML start=/\%#=1<\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)\>/ end=/\%#=1>/ skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag
+syn region razorHTML matchgroup=razorhtmlTag start=/\%#=1<script\>/ end=/\%#=1>/ contains=razorhtmlAttribute nextgroup=razorhtmlScript,razorhtmlEndTag skipnl
+syn region razorHTML matchgroup=razorhtmlTag start=/\%#=1<style\>/ end=/\%#=1>/ contains=razorhtmlAttribute nextgroup=razorhtmlStyle,razorhtmlEndTag skipnl
 
 syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=razorParentheses nextgroup=razorBlock skipwhite skipnl
 
@@ -61,7 +69,7 @@ syn keyword razorCode      code        contained nextgroup=razorBlock           
 syn keyword razorFunctions functions   contained nextgroup=razorBlock               skipwhite skipnl
 syn keyword razorSection   section     contained nextgroup=razorIdentifier          skipwhite
 
-syn keyword razorDirective contained nextgroup=razorLine
+syn keyword razorDirective contained nextgroup=razorLine skipwhite
       \ attribute implements inherits inject layout model namespace page
       \ typeparam addTagHelper removeTagHelper tagHelperPrefix
 
@@ -91,6 +99,7 @@ syn keyword razorEventAttribute contained nextgroup=razorhtmlAttributeOperator,r
       \ onbeforecut onbeforecopy onbeforepaste
       \
       \ oninvalid onreset onselect onselectionchange onselectstart
+      \ onsubmit
       \
       \ oncanplay oncanplaythrough oncuechange ondurationchange
       \ onemptied onended onpause onplay onplaying onratechange onseeked
@@ -124,14 +133,14 @@ syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcsTodo containedin=ALL
+syn region razorComment matchgroup=razorCommentDelimiter start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,razorComment
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
 execute "syn include @razorcs ".s:include_path."/cs.vim"
 
 " Synchronization {{{1
-syn sync match razorSync grouphere razorBlock /\%#=1{/
+syn sync fromstart
 
 " Highlighting {{{1
 hi def link razorDefault PreProc
@@ -147,6 +156,7 @@ hi def link razorCondition razorParentheses
 hi def link razorLine razorDefault
 hi def link razorDelimiterEscape razorDelimiter
 hi def link razorComment Comment
+hi def link razorCommentDelimiter razorComment
 hi def link razorAwait razorKeyword
 hi def link razorIf razorKeyword
 hi def link razorElse razorKeyword
