@@ -8,20 +8,20 @@ This plugin provides filetype support -- including syntax highlighting and inden
 
 ## Configuration
 
-### `g:razor_cs_shiftwidth`
+#### `g:razor_cs_shiftwidth`
 
 If defined, overrides `shiftwidth` for C# lines; this is useful if you want HTML and C# in the same file to be indented differently.
 
 As an example, if your `shiftwidth` for HTML is 2 but you want to use 4 spaces for C#: `let g:razor_cs_shiftwidth = 4`. Alternatively, if you want to use *tabs* instead of spaces for C#: `let g:razor_cs_shiftwidth = 0`.
 
-### `g:razor_js_shiftwidth`
+#### `g:razor_js_shiftwidth`
 
 If defined, overrides `shiftwidth` for JavaScript lines.
 
-### `g:razor_css_shiftwidth`
+#### `g:razor_css_shiftwidth`
 
 If defined, overrides `shiftwidth` for CSS lines.
 
-### `g:razor_fold`
+#### `g:razor_fold`
 
 If true, Razor blocks will be folded.
