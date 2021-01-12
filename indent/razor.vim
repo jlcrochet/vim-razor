@@ -10,13 +10,13 @@ if get(b:, "did_indent")
   finish
 endif
 
-" if has("nvim-0.5")
-"   lua get_razor_indent = require("get_razor_indent")
-"   setlocal indentexpr=v:lua.get_razor_indent()
-"   execute "setlocal indentkeys=<>>,".&cinkeys
+if has("nvim-0.5")
+  lua get_razor_indent = require("get_razor_indent")
+  setlocal indentexpr=v:lua.get_razor_indent()
+  execute "setlocal indentkeys=<>>,".&cinkeys
 
-"   finish
-" endif
+  finish
+endif
 
 " Only define the function once per session
 if exists("*GetRazorIndent")
