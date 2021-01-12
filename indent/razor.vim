@@ -10,13 +10,13 @@ if get(b:, "did_indent")
   finish
 endif
 
-if has("nvim-0.5")
-  lua get_razor_indent = require("get_razor_indent")
-  setlocal indentexpr=v:lua.get_razor_indent()
-  execute "setlocal indentkeys=<>>,".&cinkeys
+" if has("nvim-0.5")
+"   lua get_razor_indent = require("get_razor_indent")
+"   setlocal indentexpr=v:lua.get_razor_indent()
+"   execute "setlocal indentkeys=<>>,".&cinkeys
 
-  finish
-endif
+"   finish
+" endif
 
 " Only define the function once per session
 if exists("*GetRazorIndent")
@@ -244,8 +244,8 @@ function GetRazorIndent() abort
   if synid
     " Does this line begin with the closing tag for a style or script
     " element?
-    if strpart(line, idx, 2) ==# "</s"
-      if strpart(line, idx + 3, 5) ==# "cript>" || strpart(line, idx + 3, 4) ==# "tyle>"
+    if strpart(line, idx, 3) ==# "</s"
+      if strpart(line, idx + 3, 6) ==# "cript>" || strpart(line, idx + 3, 5) ==# "tyle>"
         return indent(prev_lnum) - shiftwidth()
       endif
     endif

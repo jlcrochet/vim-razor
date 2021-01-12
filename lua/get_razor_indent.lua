@@ -111,10 +111,11 @@ end
 local function get_last_byte(lnum)
   local line = get_line(lnum)
   local col = -1
-  local found = false
   local syngroup, target_syngroup
 
   repeat
+    local found = false
+
     for i = col + 2, #line do
       local b = line:byte(i)
 
