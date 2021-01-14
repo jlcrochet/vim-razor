@@ -203,7 +203,7 @@ syn match razorcsForDeclaration /\%#=1\h\w*\s*=/ contained contains=razorcsVaria
 
 syn keyword razorcsStatement foreach nextgroup=razorcsForeachStatement skipwhite
 syn region razorcsForeachStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsInStatement
-syn keyword razorcsInStatement in contained nextgroup=razorcsRHSVariable skipwhite
+syn keyword razorcsInStatement in contained nextgroup=razorcsRHSVariable,razorcsUnaryOperatorKeyword skipwhite
 
 syn keyword razorcsStatement break continue default
 
