@@ -46,8 +46,8 @@ syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#
 syn region razorcsIndex matchgroup=razorcsDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=@razorcsOperators,razorcsList skipwhite skipnl
 " }}}3
 
-syn region razorcsRHSComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
-syn region razorcsRHSComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1\_$/ oneline contains=razorcsTodo nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
+syn region razorcsRHSComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contained contains=razorcsTodo nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
+syn region razorcsRHSComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1\_$/ contained oneline contains=razorcsTodo nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
 
 syn match razorcsRHSVariable /\%#=1\h\w*/ contained nextgroup=@razorcsOperators skipwhite skipnl
 
