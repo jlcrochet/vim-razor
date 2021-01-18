@@ -20,7 +20,7 @@ syn match razorcsOperator /\%#=1<\%(=\|<=\=\)\=/ contained nextgroup=@razorcsRHS
 syn match razorcsOperator /\%#=1>\%(=\|>=\=\)\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1!=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1==\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
-syn match razorcsOperator /\%#=1=>/ contained nextgroup=razorcsBlock skipwhite skipnl
+syn match razorcsOperator /\%#=1=>/ contained nextgroup=@razorcsRHS,razorcsBlock skipwhite skipnl
 
 syn match razorcsOperator /\%#=1++/ contained nextgroup=@razorcsOperators skipwhite
 syn match razorcsOperator /\%#=1--/ contained nextgroup=@razorcsOperators skipwhite
