@@ -249,7 +249,7 @@ syn match razorcsLHSMemberAccessOperator /\%#=1::/ contained nextgroup=razorcsLH
 
 syn keyword razorcsModifier public protected internal private nextgroup=razorcsConstructor,razorcsLHSIdentifier,razorcsModifier,razorcsStatement,razorcsType skipwhite
 syn match razorcsConstructor /\%#=1\h\w*\%(\s*(\)\@=/ contained nextgroup=razorcsParameters skipwhite
-syn region razorcsParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsLHSIdentifier,razorcsModifier,razorcsConstant nextgroup=razorcsLambdaOperator skipwhite
+syn region razorcsParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeTuple,razorcsLHSIdentifier,razorcsModifier,razorcsConstant nextgroup=razorcsLambdaOperator skipwhite
 
 syn match razorcsAssignmentOperator /\%#=1\%([+\-*/%^]\|&&\=\|||\=\|<<\|>>\|??\)\==/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsLambdaOperator /\%#=1=>/ contained nextgroup=@razorcsRHS skipwhite
