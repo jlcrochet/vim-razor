@@ -1,7 +1,7 @@
 " Syntax {{{1
 " RHS {{{2
 syn cluster razorcsRHS contains=
-      \ razorcsRHSVariable,razorcsNumber,razorcsString,razorcsCharacter,
+      \ razorcsRHSIdentifier,razorcsNumber,razorcsString,razorcsCharacter,
       \ razorcsBoolean,razorcsNull,razorcsConstant,
       \ razorcsRHSComment,razorcsGroup,razorcsList,razorcsQueryExpression,
       \ razorcsUnaryOperator,razorcsUnaryOperatorKeyword,razorcsSpecialMethod
@@ -203,7 +203,7 @@ syn match razorcsForDeclaration /\%#=1\h\w*\s*=/ contained contains=razorcsVaria
 
 syn keyword razorcsStatement foreach nextgroup=razorcsForeachStatement skipwhite
 syn region razorcsForeachStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsInStatement
-syn keyword razorcsInStatement in contained nextgroup=razorcsRHSVariable,razorcsUnaryOperatorKeyword skipwhite
+syn keyword razorcsInStatement in contained nextgroup=razorcsRHSIdentifier,razorcsUnaryOperatorKeyword skipwhite
 
 syn keyword razorcsStatement break continue default
 
@@ -251,7 +251,7 @@ syn keyword razorcsModifier public protected internal private nextgroup=razorcsC
 syn match razorcsConstructor /\%#=1\h\w*\%(\s*(\)\@=/ contained nextgroup=razorcsParameters skipwhite
 syn region razorcsParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeTuple,razorcsLHSIdentifier,razorcsModifier,razorcsConstant nextgroup=razorcsLambdaOperator skipwhite
 
-syn match razorcsAssignmentOperator /\%#=1\%([+\-*/%^]\|&&\=\|||\=\|<<\|>>\|??\)\==/ contained nextgroup=@razorcsRHS,razorcsRHSIdentifier skipwhite skipnl
+syn match razorcsAssignmentOperator /\%#=1\%([+\-*/%^]\|&&\=\|||\=\|<<\|>>\|??\)\==/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsLambdaOperator /\%#=1=>/ contained nextgroup=@razorcsRHS skipwhite
 
 syn match razorcsWhereStatement /\%#=1\<where\s*\h\w*\s*:\s*\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ contains=razorcsWhereKeyword,razorcsInheritanceOperator nextgroup=razorcsTypeComma skipwhite
