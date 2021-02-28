@@ -50,8 +50,8 @@ local void_elements = {
 
 local syngroups = {}
 
-local function syngroup_at(lnum, idx)
-  local synid = synID(lnum, idx + 1, false)
+local function syngroup_at(lnum, col)
+  local synid = synID(lnum, col, false)
 
   if synid == 0 then
     return
@@ -73,8 +73,8 @@ local function get_line(lnum)
   return nvim_buf_get_lines(0, lnum - 1, lnum, false)[1]
 end
 
-local function is_tag_bracket(lnum, idx)
-  local syngroup = syngroup_at(lnum, idx)
+local function is_tag_bracket(lnum, col)
+  local syngroup = syngroup_at(lnum, col)
   return syngroup == "razorhtmlTag" or syngroup == "razorhtmlEndTag"
 end
 
@@ -184,7 +184,7 @@ local function get_indent_info(lnum, line)
     if b == 60 then  -- <
       break
     else
-      local syngroup = syngroup_at(lnum, 0)
+      local syngroup = syngroup_at(lnum, 1)
 
       if syngroup == "razorBlock" or syngroup == "razorcsBlock" or syngroup == "razorDelimiter" then
         break
@@ -218,7 +218,7 @@ local function get_indent_info(lnum, line)
       local b = line:byte(j)
 
       if b == 60 then  -- <
-        local syngroup = syngroup_at(lnum, j - 1)
+        local syngroup = syngroup_at(lnum, j)
 
         if syngroup == "razorhtmlTag" then
           local tag_name = tag_name_at(line, j + 1)
@@ -228,7 +228,7 @@ local function get_indent_info(lnum, line)
           if void_elements[tag_name] then
             repeat
               j = line:find(">", j + 1)
-            until not j or syngroup_at(lnum, j - 1) == "razorhtmlTag"
+            until not j or syngroup_at(lnum, j) == "razorhtmlTag"
 
             if not j then
               -- Adjust the position to the next closing bracket.
@@ -240,7 +240,7 @@ local function get_indent_info(lnum, line)
 
                 repeat
                   j = line:find(">", j + 1)
-                until not j or syngroup_at(lnum, j - 1) == "razorhtmlTag"
+                until not j or syngroup_at(lnum, j) == "razorhtmlTag"
 
                 if j then
                   i = k
@@ -277,7 +277,7 @@ return function()
     return 0
   end
 
-  local syngroup = syngroup_at(lnum, 0)
+  local syngroup = syngroup_at(lnum, 1)
 
   -- Is this line inside of a multiline region?
   if syngroup == "razorComment" or syngroup == "razorhtmlComment" or syngroup == "razorcsComment" or syngroup == "razorcsString" then
@@ -465,7 +465,7 @@ return function()
         return indent(prev_lnum)
       end
 
-      if last_byte == 62 and is_tag_bracket(prev_lnum, last_col - 1) then -- >
+      if last_byte == 62 and is_tag_bracket(prev_lnum, last_col) then -- >
         return indent(prev_lnum)
       end
 
@@ -499,7 +499,7 @@ return function()
   -- previous character isn't a Razor delimiter.
   local last_byte, last_col, prev_line = get_last_byte(prev_lnum)
 
-  if last_byte == 123 and syngroup_at(prev_lnum, last_col - 1) == "razorDelimiter" then  -- {
+  if last_byte == 123 and syngroup_at(prev_lnum, last_col) == "razorDelimiter" then  -- {
     return indent(prev_lnum) + cs_sw
   end
 
