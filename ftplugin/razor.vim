@@ -15,11 +15,11 @@ runtime! ftplugin/html.vim
 setlocal comments=s1:@*,mb:*,ex:*@,://
 setlocal commentstring=@*\ %s\ *@
 
-" Change the :browse e filter to primarily show HTML-related files.
+" Change the :browse filter to primarily show HTML-related files.
 "
 " NOTE: Modified from ftplugin/html.vim to include Razor files
 if has("gui_win32")
-  if exists("b:browsefilter") 
+  if exists("b:browsefilter")
     let b:browsefilter = "Razor Files (*.cshtml,*.razor)\t*.cshtml;*.razor\n".b:browsefilter
   else
     let b:browsefilter = "Razor Files (*.cshtml,*.razor)\t*.cshtml;*.razor\n"

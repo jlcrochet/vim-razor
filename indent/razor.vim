@@ -93,12 +93,16 @@ function s:get_last_char(lnum)
   while p
     let synid = synID(a:lnum, col, 0)
 
-    if p == 2 && synid == g:razor#cs_comment_delimiter
-      let found = 1
-      break
-    elseif p == 3 && synid == g:razor#comment_delimiter
-      let found = 1
-      break
+    if p == 2
+      if synid == g:razor#cs_comment_delimiter
+        let found = 1
+        break
+      endif
+    elseif p == 3
+      if synid == g:razor#comment_delimiter
+        let found = 1
+        break
+      endif
     endif
 
     let [_, col, p] = searchpos('\(/[*/]\)\|\(@\*\)', "pz", a:lnum)
@@ -117,108 +121,54 @@ function s:get_last_char(lnum)
   return [char, idx, segment]
 endfunction
 
-function s:get_indent_info(lnum, line)
-  let lnum = a:lnum
-  let line = a:line
-
-  let lnums = [lnum]
-  let lines = [line]
-
-  let i = 0
-
-  while 1
-    if line =~# '^\s*<'
-      break
-    else
-      let synid = synID(lnum, 1, 0)
-
-      if synid == g:razor#block || synid == g:razor#cs_block || synid == g:razor#delimiter
-        break
-      endif
-    endif
-
-    let lnum = prevnonblank(lnum - 1)
-
-    if !lnum
-      break
-    endif
-
-    let line = getline(lnum)
-
-    call add(lnums, lnum)
-    call add(lines, line)
-
-    let i += 1
-  endwhile
-
+function s:get_indent_info(lnum)
+  let brackets = 0
   let pairs = 0
 
-  while i >= 0
-    let lnum = lnums[i]
-    let line = lines[i]
+  for i in range(a:lnum, 1, -1)
+    call cursor(i, 1)
 
-    let j = 0
-    let upper = strlen(line)
+    let [_, j, p] = searchpos('\(<\)\|\(>\)', "cpz", i)
 
-    while j < upper
-      let char = line[j]
-
-      if char ==# "<"
-        let synid = synID(lnum, j + 1, 0)
+    while p
+      if p == 2  " <
+        let synid = synID(i, j, 0)
 
         if synid == g:razor#html_tag
-          let [name, _, j] = matchstrpos(line, '^[[:alnum:].:_-]\+', j + 1)
+          let brackets += 1
 
-          if get(s:void_elements, name)
-            while 1
-              let j = stridx(line, ">", j)
+          let tag_name = expand("<cword>")
 
-              if j == -1 || synID(lnum, j + 1, 0) == g:razor#html_tag
-                break
-              endif
-            endwhile
-
-            if j == -1
-              " Adjust the position to the next closing bracket.
-              for k in range(i - 1, 0, -1)
-                let lnum = lnums[k]
-                let line = lines[k]
-
-                let j = -1
-
-                while 1
-                  let j = stridx(line, ">", j + 1)
-
-                  if j == -1 || synID(lnum, j + 1, 0) == g:razor#html_tag
-                    break
-                  endif
-                endwhile
-
-                if j != -1
-                  let i = k
-                  break
-                endif
-              endfor
-            endif
-          else
+          if !get(s:void_elements, tag_name)
             let pairs += 1
           endif
         elseif synid == g:razor#html_end_tag
+          let brackets += 1
           let pairs -= 1
         endif
-      elseif char ==# ">"
-        if line[j - 1] ==# "/" && synID(lnum, j + 1, 0) == g:razor#html_tag
-          let pairs -= 1
+      elseif p == 3  " >
+        let synid = synID(i, j, 0)
+
+        if synid == g:razor#html_tag
+          let brackets -= 1
+
+          if search('/\%#', "bn", i)
+            let pairs -= 1
+          endif
+        elseif synid == g:razor#html_end_tag
+          let brackets -= 1
         endif
       endif
 
-      let j += 1
+      let [_, j, p] = searchpos('\(<\)\|\(>\)', "pz", i)
     endwhile
 
-    let i -= 1
-  endwhile
+    if brackets >= 0
+      return [i, pairs]
+    endif
+  endfor
 
-  return [lnums[-1], pairs > 0 ? 1 : 0]
+  return a:lnum, 0
 endfunction
 
 " GetRazorIndent {{{1
@@ -259,7 +209,7 @@ function GetRazorIndent() abort
       while 1
         let idx = stridx(prev_line, "<script", idx + 1)
 
-        if idx == -1 || prev_line[idx + 7] !~ '[[:alnum:]_.:-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
+        if idx == -1 || prev_line[idx + 7] !~# '[[:alnum:]_.:-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
           break
         endif
       endwhile
@@ -287,7 +237,7 @@ function GetRazorIndent() abort
       while 1
         let idx = stridx(prev_line, "<style", idx + 1)
 
-        if idx == -1 || prev_line[idx + 6] !~ '[[:alnum:].:_-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
+        if idx == -1 || prev_line[idx + 6] !~# '[[:alnum:].:_-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
           break
         endif
       endwhile
@@ -349,9 +299,11 @@ function GetRazorIndent() abort
             let shift -= 1
           endif
 
-          let [start_lnum, prev_shift] = s:get_indent_info(prev_lnum, prev_line)
+          let [start_lnum, pairs] = s:get_indent_info(prev_lnum)
 
-          let shift += prev_shift
+          if pairs > 0
+            let shift += 1
+          endif
 
           return indent(start_lnum) + shift * shiftwidth()
         else
@@ -410,9 +362,11 @@ function GetRazorIndent() abort
     let shift -= 1
   endif
 
-  let [start_lnum, prev_shift] = s:get_indent_info(prev_lnum, prev_line)
+  let [start_lnum, pairs] = s:get_indent_info(prev_lnum)
 
-  let shift += prev_shift
+  if pairs > 0
+    let shift += 1
+  endif
 
   return indent(start_lnum) + shift * shiftwidth()
 endfunction

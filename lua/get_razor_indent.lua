@@ -164,109 +164,50 @@ local function get_last_byte(lnum)
   return nil, col, line
 end
 
-local function get_indent_info(lnum, line)
-  local lnums = { lnum }
-  local lines = { line }
-
-  local i = 1
-
-  while true do
-    local b
-
-    for i = 1, #line do
-      b = line:byte(i)
-
-      if b > 32 then
-        break
-      end
-    end
-
-    if b == 60 then  -- <
-      break
-    else
-      local syngroup = syngroup_at(lnum, 1)
-
-      if syngroup == "razorBlock" or syngroup == "razorcsBlock" or syngroup == "razorDelimiter" then
-        break
-      end
-    end
-
-    lnum = prevnonblank(lnum - 1)
-
-    if lnum == 0 then
-      break
-    end
-
-    line = get_line(lnum)
-
-    insert(lnums, lnum)
-    insert(lines, line)
-
-    i = i + 1
-  end
-
+local function get_indent_info(lnum)
+  local brackets = 0
   local pairs = 0
 
-  while i > 0 do
-    local lnum = lnums[i]
-    local line = lines[i]
+  for i = lnum, 1, -1 do
+    local line = get_line(i)
 
-    local j = 1
-    local upper = #line
-
-    while j <= upper do
+    for j = 1, #line do
       local b = line:byte(j)
 
       if b == 60 then  -- <
-        local syngroup = syngroup_at(lnum, j)
+        local syngroup = syngroup_at(i, j)
 
         if syngroup == "razorhtmlTag" then
-          local tag_name = tag_name_at(line, j + 1)
+          brackets = brackets + 1
 
-          j = j + #tag_name
-
-          if void_elements[tag_name] then
-            repeat
-              j = line:find(">", j + 1)
-            until not j or syngroup_at(lnum, j) == "razorhtmlTag"
-
-            if not j then
-              -- Adjust the position to the next closing bracket.
-              for k = i - 1, 1, -1 do
-                lnum = lnums[k]
-                line = lines[k]
-
-                j = 0
-
-                repeat
-                  j = line:find(">", j + 1)
-                until not j or syngroup_at(lnum, j) == "razorhtmlTag"
-
-                if j then
-                  i = k
-                  break
-                end
-              end
-            end
-          else
+          if not void_elements[tag_name_at(line, j + 1)] then
             pairs = pairs + 1
           end
         elseif syngroup == "razorhtmlEndTag" then
+          brackets = brackets + 1
           pairs = pairs - 1
         end
       elseif b == 62 then  -- >
-        if line:byte(j - 1) == 47 and syngroup_at(lnum, j - 1) == "razorhtmlTag" then  -- /
-          pairs = pairs - 1
+        local syngroup = syngroup_at(i, j)
+
+        if syngroup == "razorhtmlTag" then
+          brackets = brackets - 1
+
+          if line:byte(j - 1) == 47 then  -- /
+            pairs = pairs - 1
+          end
+        elseif syngroup == "razorhtmlEndTag" then
+          brackets = brackets - 1
         end
       end
-
-      j = j + 1
     end
 
-    i = i - 1
+    if brackets >= 0 then
+      return i, pairs
+    end
   end
 
-  return lnums[#lnums], pairs > 0 and 1 or 0
+  return lnum, 0
 end
 
 return function()
@@ -446,9 +387,11 @@ return function()
             shift = shift - 1
           end
 
-          local start_lnum, prev_shift = get_indent_info(prev_lnum, prev_line)
+          local start_lnum, pairs = get_indent_info(prev_lnum)
 
-          shift = shift + prev_shift
+          if pairs > 0 then
+            shift = shift + 1
+          end
 
           return indent(start_lnum) + shift * shiftwidth()
         else
@@ -497,7 +440,7 @@ return function()
 
   -- Special case: if we aren't inside of a syngroup, make sure that the
   -- previous character isn't a Razor delimiter.
-  local last_byte, last_col, prev_line = get_last_byte(prev_lnum)
+  local last_byte, last_col = get_last_byte(prev_lnum)
 
   if last_byte == 123 and syngroup_at(prev_lnum, last_col) == "razorDelimiter" then  -- {
     return indent(prev_lnum) + cs_sw
@@ -510,9 +453,11 @@ return function()
     shift = shift - 1
   end
 
-  local start_lnum, prev_shift = get_indent_info(prev_lnum, prev_line)
+  local start_lnum, pairs = get_indent_info(prev_lnum)
 
-  shift = shift + prev_shift
+  if pairs > 0 then
+    shift = shift + 1
+  end
 
   return indent(start_lnum) + shift * shiftwidth()
 end
