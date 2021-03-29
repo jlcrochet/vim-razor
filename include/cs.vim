@@ -178,7 +178,7 @@ syn keyword razorcsSpecialMethod checked unchecked typeof nameof default nextgro
 syn keyword razorcsModifier
       \ abstract async const delegate event explicit extern
       \ implicit in out override params partial readonly ref sealed
-      \ static unsafe virtual volatile yield
+      \ static unsafe virtual volatile yield new
 
 syn keyword razorcsStatement await nextgroup=razorcsRHSIdentifier skipwhite
 
