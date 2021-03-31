@@ -136,6 +136,7 @@ syn match razorcsQueryVariable /\%#=1\h\w*/ contained contains=razorcsModifier,r
 
 " LHS {{{2
 syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
+syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\*/ end=/\%#=1\*\// keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
 syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1\_$/ oneline contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString
 syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\// end=/\%#=1\_$/ oneline keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString
 
