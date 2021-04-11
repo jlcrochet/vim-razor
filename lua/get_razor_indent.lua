@@ -1,8 +1,7 @@
-local insert = table.insert
-
 local v = vim.v
 local g = vim.g
 local bo = vim.bo
+local cmd = vim.cmd
 
 local fn = vim.fn
 local prevnonblank = fn.prevnonblank
@@ -14,15 +13,14 @@ local cindent = fn.cindent
 
 local api = vim.api
 local nvim_get_current_line = api.nvim_get_current_line
-local nvim_command = api.nvim_command
 local nvim_eval = api.nvim_eval
 local nvim_buf_get_lines = api.nvim_buf_get_lines
 
 -- Load the settings for each filetype:
-nvim_command "runtime! indent/javascript.vim | unlet b:did_indent"
+cmd "runtime! indent/javascript.vim | unlet b:did_indent"
 local js_indentexpr = bo.indentexpr
 
-nvim_command "runtime! indent/css.vim"
+cmd "runtime! indent/css.vim"
 local css_indentexpr = bo.indentexpr
 
 local cs_sw = g.razor_cs_shiftwidth or bo.shiftwidth
