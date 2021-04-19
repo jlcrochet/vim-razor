@@ -3,7 +3,7 @@
 " Author: Jeffrey Crochet <jlcrochet@pm.me>
 " URL: github.com/jlcrochet/vim-razor
 
-if has_key(b:, "current_syntax")
+if exists("b:current_syntax")
   finish
 endif
 

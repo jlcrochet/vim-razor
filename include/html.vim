@@ -24,8 +24,10 @@ syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<style\>/ end=/\%#=1
 syn region razorhtmlStyle start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\/style>/ contained transparent contains=@razorhtmlcss
 syn match razorhtmlEndTag /\%#=1<\/style>/ contained
 
-syn region razorhtmlComment matchgroup=razorhtmlCommentDelimiter start=/\%#=1<!--/ end=/\%#=1-->/
-syn region razorhtmlDoctype matchgroup=razorhtmlCommentDelimiter start=/\%#=1<!\cdoctype\>/ end=/\%#=1>/
+syn region razorhtmlComment start=/\%#=1<!--/ end=/\%#=1-->/ keepend
+syn region razorhtmlDoctype start=/\%#=1<!\cdoctype\>/ end=/\%#=1>/
+
+syn match razorhtmlError /\%#=1>/
 
 hi def link razorhtmlTag Identifier
 hi def link razorhtmlEndTag razorhtmlTag
@@ -35,5 +37,5 @@ hi def link razorhtmlValueDelimiter razorhtmlValue
 hi def link razorhtmlEntityReference SpecialChar
 hi def link razorhtmlCharacterReference razorhtmlEntityReference
 hi def link razorhtmlComment Comment
-hi def link razorhtmlCommentDelimiter razorhtmlComment
 hi def link razorhtmlDoctype razorhtmlComment
+hi def link razorhtmlError Error
