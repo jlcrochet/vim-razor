@@ -24,8 +24,8 @@ syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<style\>/ end=/\%#=1
 syn region razorhtmlStyle start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\/style>/ contained transparent contains=@razorhtmlcss
 syn match razorhtmlEndTag /\%#=1<\/style>/ contained
 
-syn region razorhtmlComment start=/\%#=1<!--/ end=/\%#=1-->/ keepend
-syn region razorhtmlDoctype start=/\%#=1<!\cdoctype\>/ end=/\%#=1>/
+syn region razorhtmlComment start=/\%#=1<!--/ end=/\%#=1-->/ keepend contains=razorhtmlEntityReference,razorhtmlCharacterReference
+syn region razorhtmlDoctype start=/\%#=1<!\cdoctype\>/ end=/\%#=1>/ contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
 syn match razorhtmlError /\%#=1>/
 
