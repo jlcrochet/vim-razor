@@ -94,12 +94,12 @@ function s:get_last_char(lnum)
     let synid = synID(a:lnum, col, 0)
 
     if p == 2
-      if synid == g:razor#cs_comment_delimiter
+      if synid == g:razor#indent#cs_comment_delimiter
         let found = 1
         break
       endif
     elseif p == 3
-      if synid == g:razor#comment_delimiter
+      if synid == g:razor#indent#comment_delimiter
         let found = 1
         break
       endif
@@ -134,7 +134,7 @@ function s:get_indent_info(lnum)
       if p == 2  " <
         let synid = synID(i, j, 0)
 
-        if synid == g:razor#html_tag
+        if synid == g:razor#indent#html_tag
           let brackets += 1
 
           let tag_name = expand("<cword>")
@@ -142,20 +142,20 @@ function s:get_indent_info(lnum)
           if !get(s:void_elements, tag_name)
             let pairs += 1
           endif
-        elseif synid == g:razor#html_end_tag
+        elseif synid == g:razor#indent#html_end_tag
           let brackets += 1
           let pairs -= 1
         endif
       elseif p == 3  " >
         let synid = synID(i, j, 0)
 
-        if synid == g:razor#html_tag
+        if synid == g:razor#indent#html_tag
           let brackets -= 1
 
           if search('/\%#', "bn", i)
             let pairs -= 1
           endif
-        elseif synid == g:razor#html_end_tag
+        elseif synid == g:razor#indent#html_end_tag
           let brackets -= 1
         endif
       endif
@@ -184,7 +184,7 @@ function GetRazorIndent() abort
   let synid = synID(v:lnum, 1, 0)
 
   " Is this line inside of a multiline region?
-  if synid == g:razor#comment || synid == g:razor#html_comment || synid == g:razor#cs_comment || synid == g:razor#cs_string
+  if synid == g:razor#indent#comment || synid == g:razor#indent#html_comment || synid == g:razor#indent#cs_comment || synid == g:razor#indent#cs_string
     return -1
   endif
 
@@ -201,7 +201,7 @@ function GetRazorIndent() abort
     endif
 
     " Is this line inside of a script element?
-    if synid == g:razor#html_script || synIDattr(synid, "name")[:9] ==# "javascript"
+    if synid == g:razor#indent#html_script || synIDattr(synid, "name")[:9] ==# "javascript"
       " Is the previous line the beginning tag of the element?
       let prev_line = getline(prev_lnum)
       let idx = -1
@@ -209,7 +209,7 @@ function GetRazorIndent() abort
       while 1
         let idx = stridx(prev_line, "<script", idx + 1)
 
-        if idx == -1 || prev_line[idx + 7] !~# '[[:alnum:]_.:-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
+        if idx == -1 || prev_line[idx + 7] !~# '[[:alnum:]_.:-]' && synID(prev_lnum, idx + 1, 0) == g:razor#indent#html_tag
           break
         endif
       endwhile
@@ -229,7 +229,7 @@ function GetRazorIndent() abort
     endif
 
     " Is this line inside of a style element?
-    if synid == g:razor#html_style || synIDattr(synid, "name")[:2] ==# "css"
+    if synid == g:razor#indent#html_style || synIDattr(synid, "name")[:2] ==# "css"
       " Is the previous line the beginning tag of the element?
       let prev_line = getline(prev_lnum)
       let idx = -1
@@ -237,7 +237,7 @@ function GetRazorIndent() abort
       while 1
         let idx = stridx(prev_line, "<style", idx + 1)
 
-        if idx == -1 || prev_line[idx + 6] !~# '[[:alnum:].:_-]' && synID(prev_lnum, idx + 1, 0) == g:razor#html_tag
+        if idx == -1 || prev_line[idx + 6] !~# '[[:alnum:].:_-]' && synID(prev_lnum, idx + 1, 0) == g:razor#indent#html_tag
           break
         endif
       endwhile
@@ -257,7 +257,7 @@ function GetRazorIndent() abort
     endif
 
     " Is this line inside of a multiline tag?
-    if line[idx] !=# "<" && synid == g:razor#html_tag || synid == g:razor#html_attribute
+    if line[idx] !=# "<" && synid == g:razor#indent#html_tag || synid == g:razor#indent#html_attribute
       let prev_line = getline(prev_lnum)
       let idx = match(prev_line, '\S')
 
@@ -270,7 +270,7 @@ function GetRazorIndent() abort
     endif
 
     " Is this line inside of a Razor block?
-    if synid == g:razor#delimiter || synid == g:razor#block || synid == g:razor#cs_block || synIDattr(synid, "name")[:6] ==# "razorcs"
+    if synid == g:razor#indent#delimiter || synid == g:razor#indent#block || synid == g:razor#indent#cs_block || synIDattr(synid, "name")[:6] ==# "razorcs"
       " First, we need to check for some cases that `cindent` can't
       " handle.
 
@@ -323,7 +323,7 @@ function GetRazorIndent() abort
       if last_char ==# ">"
         let synid = synID(prev_lnum, last_idx + 1, 0)
 
-        if synid == g:razor#html_tag || synid == g:razor#html_end_tag
+        if synid == g:razor#indent#html_tag || synid == g:razor#indent#html_end_tag
           return indent(prev_lnum)
         endif
       endif
@@ -351,7 +351,7 @@ function GetRazorIndent() abort
   " previous character isn't a Razor delimiter.
   let [last_char, last_idx, prev_line] = s:get_last_char(prev_lnum)
 
-  if last_char ==# "{" && synID(prev_lnum, last_idx + 1, 0) == g:razor#delimiter
+  if last_char ==# "{" && synID(prev_lnum, last_idx + 1, 0) == g:razor#indent#delimiter
     return indent(prev_lnum) + s:cs_sw
   endif
 
