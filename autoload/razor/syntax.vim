@@ -38,10 +38,7 @@ let s:hexadecimal_re = s:hexadecimal . s:or(
       \ s:exponent_suffix . s:float_suffix.'\='
       \ ) . '\='
 
-const g:razor#syntax#float = printf(s:syn_match_template, s:float_re)
-const g:razor#syntax#decimal = printf(s:syn_match_template, s:decimal_re)
-const g:razor#syntax#binary = printf(s:syn_match_template, s:binary_re)
-const g:razor#syntax#hexadecimal = printf(s:syn_match_template, s:hexadecimal_re)
+const g:razor#syntax#cs_numbers = printf(s:syn_match_template .. repeat(" | " .. s:syn_match_template, 3), s:float_re, s:decimal_re, s:binary_re, s:hexadecimal_re)
 
 delfunction s:or
 delfunction s:optional

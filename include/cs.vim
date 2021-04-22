@@ -64,10 +64,7 @@ syn match razorcsLambdaParameter /\%#=1\h\w*/ contained
 syn match razorcsLambdaParameter /\%#=1\h\w*\%(<.\{-}>\)\=\s\+\h\w*/ contained contains=razorcsRHSType,razorcsRHSIdentifier
 
 " Numbers {{{3
-execute g:razor#syntax#float
-execute g:razor#syntax#decimal
-execute g:razor#syntax#binary
-execute g:razor#syntax#hexadecimal
+execute g:razor#syntax#cs_numbers
 " }}}3
 
 syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=razorcsOperator skipwhite skipnl
