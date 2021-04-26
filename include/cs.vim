@@ -40,8 +40,10 @@ syn match razorcsUnaryOperator /\%#=1--\=/ contained nextgroup=@razorcsRHS skipw
 syn match razorcsUnaryOperator /\%#=1\.\./ contained nextgroup=@razorcsRHS skipwhite skipnl
 
 syn keyword razorcsUnaryOperatorKeyword out await stackalloc contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsTypeTuple skipwhite
-syn keyword razorcsUnaryOperatorKeyword new contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsIndex,razorcsList skipwhite
+syn keyword razorcsUnaryOperatorKeyword new contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsIndex,razorcsObject skipwhite
 syn keyword razorcsUnaryOperatorKeyword async contained nextgroup=razorcsLambdaDeclarator,razorcsLambdaParameters skipwhite
+
+syn region razorcsObject matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=razorcsVariable
 
 syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=@razorcsOperators,razorcsList skipwhite skipnl
 syn region razorcsIndex matchgroup=razorcsDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=@razorcsOperators,razorcsList skipwhite skipnl
@@ -96,13 +98,13 @@ syn match razorcsQueryVariable /\%#=1\h\w*/ contained contains=razorcsModifier,r
 " LHS {{{2
 syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
 syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\*/ end=/\%#=1\*\// keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1\_$/ oneline contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\// end=/\%#=1\_$/ oneline keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString
+syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1$/ oneline contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString
+syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\// end=/\%#=1$/ oneline keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString
 
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 syn include @razorcsxml syntax/xml.vim
 
-syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1\_$/ oneline
+syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1$/ oneline
 
 syn match razorcsIncrementOperator /\%#=1++/
 syn match razorcsDecrementOperator /\%#=1--/

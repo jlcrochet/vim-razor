@@ -38,11 +38,11 @@ syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorLine start=/\%#=1\S/ end=/\%#=1\_$/ contained oneline
+syn region razorLine start=/\%#=1\S/ end=/\%#=1$/ contained oneline
 
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
-syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1\_$/ contained oneline contains=TOP
+syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1$/ contained oneline contains=TOP
 syn region razorHTML start=/\%#=1<\a/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
 syn region razorInnerHTML matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/.\{-}>/ contained contains=@razorTop,razorHTML
 syn match razorhtmlTag /\%#=1\/\@1<=>/ contained
