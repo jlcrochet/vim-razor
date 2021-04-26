@@ -73,14 +73,16 @@ syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'
 
 syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ contained oneline contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=razorcsOperator skipwhite skipnl
 syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ contained oneline contains=razorcsEscapeSequence,razorcsEscapeSequenceError,razorcsStringInterpolation,razorcsStringNoInterpolation nextgroup=razorcsOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ skip=/\%#=1""/ contained nextgroup=razorcsOperator skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ skip=/\%#=1""/ contained contains=razorcsStringInterpolation,razorcsStringNoInterpolation nextgroup=razorcsOperator skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ skip=/\%#=1""/ contained contains=razorcsQuoteEscape,nextgroup=razorcsOperator skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ skip=/\%#=1""/ contained contains=razorcsQuoteEscape,razorcsStringInterpolation,razorcsStringNoInterpolation nextgroup=razorcsOperator skipwhite skipnl
 
 syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1}/ oneline contained contains=@razorcsRHS
 syn match razorcsStringNoInterpolation /\%#=1{{/ contained
 
 syn match razorcsEscapeSequenceError /\%#=1\\./ contained
 syn match razorcsEscapeSequence /\%#=1\\\%(['"\\0abfnrtv]\|x\x\{1,4}\|u\x\{4}\|U\x\{8}\)/ contained
+
+syn match razorcsQuoteEscape /\%#=1""/ contained
 
 syn keyword razorcsBoolean true false contained nextgroup=razorcsOperator skipwhite skipnl
 syn keyword razorcsNull null contained nextgroup=razorcsOperator skipwhite skipnl
@@ -262,6 +264,7 @@ hi def link razorcsStringInterpolationDelimiter PreProc
 hi def link razorcsStringNoInterpolation razorcsString
 hi def link razorcsEscapeSequence SpecialChar
 hi def link razorcsEscapeSequenceError Error
+hi def link razorcsQuoteEscape razorcsEscapeSequence
 hi def link razorcsQueryKeyword Keyword
 hi def link razorcsQueryVariable razorcsVariable
 " }}}1
