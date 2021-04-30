@@ -208,7 +208,7 @@ local function get_indent_info(lnum)
   return lnum, 0
 end
 
-return function()
+function get_razor_indent()
   local lnum = v.lnum
   local prev_lnum = prevnonblank(lnum - 1)
 
