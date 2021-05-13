@@ -11,9 +11,9 @@ function s:optional(re)
   return '\%('.a:re.'\)\='
 endfunction
 
-let s:decimal = '\d\%(_\+\d\+\)*'
-let s:binary = '0[bB][01]\%(_\+[01]\+\)*'
-let s:hexadecimal = '0[xX]\x\%(_\+\x\+\)*'
+let s:decimal = '\d\+\%(_\+\d\+\)*'
+let s:binary = '0[bB][01]\+\%(_\+[01]\+\)*'
+let s:hexadecimal = '0[xX]\x\+\%(_\+\x\+\)*'
 
 let s:integer_suffix = '\%([uU][lL]\=\|[lL][uU]\=\)'
 let s:float_suffix = '[fFmM]'
