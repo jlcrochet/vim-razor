@@ -143,14 +143,10 @@ syn keyword razorcsStatement await nextgroup=razorcsRHSIdentifier skipwhite
 
 syn keyword razorcsStatement get set nextgroup=razorcsLambdaOperator,razorcsBlock skipwhite skipnl
 
-syn keyword razorcsStatement fixed unfixed nextgroup=razorcsGuardedStatement skipwhite
+syn keyword razorcsStatement using fixed unfixed nextgroup=razorcsGuardedStatement skipwhite
 syn region razorcsGuardedStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained transparent
 
-syn keyword razorcsStatement using nextgroup=razorcsGuardedStatement,razorcsUsingIdentifier,razorcsUsingStatic skipwhite
-syn match razorcsUsingIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ contained nextgroup=razorcsAssignmentOperator skipwhite
-syn keyword razorcsUsingStatic static contained nextgroup=razorcsUsingIdentifier skipwhite
-
-syn keyword razorcsStatement alias nextgroup=razorcsUsingIdentifier skipwhite
+syn keyword razorcsStatement alias
 
 syn keyword razorcsStatement if switch while nextgroup=razorcsCondition skipwhite
 syn keyword razorcsStatement else
@@ -249,7 +245,6 @@ hi def link razorcsLambdaDeclarator razorcsDeclarator
 hi def link razorcsLambdaParameter razorcsLambdaDeclarator
 hi def link razorcsInheritanceOperator razorcsOperator
 hi def link razorcsVariable razorcsDeclarator
-hi def link razorcsUsingIdentifier Identifier
 hi def link razorcsConstructor razorcsDeclarator
 hi def link razorcsTypeDefinition Typedef
 hi def link razorcsEnumDefinition razorcsTypeDefinition
