@@ -40,7 +40,7 @@ syn match razorcsUnaryOperator /\%#=1--\=/ contained nextgroup=@razorcsRHS skipw
 syn match razorcsUnaryOperator /\%#=1\.\./ contained nextgroup=@razorcsRHS skipwhite skipnl
 
 syn keyword razorcsUnaryOperatorKeyword out await stackalloc contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsTypeTuple skipwhite
-syn keyword razorcsUnaryOperatorKeyword new contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsIndex,razorcsObject skipwhite
+syn keyword razorcsUnaryOperatorKeyword new contained nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsGroup,razorcsIndex,razorcsObject skipwhite
 syn keyword razorcsUnaryOperatorKeyword async contained nextgroup=razorcsLambdaDeclarator,razorcsLambdaParameters skipwhite
 
 syn region razorcsObject matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=razorcsVariable
@@ -51,7 +51,7 @@ syn region razorcsIndex matchgroup=razorcsDelimiter start=/\%#=1?\=\[/ end=/\%#=
 
 syn match razorcsRHSVariable /\%#=1\h\w*/ contained nextgroup=@razorcsOperators skipwhite skipnl
 
-syn match razorcsRHSIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsType,razorcsModifier,razorcsStatement,razorcsType nextgroup=@razorcsOperators,razorcsList,razorcsVariable skipwhite skipnl
+syn match razorcsRHSIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsType,razorcsModifier,razorcsStatement,razorcsType,razorcsConstant nextgroup=@razorcsOperators,razorcsList,razorcsVariable skipwhite skipnl
 
 syn keyword razorcsRHSType contained nextgroup=razorcsIndex,razorcsRHSMemberAccessOperator,razorcsVariable skipwhite skipnl
       \ bool byte char decimal double dynamic float int long object
