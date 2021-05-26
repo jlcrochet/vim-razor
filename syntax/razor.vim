@@ -25,11 +25,11 @@ syn cluster razorTop contains=TOP
 " These are regions where Razor interpolation can occur:
 syn cluster razorInterpolation contains=razorhtmlValue,razorhtmlScript,razorhtmlStyle,javascriptString,cssValue
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements
+syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements display
 syn match razorDelimiter /\%#=1\w\@1<!@/ contained containedin=@razorInterpolation nextgroup=razorImplicitExpression,razorExplicitExpression
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes
 
-syn match razorDelimiterEscape /\%#=1@@/ containedin=@razorInterpolation
+syn match razorDelimiterEscape /\%#=1@@/ containedin=@razorInterpolation display
 
 syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS,razorcsRHSIdentifier

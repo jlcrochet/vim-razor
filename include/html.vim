@@ -12,9 +12,9 @@ syn match razorhtmlValue /\%#=1[^[:space:]>]\+/ contained contains=razorhtmlEnti
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
-syn match razorhtmlEntityReference /\%#=1&\a[[:alnum:]]*;/
-syn match razorhtmlCharacterReference /\%#=1&#\d\+;/
-syn match razorhtmlCharacterReference /\%#=1&#x\x\+;/
+syn match razorhtmlEntityReference /\%#=1&\a[[:alnum:]]*;/ display
+syn match razorhtmlCharacterReference /\%#=1&#\d\+;/ display
+syn match razorhtmlCharacterReference /\%#=1&#x\x\+;/ display
 
 syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<script\>/ end=/\%#=1>/ contains=razorhtmlAttribute nextgroup=razorhtmlScript,razorhtmlEndTag skipnl
 syn region razorhtmlScript start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\/script>/ contained keepend transparent contains=@razorhtmljs
@@ -27,7 +27,7 @@ syn match razorhtmlEndTag /\%#=1<\/style>/ contained
 syn region razorhtmlComment start=/\%#=1<!--/ end=/\%#=1-->/
 syn region razorhtmlDoctype start=/\%#=1<!\cdoctype\>/ end=/\%#=1>/ contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
-syn match razorhtmlError /\%#=1>/
+syn match razorhtmlError /\%#=1>/ display
 
 hi def link razorhtmlTag Identifier
 hi def link razorhtmlEndTag razorhtmlTag

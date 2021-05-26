@@ -1,0 +1,202 @@
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.009  000.009: --- NVIM STARTING ---
+000.303  000.294: locale set
+000.591  000.289: inits 1
+000.606  000.015: window checked
+000.645  000.039: parsing arguments
+000.740  000.095: expanding arguments
+000.776  000.036: inits 2
+001.183  000.406: init highlight
+001.184  000.001: waiting for UI
+005.933  004.749: done waiting for UI
+005.983  000.050: initialized screen early for UI
+006.104  000.014  000.014: sourcing /usr/share/nvim/archlinux.vim
+006.108  000.038  000.024: sourcing /etc/xdg//nvim/sysinit.vim
+006.408  000.043  000.043: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/opt/paq-nvim/plugin/paq-nvim.vim
+008.758  000.127  000.127: sourcing /home/jeffrey/.config/nvim/keymap/caps_lock.vim
+009.474  003.347  003.177: sourcing /home/jeffrey/.config/nvim/init.vim
+009.480  000.112: sourcing vimrc file(s)
+009.752  000.014  000.014: sourcing /home/jeffrey/sync/programs/vim-crystal/ftdetect/crystal.vim
+009.775  000.010  000.010: sourcing /home/jeffrey/sync/programs/vim-crystal/ftdetect/ecrystal.vim
+009.829  000.015  000.015: sourcing /home/jeffrey/sync/programs/vim-razor/ftdetect/razor.vim
+009.932  000.011  000.011: sourcing /usr/share/vim/vimfiles/ftdetect/PKGBUILD.vim
+009.957  000.013  000.013: sourcing /usr/share/vim/vimfiles/ftdetect/pullrequest.vim
+010.092  000.576  000.512: sourcing /home/jeffrey/.config/nvim/filetype.vim
+010.133  000.012  000.012: sourcing /usr/share/nvim/runtime/filetype.vim
+010.382  000.037  000.037: sourcing /usr/share/nvim/runtime/ftplugin.vim
+010.594  000.028  000.028: sourcing /usr/share/nvim/runtime/indent.vim
+011.342  000.346  000.346: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+012.146  000.729  000.729: sourcing /home/jeffrey/.config/nvim/after/syntax/syncolor.vim
+012.400  001.465  000.389: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+012.480  001.608  000.143: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+012.806  000.021  000.021: sourcing /home/jeffrey/sync/programs/vim-crystal/plugin/crystal.vim
+012.875  000.018  000.018: sourcing /home/jeffrey/sync/programs/vim-ruby/plugin/ruby.vim
+013.383  000.318  000.318: sourcing /home/jeffrey/.config/nvim/plugin/commenter.vim
+013.872  000.470  000.470: sourcing /home/jeffrey/.config/nvim/plugin/end_pairs.vim
+013.996  000.108  000.108: sourcing /home/jeffrey/.config/nvim/plugin/end_tags.vim
+014.132  000.120  000.120: sourcing /home/jeffrey/.config/nvim/plugin/end_words.vim
+014.223  000.075  000.075: sourcing /home/jeffrey/.config/nvim/plugin/indent_colors.vim
+014.378  000.141  000.141: sourcing /home/jeffrey/.config/nvim/plugin/indent_object.vim
+014.531  000.132  000.132: sourcing /home/jeffrey/.config/nvim/plugin/marks.vim
+014.678  000.127  000.127: sourcing /home/jeffrey/.config/nvim/plugin/match_pairs.vim
+014.989  000.295  000.295: sourcing /home/jeffrey/.config/nvim/plugin/search.vim
+015.553  000.547  000.547: sourcing /home/jeffrey/.config/nvim/plugin/surround.vim
+015.652  000.080  000.080: sourcing /home/jeffrey/.config/nvim/plugin/tab_wrapper.vim
+015.750  000.082  000.082: sourcing /home/jeffrey/.config/nvim/plugin/terminal.vim
+015.861  000.013  000.013: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/opt/paq-nvim/plugin/paq-nvim.vim
+016.067  000.013  000.013: sourcing /usr/share/nvim/runtime/plugin/gzip.vim
+016.089  000.010  000.010: sourcing /usr/share/nvim/runtime/plugin/health.vim
+016.111  000.009  000.009: sourcing /usr/share/nvim/runtime/plugin/man.vim
+016.135  000.011  000.011: sourcing /usr/share/nvim/runtime/plugin/matchit.vim
+016.160  000.011  000.011: sourcing /usr/share/nvim/runtime/plugin/matchparen.vim
+016.189  000.018  000.018: sourcing /usr/share/nvim/runtime/plugin/netrwPlugin.vim
+016.208  000.008  000.008: sourcing /usr/share/nvim/runtime/plugin/rplugin.vim
+016.229  000.007  000.007: sourcing /usr/share/nvim/runtime/plugin/shada.vim
+016.252  000.011  000.011: sourcing /usr/share/nvim/runtime/plugin/spellfile.vim
+016.295  000.031  000.031: sourcing /usr/share/nvim/runtime/plugin/tarPlugin.vim
+016.407  000.015  000.015: sourcing /usr/share/nvim/runtime/plugin/tohtml.vim
+016.430  000.008  000.008: sourcing /usr/share/nvim/runtime/plugin/tutor.vim
+016.459  000.016  000.016: sourcing /usr/share/nvim/runtime/plugin/zipPlugin.vim
+017.183  000.656  000.656: sourcing /usr/share/vim/vimfiles/plugin/fzf.vim
+017.190  002.077: loading plugins
+017.355  000.020  000.020: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/fzf/plugin/fzf.vim
+018.084  000.662  000.662: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/fzf.vim/plugin/fzf.vim
+018.220  000.061  000.061: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/nnn.vim/plugin/nnn.vim
+018.346  000.413: loading packages
+018.429  000.083: loading after plugins
+018.437  000.008: inits 3
+021.117  002.680: reading ShaDa
+023.188  000.043  000.043: sourcing /home/jeffrey/.config/nvim/ftplugin/html.vim
+023.251  000.012  000.012: sourcing /usr/share/nvim/runtime/ftplugin/html.vim
+023.452  000.355  000.300: sourcing /home/jeffrey/sync/programs/vim-razor/ftplugin/razor.vim
+023.506  000.010  000.010: sourcing /home/jeffrey/.config/nvim/ftplugin/razor.vim
+025.361  000.281  000.281: sourcing /home/jeffrey/.config/nvim/indent/javascript.vim
+025.429  000.015  000.015: sourcing /usr/share/nvim/runtime/indent/javascript.vim
+025.733  000.102  000.102: sourcing /home/jeffrey/.config/nvim/indent/css.vim
+025.789  000.012  000.012: sourcing /usr/share/nvim/runtime/indent/css.vim
+026.050  001.417  001.007: sourcing /home/jeffrey/sync/programs/vim-razor/indent/razor.vim
+026.596  000.068  000.068: sourcing /home/jeffrey/.config/nvim/autoload/javascript/syntax.vim
+027.344  000.934  000.866: sourcing /home/jeffrey/.config/nvim/syntax/javascript.vim
+027.414  000.019  000.019: sourcing /usr/share/nvim/runtime/syntax/javascript.vim
+027.537  000.068  000.068: sourcing /home/jeffrey/.config/nvim/syntax/css.vim
+027.596  000.014  000.014: sourcing /usr/share/nvim/runtime/syntax/css.vim
+027.752  001.377  000.342: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/../include/html.vim
+028.539  000.086  000.086: sourcing /home/jeffrey/sync/programs/vim-razor/autoload/razor/syntax.vim
+028.853  000.012  000.012: sourcing /home/jeffrey/.config/nvim/syntax/xml.vim
+028.918  000.022  000.022: sourcing /usr/share/nvim/runtime/syntax/xml.vim
+029.499  001.398  001.278: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/../include/cs.vim
+029.569  003.239  000.463: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/razor.vim
+030.708  004.571: opening buffers
+030.715  000.007: BufEnter autocommands
+030.717  000.002: editing files in windows
+030.722  000.005: VimEnter autocommands
+030.723  000.001: UIEnter autocommands
+030.724  000.001: before starting main loop
+040.192  009.467: first screen update
+040.197  000.006: --- NVIM STARTED ---
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.009  000.009: --- NVIM STARTING ---
+000.333  000.324: locale set
+000.647  000.315: inits 1
+000.661  000.014: window checked
+000.700  000.039: parsing arguments
+000.738  000.038: expanding arguments
+000.775  000.037: inits 2
+001.171  000.397: init highlight
+001.172  000.001: waiting for UI
+005.398  004.226: done waiting for UI
+005.456  000.058: initialized screen early for UI
+005.597  000.014  000.014: sourcing /usr/share/nvim/archlinux.vim
+005.602  000.042  000.028: sourcing /etc/xdg//nvim/sysinit.vim
+005.902  000.042  000.042: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/opt/paq-nvim/plugin/paq-nvim.vim
+008.069  000.126  000.126: sourcing /home/jeffrey/.config/nvim/keymap/caps_lock.vim
+008.665  003.044  002.877: sourcing /home/jeffrey/.config/nvim/init.vim
+008.670  000.128: sourcing vimrc file(s)
+008.960  000.013  000.013: sourcing /home/jeffrey/sync/programs/vim-crystal/ftdetect/crystal.vim
+008.986  000.011  000.011: sourcing /home/jeffrey/sync/programs/vim-crystal/ftdetect/ecrystal.vim
+009.040  000.015  000.015: sourcing /home/jeffrey/sync/programs/vim-razor/ftdetect/razor.vim
+009.180  000.019  000.019: sourcing /usr/share/vim/vimfiles/ftdetect/PKGBUILD.vim
+009.206  000.012  000.012: sourcing /usr/share/vim/vimfiles/ftdetect/pullrequest.vim
+009.344  000.640  000.569: sourcing /home/jeffrey/.config/nvim/filetype.vim
+009.386  000.013  000.013: sourcing /usr/share/nvim/runtime/filetype.vim
+009.591  000.033  000.033: sourcing /usr/share/nvim/runtime/ftplugin.vim
+009.831  000.060  000.060: sourcing /usr/share/nvim/runtime/indent.vim
+010.414  000.291  000.291: sourcing /usr/share/nvim/runtime/syntax/syncolor.vim
+011.161  000.708  000.708: sourcing /home/jeffrey/.config/nvim/after/syntax/syncolor.vim
+011.400  001.333  000.335: sourcing /usr/share/nvim/runtime/syntax/synload.vim
+011.477  001.474  000.140: sourcing /usr/share/nvim/runtime/syntax/syntax.vim
+011.816  000.038  000.038: sourcing /home/jeffrey/sync/programs/vim-crystal/plugin/crystal.vim
+011.890  000.018  000.018: sourcing /home/jeffrey/sync/programs/vim-ruby/plugin/ruby.vim
+012.389  000.301  000.301: sourcing /home/jeffrey/.config/nvim/plugin/commenter.vim
+012.882  000.476  000.476: sourcing /home/jeffrey/.config/nvim/plugin/end_pairs.vim
+013.010  000.109  000.109: sourcing /home/jeffrey/.config/nvim/plugin/end_tags.vim
+013.147  000.122  000.122: sourcing /home/jeffrey/.config/nvim/plugin/end_words.vim
+013.236  000.073  000.073: sourcing /home/jeffrey/.config/nvim/plugin/indent_colors.vim
+013.370  000.120  000.120: sourcing /home/jeffrey/.config/nvim/plugin/indent_object.vim
+013.489  000.103  000.103: sourcing /home/jeffrey/.config/nvim/plugin/marks.vim
+013.627  000.121  000.121: sourcing /home/jeffrey/.config/nvim/plugin/match_pairs.vim
+013.980  000.337  000.337: sourcing /home/jeffrey/.config/nvim/plugin/search.vim
+014.530  000.530  000.530: sourcing /home/jeffrey/.config/nvim/plugin/surround.vim
+014.624  000.076  000.076: sourcing /home/jeffrey/.config/nvim/plugin/tab_wrapper.vim
+014.716  000.076  000.076: sourcing /home/jeffrey/.config/nvim/plugin/terminal.vim
+014.816  000.011  000.011: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/opt/paq-nvim/plugin/paq-nvim.vim
+015.038  000.015  000.015: sourcing /usr/share/nvim/runtime/plugin/gzip.vim
+015.061  000.010  000.010: sourcing /usr/share/nvim/runtime/plugin/health.vim
+015.083  000.008  000.008: sourcing /usr/share/nvim/runtime/plugin/man.vim
+015.104  000.010  000.010: sourcing /usr/share/nvim/runtime/plugin/matchit.vim
+015.127  000.010  000.010: sourcing /usr/share/nvim/runtime/plugin/matchparen.vim
+015.157  000.017  000.017: sourcing /usr/share/nvim/runtime/plugin/netrwPlugin.vim
+015.175  000.007  000.007: sourcing /usr/share/nvim/runtime/plugin/rplugin.vim
+015.194  000.007  000.007: sourcing /usr/share/nvim/runtime/plugin/shada.vim
+015.218  000.012  000.012: sourcing /usr/share/nvim/runtime/plugin/spellfile.vim
+015.244  000.013  000.013: sourcing /usr/share/nvim/runtime/plugin/tarPlugin.vim
+015.351  000.015  000.015: sourcing /usr/share/nvim/runtime/plugin/tohtml.vim
+015.373  000.008  000.008: sourcing /usr/share/nvim/runtime/plugin/tutor.vim
+015.402  000.016  000.016: sourcing /usr/share/nvim/runtime/plugin/zipPlugin.vim
+016.066  000.598  000.598: sourcing /usr/share/vim/vimfiles/plugin/fzf.vim
+016.072  001.922: loading plugins
+016.203  000.017  000.017: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/fzf/plugin/fzf.vim
+016.948  000.680  000.680: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/fzf.vim/plugin/fzf.vim
+017.086  000.061  000.061: sourcing /home/jeffrey/.local/share/nvim/site/pack/paqs/start/nnn.vim/plugin/nnn.vim
+017.186  000.356: loading packages
+017.267  000.081: loading after plugins
+017.274  000.007: inits 3
+022.157  004.883: reading ShaDa
+024.166  000.046  000.046: sourcing /home/jeffrey/.config/nvim/ftplugin/html.vim
+024.231  000.013  000.013: sourcing /usr/share/nvim/runtime/ftplugin/html.vim
+024.410  000.353  000.294: sourcing /home/jeffrey/sync/programs/vim-razor/ftplugin/razor.vim
+024.460  000.009  000.009: sourcing /home/jeffrey/.config/nvim/ftplugin/razor.vim
+026.321  000.405  000.405: sourcing /home/jeffrey/.config/nvim/indent/javascript.vim
+026.392  000.016  000.016: sourcing /usr/share/nvim/runtime/indent/javascript.vim
+026.695  000.102  000.102: sourcing /home/jeffrey/.config/nvim/indent/css.vim
+026.751  000.012  000.012: sourcing /usr/share/nvim/runtime/indent/css.vim
+026.915  001.322  000.787: sourcing /home/jeffrey/sync/programs/vim-razor/indent/razor.vim
+027.525  000.071  000.071: sourcing /home/jeffrey/.config/nvim/autoload/javascript/syntax.vim
+028.352  001.076  001.005: sourcing /home/jeffrey/.config/nvim/syntax/javascript.vim
+028.436  000.023  000.023: sourcing /usr/share/nvim/runtime/syntax/javascript.vim
+028.567  000.071  000.071: sourcing /home/jeffrey/.config/nvim/syntax/css.vim
+028.626  000.014  000.014: sourcing /usr/share/nvim/runtime/syntax/css.vim
+028.779  001.538  000.353: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/../include/html.vim
+029.672  000.088  000.088: sourcing /home/jeffrey/sync/programs/vim-razor/autoload/razor/syntax.vim
+029.992  000.012  000.012: sourcing /home/jeffrey/.config/nvim/syntax/xml.vim
+030.060  000.024  000.024: sourcing /usr/share/nvim/runtime/syntax/xml.vim
+030.614  001.371  001.248: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/../include/cs.vim
+030.686  003.484  000.575: sourcing /home/jeffrey/sync/programs/vim-razor/syntax/razor.vim
+031.492  004.167: opening buffers
+031.497  000.005: BufEnter autocommands
+031.499  000.002: editing files in windows
+031.502  000.003: VimEnter autocommands
+031.503  000.001: UIEnter autocommands
+031.504  000.001: before starting main loop
+040.568  009.063: first screen update
+040.573  000.005: --- NVIM STARTED ---
