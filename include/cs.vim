@@ -32,7 +32,8 @@ syn match razorcsRHSMemberAccessOperator /\%#=1::/ contained nextgroup=razorcsRH
 syn match razorcsOperator /\%#=1\.\./ contained nextgroup=@razorcsRHS skipwhite skipnl
 
 syn keyword razorcsOperatorKeyword as is contained nextgroup=razorcsRHSType,razorcsRHSIdentifier,razorcsNull skipwhite skipnl
-syn keyword razorcsOperatorKeyword switch with contained nextgroup=razorcsList skipwhite
+syn keyword razorcsOperatorKeyword switch contained nextgroup=razorcsList skipwhite
+syn keyword razorcsOperatorKeyword with contained nextgroup=razorcsObject skipwhite
 
 syn match razorcsUnaryOperator /\%#=1[!^~&*]/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsUnaryOperator /\%#=1++\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
@@ -141,7 +142,7 @@ syn keyword razorcsModifier
 
 syn keyword razorcsStatement await nextgroup=razorcsRHSIdentifier skipwhite
 
-syn keyword razorcsStatement get set nextgroup=razorcsLambdaOperator,razorcsBlock skipwhite skipnl
+syn keyword razorcsStatement get set init nextgroup=razorcsLambdaOperator,razorcsBlock skipwhite skipnl
 
 syn keyword razorcsStatement using fixed unfixed nextgroup=razorcsGuardedStatement skipwhite
 syn region razorcsGuardedStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained transparent

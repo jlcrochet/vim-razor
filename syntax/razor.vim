@@ -78,7 +78,7 @@ syn cluster razorStatements contains=
       \ razorUsing,razorTry,razorCatch,razorFinally,razorLock,
       \ razorCode,razorFunctions,razorSection,razorDirective
 
-syn match razorIdentifier /\%#=1\h[[:alnum:].]*/ contained nextgroup=razorBlock skipwhite skipnl
+syn match razorIdentifier /\%#=1\h[[:alnum:]_.]*/ contained nextgroup=razorBlock skipwhite skipnl
 
 syn keyword razorAttributes attributes contained nextgroup=razorhtmlAttributeOperator
 syn match razorBind /\%#=1bind\%(-\h\w*\)\=\%(:\%(event\|format\)\)\=\>/ contained nextgroup=razorhtmlAttributeOperator
