@@ -9,8 +9,8 @@ syn match razorhtmlAttributeOperator /\%#=1=/ contained nextgroup=razorhtmlValue
 
 syn match razorhtmlValue /\%#=1[^[:space:]>]\+/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
-syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ oneline contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
-syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ oneline contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
 syn match razorhtmlEntityReference /\%#=1&\a[[:alnum:]]*;/
 syn match razorhtmlCharacterReference /\%#=1&#\d\+;/
