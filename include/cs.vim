@@ -99,15 +99,15 @@ syn keyword razorcsQueryKeyword on contained
 syn match razorcsQueryVariable /\%#=1\h\w*/ contained contains=razorcsModifier,razorcsStatement,razorcsQueryKeyword,razorcsType nextgroup=razorcsAssignmentOperator skipwhite skipnl
 
 " LHS {{{2
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\*/ end=/\%#=1\*\// keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1$/ oneline contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\// end=/\%#=1$/ oneline keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString
+syn region razorcsComment start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
+syn region razorcsComment start=/\%#=1\/\/\*/ end=/\%#=1\*\// keepend contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString nextgroup=@razorcsRHS skipwhite
+syn match razorcsComment /\%#=1\/\/.*/ contains=razorcsTodo containedin=ALLBUT,razorcsComment,razorcsString
+syn match razorcsComment /\%#=1\/\/\/.*/ contains=razorcsTodo,@razorcsxml containedin=ALLBUT,razorcsComment,razorcsString
 
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 syn include @razorcsxml syntax/xml.vim
 
-syn region razorcsPreprocessor start=/\%#=1#/ end=/\%#=1$/ oneline
+syn match razorcsPreprocessor /\%#=1^\s*#.*/
 
 syn match razorcsIncrementOperator /\%#=1++/
 syn match razorcsDecrementOperator /\%#=1--/
@@ -229,7 +229,6 @@ hi def link razorcsLHSMemberAccessOperator razorcsOperator
 hi def link razorcsRHSMemberAccessOperator razorcsLHSMemberAccessOperator
 hi def link razorcsDelimiter Delimiter
 hi def link razorcsComment Comment
-hi def link razorcsCommentDelimiter razorcsComment
 hi def link razorcsTodo Todo
 hi def link razorcsPreprocessor PreProc
 hi def link razorcsIncrementOperator razorcsOperator

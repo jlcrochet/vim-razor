@@ -38,11 +38,11 @@ syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
 
-syn region razorLine start=/\%#=1\S/ end=/\%#=1$/ contained oneline
+syn match razorLine /\%#=1\S.*/ contained
 
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
-syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1$/ contained oneline contains=TOP
+syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1$/ contained contains=TOP
 syn region razorHTML start=/\%#=1<\a/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
 syn region razorInnerHTML matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/.\{-}>/ contained contains=@razorTop,razorHTML
 syn match razorhtmlTag /\%#=1\/\@1<=>/ contained
@@ -133,7 +133,7 @@ syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment matchgroup=razorCommentDelimiter start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,razorComment
+syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcsTodo containedin=ALLBUT,razorComment
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
@@ -156,7 +156,6 @@ hi def link razorCondition razorParentheses
 hi def link razorLine razorDefault
 hi def link razorDelimiterEscape razorDelimiter
 hi def link razorComment Comment
-hi def link razorCommentDelimiter razorComment
 hi def link razorAwait razorKeyword
 hi def link razorIf razorKeyword
 hi def link razorElse razorKeyword

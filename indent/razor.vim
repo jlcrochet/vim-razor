@@ -94,12 +94,12 @@ function s:get_last_char(lnum)
     let synid = synID(a:lnum, col, 0)
 
     if p == 2
-      if synid == g:razor#indent#cs_comment_delimiter
+      if synid == g:razor#indent#cs_comment
         let found = 1
         break
       endif
     elseif p == 3
-      if synid == g:razor#indent#comment_delimiter
+      if synid == g:razor#indent#comment
         let found = 1
         break
       endif

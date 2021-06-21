@@ -5,10 +5,8 @@
 
 " Caching important highlight ID's for faster lookup
 const g:razor#indent#comment = hlID("razorComment")
-const g:razor#indent#comment_delimiter = hlID("razorCommentDelimiter")
 const g:razor#indent#cs_string = hlID("razorcsString")
 const g:razor#indent#cs_comment = hlID("razorcsComment")
-const g:razor#indent#cs_comment_delimiter = hlID("razorcsCommentDelimiter")
 const g:razor#indent#html_comment = hlID("razorhtmlComment")
 const g:razor#indent#html_tag = hlID("razorhtmlTag")
 const g:razor#indent#html_end_tag = hlID("razorhtmlEndTag")

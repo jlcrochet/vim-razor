@@ -123,7 +123,7 @@ local function get_last_byte(lnum)
         if b2 == 42 or b2 == 47 then  -- * /
           found = true
           col = i
-          target_syngroup = "razorcsCommentDelimiter"
+          target_syngroup = "razorcsComment"
 
           break
         end
@@ -131,7 +131,7 @@ local function get_last_byte(lnum)
         if line:byte(i + 1) == 42 then  -- *
           found = true
           col = i
-          target_syngroup = "razorCommentDelimiter"
+          target_syngroup = "razorComment"
 
           break
         end
