@@ -133,7 +133,7 @@ syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ keepend contains=razorcsTodo containedin=ALLBUT,razorComment
+syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,razorComment
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
