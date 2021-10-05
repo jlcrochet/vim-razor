@@ -9,7 +9,7 @@ endif
 
 let b:main_syntax = "razor"
 
-let s:include_path = expand("<sfile>:p:h")."/../include"
+let s:include_path = expand("<sfile>:p:h") .. "/../include"
 
 if get(g:, "razor_fold")
   setlocal foldmethod=syntax
@@ -18,7 +18,7 @@ endif
 " Syntax {{{1
 " NOTE: The syntax files for C# and HTML are kept in a separate
 " directory so that they don't get picked up by Vim in other contexts.
-execute "source ".s:include_path."/html.vim"
+execute "source " .. s:include_path .. "/html.vim"
 
 syn cluster razorTop contains=TOP
 
@@ -32,7 +32,7 @@ syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@
 syn match razorDelimiterEscape /\%#=1@@/ containedin=@razorInterpolation
 
 syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razorParentheses,razorBrackets
-syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS,razorcsRHSIdentifier
+syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS
 
 syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
 syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
@@ -40,7 +40,7 @@ syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1
 
 syn match razorLine /\%#=1\S.*/ contained
 
-syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorcsBlock,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
+syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite
 
 syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1$/ contained contains=TOP
 syn region razorHTML start=/\%#=1<\a/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
@@ -137,7 +137,7 @@ syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo con
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
-execute "syn include @razorcs ".s:include_path."/cs.vim"
+execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
 
 " Synchronization {{{1
 syn sync fromstart

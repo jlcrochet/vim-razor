@@ -1,9 +1,5 @@
 # vim-razor
 
-![vim-razor demo](demo.png)
-
-## Description
-
 This plugin provides filetype support &mdash; including syntax highlighting and indentation &mdash; for [Razor](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor) markup files. Out of the box, it detects `*.cshtml` and `*.razor` file extensions.
 
 ## Configuration

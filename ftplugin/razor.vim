@@ -12,8 +12,9 @@ let b:did_ftplugin = 1
 
 runtime! ftplugin/html.vim
 
-setlocal comments=s1:@*,mb:*,ex:*@,://
+setlocal comments=s1:@*,mb:*,ex:*@,:///,://
 setlocal commentstring=@*\ %s\ *@
+setlocal suffixesadd=.cshtml,.razor
 
 " Change the :browse filter to primarily show HTML-related files.
 "
