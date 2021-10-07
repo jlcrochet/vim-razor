@@ -126,7 +126,7 @@ syn keyword razorcsStatement fixed contained containedin=razorcsBlock nextgroup=
 syn region razorcsGuardedStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs
 
 syn keyword razorcsModifier public static nextgroup=razorcsConstructor skipwhite skipnl
-syn match razorcsConstructor /\%#=1\h\w*\ze\_s*(/ contained contains=razorcsKeywordError nextgroup=razorcsConstructorParameters skipwhite skipnl
+syn match razorcsConstructor /\%#=1\h\w*(\@=/ contained contains=razorcsKeywordError nextgroup=razorcsConstructorParameters skipwhite skipnl
 syn region razorcsConstructorParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeIdentifier,razorcsModifier,razorcsThis,razorcsAttribute nextgroup=razorcsLambdaOperator,razorcsConstructorInheritanceOperator skipwhite skipnl
 syn match razorcsConstructorInheritanceOperator /\%#=1:/ contained nextgroup=razorcsMethodConstant skipwhite skipnl
 syn keyword razorcsMethodConstant this base contained nextgroup=razorcsMethodConstantParameters skipwhite skipnl
