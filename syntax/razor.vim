@@ -22,14 +22,10 @@ execute "source " .. s:include_path .. "/html.vim"
 
 syn cluster razorTop contains=TOP
 
-" These are regions where Razor interpolation can occur:
-syn cluster razorInterpolation contains=razorhtmlValue,razorhtmlScript,razorhtmlStyle,javascriptString,cssValue
-
-syn match razorDelimiter /\%#=1\w\@1<!@/ nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements
-syn match razorDelimiter /\%#=1\w\@1<!@/ contained containedin=@razorInterpolation nextgroup=razorImplicitExpression,razorExplicitExpression
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=ALLBUT,razorDelimiter,razorDelimiterEscape,razorhtmlTag,@razorComments nextgroup=razorImplicitExpression,razorExplicitExpression,razorBlock,@razorStatements
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag nextgroup=@razorDirectiveAttributes
 
-syn match razorDelimiterEscape /\%#=1@@/ containedin=@razorInterpolation
+syn match razorDelimiterEscape /\%#=1@@/ containedin=ALLBUT,razorDelimiter,razorDelimiterEscape,@razorComments
 
 syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razorParentheses,razorBrackets
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS
@@ -133,11 +129,13 @@ syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,razorComment
+syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,@razorComments
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
 execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
+
+syn cluster razorComments contains=\k\{-}Comment
 
 " Synchronization {{{1
 syn sync fromstart
