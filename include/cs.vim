@@ -142,7 +142,7 @@ syn region razorcsTupleDeclarator matchgroup=razorcsDelimiter start=/\%#=1(/ end
 
 syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=\%(?\.\@!\)\=\**\%(\[.\{-}\]\)*/ contains=razorcsGeneric,razorcsTypeModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsAssignmentOperator,razorcsCompoundAssignmentOperator,razorcsMemberAccessOperator,razorcsNullForgivingOperator,razorcsInvocation,razorcsIndex,razorcsOperatorModifier,razorcsPropertyBlock skipwhite skipnl
 syn region razorcsGeneric matchgroup=razorcsDelimiter start=/\%#=1</ end=/\%#=1>/ contained contains=razorcsType,razorcsTypeIdentifier,razorcsModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsOperatorModifier,razorcsPropertyBlock skipwhite skipnl
-syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS,razorcsKeywordArgument nextgroup=razorcsInvocation,razorcsIndex,razorcsOperator skipwhite skipnl
+syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsIndex,razorcsOperator skipwhite skipnl
 syn region razorcsIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsIndex,razorcsOperator skipwhite skipnl
 
 syn keyword razorcsConstant this base nextgroup=razorcsAssignmentOperator,razorcsCompoundAssignmentOperator,razorcsMemberAccessOperator,razorcsInvocation,razorcsIndex skipwhite skipnl
@@ -177,9 +177,9 @@ syn match razorcsMethodTypeVariable /\%#=1\h\w*/ contained contains=razorcsKeywo
 
 syn region razorcsTypeTuple matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeTuple,razorcsIdentifier nextgroup=razorcsDeclarator skipwhite skipnl
 
-syn region razorcsGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contains=@razorcsRHS,razorcsKeywordArgument,razorcsRHSTypeIdentifier nextgroup=razorcsAssignmentOperator,razorcsMemberAccessOperator,razorcsDeclarator,razorcsInvocation,razorcsIndex,razorcsOperatorKeyword skipwhite skipnl
+syn region razorcsGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contains=@razorcsRHS,razorcsRHSTypeIdentifier nextgroup=razorcsAssignmentOperator,razorcsMemberAccessOperator,razorcsDeclarator,razorcsInvocation,razorcsIndex,razorcsOperatorKeyword skipwhite skipnl
 
-syn region razorcsAttribute matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contains=@razorcsRHS,razorcsAttributeTarget
+syn region razorcsAttribute matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contains=@razorcsRHS
 
 syn match razorcsAssignmentOperator /\%#=1=/ contained nextgroup=@razorcsRHS,razorcsRHSTypeIdentifier,razorcsInitializer skipwhite skipnl
 syn match razorcsCompoundAssignmentOperator /\%#=1\%([+\-*/%^]\|&&\=\|||\=\|??\|<<\|>>\)=/ contained nextgroup=@razorcsRHS,razorcsRHSTypeIdentifier,razorcsInitializer skipwhite skipnl
@@ -230,7 +230,7 @@ syn keyword razorcsRHSType contained nextgroup=razorcsMemberAccessOperator,razor
       \ char bool object string void dynamic
 
 syn match razorcsRHSIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGeneric nextgroup=@razorcsOperators,razorcsRHSInvocation,razorcsRHSIndex,razorcsInitializer,razorcsOperatorModifier skipwhite skipnl
-syn region razorcsRHSInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS,razorcsKeywordArgument nextgroup=@razorcsOperators,razorcsInitializer,razorcsRHSInvocation,razorcsRHSIndex skipwhite skipnl
+syn region razorcsRHSInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=@razorcsOperators,razorcsInitializer,razorcsRHSInvocation,razorcsRHSIndex skipwhite skipnl
 syn region razorcsRHSIndex matchgroup=razorcsDelimiter start=/\%#=1?\=\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=@razorcsOperators,razorcsRHSInvocation,razorcsRHSIndex,razorcsInitializer skipwhite skipnl
 
 syn region razorcsInitializer matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcsRHS,razorcsInitializer nextgroup=@razorcsOperators skipwhite skipnl
@@ -276,6 +276,7 @@ syn match razorcsOperator /\%#=1??=\=/ contained nextgroup=@razorcsRHS skipwhite
 syn match razorcsOperator /\%#=1\./ contained nextgroup=razorcsRHSIdentifier,razorcsRHSConstant skipwhite skipnl
 syn match razorcsOperator /\%#=1\.\./ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1?\./ contained nextgroup=razorcsRHSIdentifier,razorcsRHSConstant skipwhite skipnl
+syn match razorcsOperator /\%#=1:/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1::/ contained nextgroup=razorcsRHSIdentifier skipwhite skipnl
 
 syn region razorcsRHSGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS,razorcsRHSTypeIdentifier nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
@@ -301,7 +302,7 @@ syn keyword razorcsOperatorKeyword with contained nextgroup=razorcsInitializer s
 
 syn keyword razorcsFunctionKeyword typeof default checked unchecked sizeof nameof contained nextgroup=razorcsRHSInvocation skipwhite skipnl
 
-syn region razorcsRHSAttribute matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS,razorcsAttributeTarget nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
+syn region razorcsRHSAttribute matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipnl
 
 syn region razorcsLINQExpression start=/\%#=1\<from\>/ end=/\%#=1[)\]};]\@=/ contained transparent contains=razorcsLINQKeyword,@razorcsRHS
 syn keyword razorcsLINQKeyword from into contained nextgroup=razorcsDeclarator,razorcsLINQDeclaration skipwhite skipnl
@@ -318,17 +319,12 @@ syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 
 syn match razorcsDirective /\%#=1^\s*\zs#.*/ containedin=ALLBUT,razorcsDirective,razorcsString,razorcsComment
 
-syn match razorcsKeywordArgument /\%#=1\h\w*\ze\s*:/ contained contains=razorcsKeywordError nextgroup=razorcsKeywordArgumentColon skipwhite skipnl
-syn match razorcsKeywordArgumentColon /\%#=1:/ contained nextgroup=@razorcsRHS skipwhite skipnl
-
 syn match razorcsTypeModifier /\%#=1[*?]/ contained nextgroup=razorcsDeclarator,razorcsTypeModifier skipwhite skipnl
 syn region razorcsTypeModifier matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsDeclarator,razorcsInitializer,razorcsTypeModifier skipwhite skipnl
 
 syn match razorcsTypeIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=?\=\**\%(\[.\{-}\]\)*/ contained contains=razorcsType,razorcsKeywordError,razorcsGeneric,razorcsTypeModifier nextgroup=razorcsDeclarator,razorcsTypeMemberAccessOperator,razorcsIndexerThis,razorcsOperatorModifier skipwhite skipnl
 syn match razorcsTypeMemberAccessOperator /\%#=1\./ contained nextgroup=razorcsTypeIdentifier skipwhite skipnl
 syn match razorcsTypeMemberAccessOperator /\%#=1::/ contained nextgroup=razorcsTypeIdentifier skipwhite skipnl
-
-syn match razorcsAttributeTarget /\%#=1\h\w*/ contained nextgroup=razorcsKeywordArgumentColon skipwhite skipnl
 
 syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contains=@razorcs,razorHTML
 
@@ -419,7 +415,6 @@ hi def link razorcsEscapeSequenceError Error
 hi def link razorcsQuoteEscape razorcsEscapeSequence
 hi def link razorcsBraceEscape razorcsEscapeSequence
 hi def link razorcsFieldInitializer razorcsDeclarator
-hi def link razorcsAttributeTarget razorcsKeywordArgument
 hi def link razorcsKeywordError Error
 " }}}1
 
