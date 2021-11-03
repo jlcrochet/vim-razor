@@ -243,10 +243,10 @@ syn keyword razorcsRHSConstant this base contained nextgroup=@razorcsOperators,r
 
 syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipnl
 
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1"/   end=/\%#=1"/ contained oneline contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$"/  end=/\%#=1"/ contained oneline contains=razorcsBraceEscape,razorcsEscapeSequence,razorcsEscapeSequenceError,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1@"/  end=/\%#=1"/ contained skip=/\%#=1""/ contains=razorcsQuoteEscape nextgroup=@razorcsOperators skipwhite skipnl
-syn region razorcsString matchgroup=razorcsStringDelimiter start=/\%#=1$@"/ end=/\%#=1"/ contained skip=/\%#=1""/ contains=razorcsBraceEscape,razorcsQuoteEscape,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1"/   matchgroup=razorcsStringEnd end=/\%#=1"/ contained oneline contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1$"/  matchgroup=razorcsStringEnd end=/\%#=1"/ contained oneline contains=razorcsBraceEscape,razorcsEscapeSequence,razorcsEscapeSequenceError,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1@"/  matchgroup=razorcsStringEnd end=/\%#=1"/ contained skip=/\%#=1""/ contains=razorcsQuoteEscape nextgroup=@razorcsOperators skipwhite skipnl
+syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1$@"/ matchgroup=razorcsStringEnd end=/\%#=1"/ contained skip=/\%#=1""/ contains=razorcsBraceEscape,razorcsQuoteEscape,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipnl
 
 syn match razorcsStringInterpolationError /\%#=1[{}]/ contained
 syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1\%(:.\{-}\)\=}/ contained oneline contains=@razorcsRHS
@@ -311,10 +311,10 @@ syn keyword razorcsLINQKeyword let contained nextgroup=razorcsDeclarator skipwhi
 syn keyword razorcsLINQKeyword in where select orderby group by ascending descending join on equals contained
 
 " Miscellaneous (high priority) {{{2
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\*/ end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\// end=/\%#=1$/ contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
-syn region razorcsComment matchgroup=razorcsCommentDelimiter start=/\%#=1\/\/\*/ end=/\%#=1\*\/\// contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\/\// contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 
 syn match razorcsDirective /\%#=1^\s*\zs#.*/ containedin=ALLBUT,razorcsDirective,razorcsString,razorcsComment
@@ -330,7 +330,8 @@ syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ 
 
 " Highlighting {{{1
 hi def link razorcsComment Comment
-hi def link razorcsCommentDelimiter razorcsComment
+hi def link razorcsCommentStart razorcsComment
+hi def link razorcsCommentEnd razorcsCommentStart
 hi def link razorcsTodo Todo
 hi def link razorcsDirective PreProc
 hi def link razorcsStatement Statement
@@ -407,7 +408,8 @@ hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant
 hi def link razorcsCharacter Character
 hi def link razorcsString String
-hi def link razorcsStringDelimiter razorcsString
+hi def link razorcsStringStart razorcsString
+hi def link razorcsStringEnd razorcsStringStart
 hi def link razorcsStringInterpolationDelimiter PreProc
 hi def link razorcsStringInterpolationError Error
 hi def link razorcsEscapeSequence PreProc

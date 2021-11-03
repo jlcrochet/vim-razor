@@ -129,7 +129,7 @@ syn keyword razorRef ref contained nextgroup=razorhtmlAttributeOperator
 syn cluster razorDirectiveAttributes contains=
       \ razorAttributes,razorBind,razorEventAttribute,razorKey,razorRef
 
-syn region razorComment start=/\%#=1@\*/ end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,@razorComments
+syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ contains=razorcsTodo containedin=ALLBUT,@razorComments
 
 " NOTE: The C# file is included last in order to take precedence over
 " other patterns.
@@ -154,6 +154,8 @@ hi def link razorCondition razorParentheses
 hi def link razorLine razorDefault
 hi def link razorDelimiterEscape razorDelimiter
 hi def link razorComment Comment
+hi def link razorCommentStart razorComment
+hi def link razorCommentEnd razorCommentStart
 hi def link razorAwait razorKeyword
 hi def link razorIf razorKeyword
 hi def link razorElse razorKeyword

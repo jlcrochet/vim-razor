@@ -179,7 +179,7 @@ function GetRazorIndent() abort
   let synid = synID(v:lnum, 1, 0)
 
   " Is this line inside of a multiline region?
-  if synid == g:razor#highlighting#comment || synid == g:razor#highlighting#html_comment || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_string
+  if synid == g:razor#highlighting#comment || synid == g:razor#highlighting#comment_end || synid == g:razor#highlighting#html_comment || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_comment_end || synid == g:razor#highlighting#cs_string || synid == g:razor#highlighting#cs_string_end
     return -1
   endif
 
@@ -285,7 +285,7 @@ function GetRazorIndent() abort
       let first_char = prev_line[first_idx]
       let synid = synID(prev_lnum, 1, 1)
 
-      while first_char ==# "#" || synid == g:razor#highlighting#comment || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_string
+      while first_char ==# "#" || synid == g:razor#highlighting#comment || synid == g:razor#highlighting#comment_end || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_comment_end || synid == g:razor#highlighting#cs_string || synid == g:razor#highlighting#cs_string_end
         let prev_lnum = prevnonblank(prev_lnum - 1)
 
         if prev_lnum == 0

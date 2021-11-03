@@ -5,8 +5,11 @@
 
 " Caching important highlight ID's for faster lookup
 const g:razor#highlighting#comment = hlID("razorComment")
+const g:razor#highlighting#comment_end = hlID("razorCommentEnd")
 const g:razor#highlighting#cs_string = hlID("razorcsString")
+const g:razor#highlighting#cs_string_end = hlID("razorcsStringEnd")
 const g:razor#highlighting#cs_comment = hlID("razorcsComment")
+const g:razor#highlighting#cs_comment_end = hlID("razorcsCommentEnd")
 const g:razor#highlighting#html_comment = hlID("razorhtmlComment")
 const g:razor#highlighting#html_tag = hlID("razorhtmlTag")
 const g:razor#highlighting#html_end_tag = hlID("razorhtmlEndTag")
