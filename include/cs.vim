@@ -175,7 +175,7 @@ syn match razorcsMethodTypeInheriteeComma /\%#=1,/ contained nextgroup=razorcsMe
 syn keyword razorcsMethodTypeConstraint where contained nextgroup=razorcsMethodTypeVariable skipwhite skipnl
 syn match razorcsMethodTypeVariable /\%#=1\h\w*/ contained contains=razorcsKeywordError nextgroup=razorcsMethodTypeInheritanceOperator skipwhite skipnl
 
-syn region razorcsTypeTuple matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeTuple,razorcsIdentifier nextgroup=razorcsDeclarator skipwhite skipnl
+syn region razorcsTypeTuple matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeTuple,razorcsIdentifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsTypeModifier,razorcsOperatorModifier skipwhite skipnl
 
 syn region razorcsGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contains=@razorcsRHS,razorcsRHSTypeIdentifier nextgroup=razorcsAssignmentOperator,razorcsMemberAccessOperator,razorcsDeclarator,razorcsInvocation,razorcsIndex,razorcsOperatorKeyword skipwhite skipnl
 
