@@ -249,7 +249,7 @@ syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1@"/  matchgro
 syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1$@"/ matchgroup=razorcsStringEnd end=/\%#=1"/ contained skip=/\%#=1""/ contains=razorcsBraceEscape,razorcsQuoteEscape,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipnl
 
 syn match razorcsStringInterpolationError /\%#=1[{}]/ contained
-syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1\%(:.\{-}\)\=}/ contained oneline contains=@razorcsRHS
+syn region razorcsStringInterpolation matchgroup=razorcsStringInterpolationDelimiter start=/\%#=1{/ end=/\%#=1\%([,:].\{-}\)\=}/ contained oneline contains=@razorcsRHS
 
 syn match razorcsEscapeSequenceError /\%#=1\\./ contained
 syn match razorcsEscapeSequence /\%#=1\\\%(['"\\0abfnrtv]\|x\x\{1,4}\|u\x\{4}\|U\x\{8}\)/ contained
