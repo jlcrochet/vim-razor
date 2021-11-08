@@ -283,7 +283,7 @@ function GetRazorIndent() abort
       let prev_line = getline(prev_lnum)
       let first_idx = match(prev_line, '\S')
       let first_char = prev_line[first_idx]
-      let synid = synID(prev_lnum, 1, 1)
+      let synid = synID(prev_lnum, 1, 0)
 
       while first_char ==# "#" || synid == g:razor#highlighting#comment || synid == g:razor#highlighting#comment_end || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_comment_end || synid == g:razor#highlighting#cs_string || synid == g:razor#highlighting#cs_string_end
         let prev_lnum = prevnonblank(prev_lnum - 1)
@@ -295,7 +295,7 @@ function GetRazorIndent() abort
         let prev_line = getline(prev_lnum)
         let first_idx = match(prev_line, '\S')
         let first_char = prev_line[first_idx]
-        let synid = synID(prev_lnum, 1, 1)
+        let synid = synID(prev_lnum, 1, 0)
       endwhile
 
       " If the previous line was one of the following:
