@@ -81,6 +81,13 @@ syn keyword razorcsStatement for foreach nextgroup=razorcsIterationExpressions s
 syn region razorcsIterationExpressions matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsIterationCondition
 syn region razorcsIterationCondition start=/\%#=1;/ end=/\%#=1;/ contained contains=@razorcsRHS
 
+syn keyword razorcsStatement for nextgroup=razorcsForExpressions skipwhite skipnl
+syn region razorcsForExpressions matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsForExpression
+syn region razorcsForExpression start=/\%#=1;/ end=/\%#=1[;)]\@=/ contained contains=@razorcsRHS
+
+syn keyword razorcsStatement foreach nextgroup=razorcsForeachExpression skipwhite skipnl
+syn region razorcsForeachExpression matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs
+
 syn keyword razorcsStatement break continue yield
 
 syn keyword razorcsStatement goto nextgroup=razorcsRHSIdentifier,razorcsCaseStatement skipwhite skipnl
