@@ -77,10 +77,6 @@ syn region razorcsCasePatterns start=/\%#=1/ end=/\%#=1[,;:\])}]\@=/ contained c
 
 syn keyword razorcsStatement default
 
-syn keyword razorcsStatement for foreach nextgroup=razorcsIterationExpressions skipwhite skipnl
-syn region razorcsIterationExpressions matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsIterationCondition
-syn region razorcsIterationCondition start=/\%#=1;/ end=/\%#=1;/ contained contains=@razorcsRHS
-
 syn keyword razorcsStatement for nextgroup=razorcsForExpressions skipwhite skipnl
 syn region razorcsForExpressions matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorcsForExpression
 syn region razorcsForExpression start=/\%#=1;/ end=/\%#=1[;)]\@=/ contained contains=@razorcsRHS
