@@ -2,6 +2,12 @@
 
 This plugin provides filetype support &mdash; including syntax highlighting and indentation &mdash; for [Razor](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor) markup files. Out of the box, it detects `*.cshtml` and `*.razor` file extensions.
 
+## Installation
+
+This is a standard Vim plugin which can be installed using your plugin manager of choice. If you do not already have a plugin manager, I recommend [vim-plug](https://github.com/junegunn/vim-plug).
+
+Alternatively, if you are using Vim 8 or NeoVim, you can install this plugin as a package; see `:h packages` for instructions.
+
 ## Configuration
 
 #### `g:razor_cs_shiftwidth`
