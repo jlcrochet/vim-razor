@@ -366,6 +366,7 @@ hi def link razorcsFunctionPointerModifier razorcsTypeModifier
 hi def link razorcsOperatorModifier razorcsModifier
 hi def link razorcsOperatorMethod razorcsOperator
 hi def link razorcsBooleanOperatorMethod razorcsBoolean
+hi def link razorcsConversionMethodKeyword razorcsType
 hi def link razorcsIncrementOperator razorcsOperator
 hi def link razorcsDecrementOperator razorcsOperator
 hi def link razorcsPointerOperator razorcsOperator
