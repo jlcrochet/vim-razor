@@ -265,8 +265,8 @@ syn region razorcsTernaryOperator matchgroup=razorcsOperator start=/\%#=1?/ end=
 
 syn match razorcsOperator /\%#=1!/ contained nextgroup=@razorcsOperators,razorcsRHSInvocation,razorcsRHSIndex skipwhite skipnl
 syn match razorcsOperator /\%#=1!=/ contained nextgroup=@razorcsRHS skipwhite skipnl
-syn match razorcsOperator /\%#=1=[=>]\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
-syn match razorcsOperator /\%#=1[+*/%]=\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
+syn match razorcsOperator /\%#=1[=+*/%]=\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
+syn match razorcsOperator /\%#=1=>/ contained nextgroup=@razorcsRHS,razorcsBlock skipwhite skipnl
 syn match razorcsOperator /\%#=1-[>=]\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1++/ contained nextgroup=@razorcsOperators skipwhite skipnl
 syn match razorcsOperator /\%#=1--/ contained nextgroup=@razorcsOperators skipwhite skipnl
