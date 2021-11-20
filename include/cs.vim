@@ -270,8 +270,8 @@ syn match razorcsOperator /\%#=1=>/ contained nextgroup=@razorcsRHS,razorcsBlock
 syn match razorcsOperator /\%#=1-[>=]\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1++/ contained nextgroup=@razorcsOperators skipwhite skipnl
 syn match razorcsOperator /\%#=1--/ contained nextgroup=@razorcsOperators skipwhite skipnl
-syn match razorcsOperator /\%#=1<\%(<=\=\|=\)\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
-syn match razorcsOperator /\%#=1>\%(>=\=\|=\)\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
+syn match razorcsOperator /\%#=1<<\==\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
+syn match razorcsOperator /\%#=1>>\==\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1&&\==\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1||\==\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
 syn match razorcsOperator /\%#=1??=\=/ contained nextgroup=@razorcsRHS skipwhite skipnl
