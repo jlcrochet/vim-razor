@@ -316,7 +316,7 @@ syn keyword razorcsLINQKeyword in where select orderby group by ascending descen
 " Miscellaneous (high priority) {{{2
 syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
 syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
-syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 
 syn match razorcsDirective /\%#=1^\s*\zs#.*/ containedin=ALLBUT,razorcsDirective,razorcsString,razorcsComment
