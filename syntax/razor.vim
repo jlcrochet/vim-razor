@@ -39,7 +39,7 @@ syn match razorLine /\%#=1\S.*/ contained
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorTop,@razorcs,razorHTML nextgroup=razorElse,razorWhile,razorCatch,razorFinally skipwhite skipnl
 
 syn region razorHTML matchgroup=razorDelimiter start=/\%#=1@:/ end=/\%#=1$/ contained contains=TOP
-syn region razorHTML start=/\%#=1<\a/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
+syn region razorHTML start=/\%#=1<\w/ end=/\%#=1>/me=e-1 skip=/\%#=1\(['"]\).\{-}\1/ contained keepend contains=razorhtmlTag nextgroup=razorInnerHTML,razorhtmlTag skipnl
 syn region razorInnerHTML matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/.\{-}>/ contained contains=@razorTop,razorHTML
 syn match razorhtmlTag /\%#=1\/\@1<=>/ contained
 syn match razorhtmlTag /\%#=1><\/.\{-}>/ contained contains=razorhtmlEndTag

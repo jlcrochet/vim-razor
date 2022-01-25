@@ -1,7 +1,7 @@
 syn include @razorhtmljs syntax/javascript.vim | unlet b:current_syntax
 syn include @razorhtmlcss syntax/css.vim
 
-syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<\a[[:alnum:].:_-]*/ end=/\%#=1>/ contains=razorhtmlAttribute
+syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<\w[[:alnum:].:_-]*/ end=/\%#=1>/ contains=razorhtmlAttribute
 syn region razorhtmlEndTag start=/\%#=1<\// end=/\%#=1>/
 
 syn match razorhtmlAttribute /\%#=1[^"'>/=[:space:]]\+/ contained nextgroup=razorhtmlAttributeOperator skipwhite skipnl
@@ -12,7 +12,7 @@ syn match razorhtmlValue /\%#=1[^[:space:]>]\+/ contained contains=razorhtmlEnti
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlEntityReference,razorhtmlCharacterReference
 
-syn match razorhtmlEntityReference /\%#=1&\a[[:alnum:]]*;/
+syn match razorhtmlEntityReference /\%#=1&\w[[:alnum:]]*;/
 syn match razorhtmlCharacterReference /\%#=1&#\d\+;/
 syn match razorhtmlCharacterReference /\%#=1&#x\x\+;/
 
