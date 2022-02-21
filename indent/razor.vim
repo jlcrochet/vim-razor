@@ -252,7 +252,7 @@ function GetRazorIndent() abort
     endif
 
     " Is this line inside of a multiline tag?
-    if synid == g:razor#highlighting#html_tag && line[idx] !=# "<" && line[idx] !=# "/" || synid == g:razor#highlighting#html_attribute
+    if synid == g:razor#highlighting#html_tag && line[idx] !~# '[<>/]' || synid == g:razor#highlighting#html_attribute
       let prev_line = getline(prev_lnum)
       let idx = match(prev_line, '\S')
 
@@ -400,9 +400,7 @@ function GetRazorIndent() abort
   " Otherwise, proceed with normal HTML indentation.
   let shift = 0
 
-  let temp = strpart(line, idx, 2)
-
-  if temp ==# "</" || temp ==# "/>"
+  if match(line, '^\%(</\|/\=>\)', idx) != -1
     let shift -= 1
   endif
 
