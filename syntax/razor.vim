@@ -31,8 +31,8 @@ syn match razorImplicitExpression /\%#=1\h\w*/ contained nextgroup=razorDot,razo
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline contains=@razorcsRHS
 
 syn match  razorDot /\%#=1?\=\./ contained nextgroup=razorImplicitExpression
-syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
-syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained oneline nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorParentheses matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorParentheses nextgroup=razorDot,razorParentheses,razorBrackets
+syn region razorBrackets matchgroup=razorDelimiter start=/\%#=1?\=\[/ end=/\%#=1]/ contained contains=razorParentheses nextgroup=razorDot,razorParentheses,razorBrackets
 
 syn match razorLine /\%#=1\S.*/ contained
 
