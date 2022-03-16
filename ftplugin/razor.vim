@@ -16,6 +16,10 @@ setlocal comments=s1:@*,mb:*,ex:*@,:///,://
 setlocal commentstring=@*\ %s\ *@
 setlocal suffixesadd=.cshtml,.razor
 
+if get(g:, "razor_fold")
+  setlocal foldmethod=syntax
+endif
+
 " Change the :browse filter to primarily show HTML-related files.
 "
 " NOTE: Modified from ftplugin/html.vim to include Razor files

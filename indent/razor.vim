@@ -5,17 +5,26 @@
 
 " Setup {{{1
 " =====
-
 if get(b:, "did_indent")
   finish
 endif
 
-" Only define the function once per session
-if exists("*GetRazorIndent")
+if has("nvim-0.5")
+  lua require "get_razor_indent"
+
+  setlocal indentexpr=v:lua.get_razor_indent()
+  let &indentkeys = &cinkeys .. ",<>>"
+
   let b:did_indent = 1
 
+  finish
+endif
+
+if exists("*GetRazorIndent")
   setlocal indentexpr=GetRazorIndent()
   let &indentkeys = &cinkeys .. ",<>>"
+
+  let b:did_indent = 1
 
   finish
 endif
@@ -29,389 +38,352 @@ let s:css_indentexpr = &indentexpr
 setlocal indentexpr=GetRazorIndent()
 let &indentkeys = &cinkeys .. ",<>>"
 
-if has_key(g:, "razor_cs_shiftwidth")
-  let s:cs_sw = g:razor_cs_shiftwidth
-else
-  let s:cs_sw = &shiftwidth
-endif
+let s:cs_shiftwidth = get(g:, "razor_cs_shiftwidth", &shiftwidth)
+let s:js_shiftwidth = get(g:, "razor_js_shiftwidth", &shiftwidth)
+let s:css_shiftwidth = get(g:, "razor_css_shiftwidth", &shiftwidth)
 
-if has_key(g:, "razor_js_shiftwidth")
-  let s:js_sw = g:razor_js_shiftwidth
-else
-  let s:js_sw = &shiftwidth
-endif
+" Helpers {{{1
+" =======
+let s:multiline_regions = [
+      \ "razorInvocation", "razorSubscript", "razorComment", "razorCommentEnd",
+      \ "razorhtmlComment", "razorhtmlCommentEnd", "razorHtmlCDATA", "razorHTMLCDATAEnd",
+      \ "razorcsInvocation", "razorcsSubscript", "razorcsRHSInvocation", "razorcsRHSSubscript", "razorcsComment", "razorcsCommentEnd"
+      \ ]
 
-if has_key(g:, "razor_css_shiftwidth")
-  let s:css_sw = g:razor_css_shiftwidth
-else
-  let s:css_sw = &shiftwidth
-endif
+function s:skip_line(lnum)
+  let syngroup = synIDattr(synID(a:lnum, 1, 0), "name")
+  return index(s:multiline_regions, syngroup) != -1 || (syngroup ==# "razorhtmlTag" && getline(a:lnum)[0] !=# "<")
+endfunction
 
-" Helper variables and functions {{{1
-" ==============================
+function s:get_start_line(lnum)
+  let lnum = a:lnum
 
-let s:void_elements = {
-      \ "area": 1,
-      \ "base": 1,
-      \ "br": 1,
-      \ "col": 1,
-      \ "command": 1,
-      \ "embed": 1,
-      \ "hr": 1,
-      \ "img": 1,
-      \ "input": 1,
-      \ "keygen": 1,
-      \ "link": 1,
-      \ "meta": 1,
-      \ "param": 1,
-      \ "source": 1,
-      \ "track": 1,
-      \ "wbr": 1
-      \ }
-
-" Get the last non-comment character in the given line, along with its
-" index and the line itself; used for C# indentation.
-"
-" First, try to find a comment delimiter: if one is found, the
-" non-whitespace character immediately before it is the last character;
-" else, simply find the last non-whitespace character in the line.
-function s:get_last_char(lnum) abort
-  let found = 0
-
-  call cursor(a:lnum, 1)
-
-  let [_, col, p] = searchpos('\(/[/*]\)\|\(@\*\)', "cpz", a:lnum)
-
-  while p
-    let synid = synID(a:lnum, col, 0)
-
-    if p == 2
-      if synid == g:razor#highlighting#cs_comment
-        let found = 1
-        break
-      endif
-    elseif p == 3
-      if synid == g:razor#highlighting#comment
-        let found = 1
-        break
-      endif
-    endif
-
-    let [_, col, p] = searchpos('\(/[*/]\)\|\(@\*\)', "pz", a:lnum)
+  while s:skip_line(lnum)
+    let lnum = prevnonblank(lnum - 1)
   endwhile
 
-  let line = getline(a:lnum)
+  return lnum
+endfunction
 
-  if found
-    let segment = line[:col - 2]
-  else
-    let segment = line
+function s:get_line_with_first_and_last_chars(lnum)
+  let line = getline(a:lnum)
+  let [first_char, first_idx, _] = matchstrpos(line, '\S')
+
+  let [found_char, found_idx, _] = matchstrpos(line, '[/<@]', first_idx)
+
+  if found_idx == -1
+    let [last_char, last_idx, _] = matchstrpos(line, '\S\ze\s*$', first_idx)
+    return [line, first_char, first_idx, last_char, last_idx]
   endif
 
-  let [char, idx, _] = matchstrpos(segment, '\S\s*$')
+  if found_char ==# "/"
+    let target_syngroup = "razorcsCommentStart"
+  elseif found_char ==# "<"
+    let target_syngroup = "razorhtmlCommentStart"
+  elseif found_char ==# "@"
+    let target_syngroup = "razorCommentStart"
+  endif
 
-  return [char, idx, segment]
-endfunction
+  while synIDattr(synID(a:lnum, found_idx + 1, 0), "name") !=# target_syngroup
+    let [found_char, found_idx, _] = matchstrpos(line, '[/<@]', found_idx + 1)
 
-function s:get_indent_info(lnum) abort
-  let brackets = 0
-  let pairs = 0
-
-  for i in range(a:lnum, 1, -1)
-    call cursor(i, 1)
-
-    let [_, j, p] = searchpos('\(<\)\|\(>\)', "cpz", i)
-
-    while p
-      if p == 2  " <
-        let synid = synID(i, j, 0)
-
-        if synid == g:razor#highlighting#html_tag
-          let brackets += 1
-
-          let tag_name = expand("<cword>")
-
-          if !get(s:void_elements, tolower(tag_name))
-            let pairs += 1
-          endif
-        elseif synid == g:razor#highlighting#html_end_tag
-          let brackets += 1
-          let pairs -= 1
-        endif
-      elseif p == 3  " >
-        let synid = synID(i, j, 0)
-
-        if synid == g:razor#highlighting#html_tag
-          let brackets -= 1
-
-          if search('/\%#', "bn", i)
-            let pairs -= 1
-          endif
-        elseif synid == g:razor#highlighting#html_end_tag
-          let brackets -= 1
-        endif
-      endif
-
-      let [_, j, p] = searchpos('\(<\)\|\(>\)', "pz", i)
-    endwhile
-
-    if brackets >= 0
-      return [i, pairs]
+    if found_idx == -1
+      let [last_char, last_idx, _] = matchstrpos(line, '\S\ze\s*$', first_idx)
+      return [line, first_char, first_idx, last_char, last_idx]
     endif
-  endfor
 
-  return a:lnum, 0
+    if found_char ==# "/"
+      let target_syngroup = "razorcsCommentStart"
+    elseif found_char ==# "<"
+      let target_syngroup = "razorhtmlCommentStart"
+    elseif found_char ==# "@"
+      let target_syngroup = "razorCommentStart"
+    endif
+  endwhile
+
+  if found_idx == first_idx
+    return [line, first_char, first_idx, 0, -1]
+  endif
+
+  let [last_char, last_idx, _] = matchstrpos(line, '\S\ze\s*$', first_idx)
+  return [line, first_char, first_idx, last_char, last_idx]
 endfunction
-
-let s:skip_delimiter = "synID(line('.'), col('.'), 1) != g:razor#highlighting#delimiter"
-let s:skip_cs_delimiter = "synID(line('.'), col('.'), 1) != g:razor#highlighting#cs_delimiter"
 
 " GetRazorIndent {{{1
 " ==============
-
 function GetRazorIndent() abort
   let prev_lnum = prevnonblank(v:lnum - 1)
 
-  if !prev_lnum
+  if prev_lnum == 0
     return 0
   endif
 
-  let synid = synID(v:lnum, 1, 0)
+  let syngroup = synIDattr(synID(v:lnum, 1, 0), "name")
 
-  " Is this line inside of a multiline region?
-  if synid == g:razor#highlighting#comment || synid == g:razor#highlighting#comment_end || synid == g:razor#highlighting#html_comment || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_comment_end || synid == g:razor#highlighting#cs_string || synid == g:razor#highlighting#cs_string_end
+  if syngroup ==# "razorComment" || syngroup ==# "razorCommentEnd"
+    " Razor comment:
+    " Do nothing.
     return -1
+  elseif syngroup ==# "razorhtmlComment" || syngroup ==# "razorhtmlCommentEnd" || syngroup ==# "razorhtmlCDATA" || syngroup ==# "razorhtmlCDATAEnd"
+    " HTML comment or CDATA:
+    " Do nothing.
+    return -1
+  elseif syngroup ==# "razorcsComment" || syngroup ==# "razorcsCommentEnd"
+    " C# comment:
+    " Do nothing.
+    return -1
+  elseif syngroup ==# "razorhtmlScript" || syngroup[:9] ==# "javascript"
+    " `script` tag:
+    " Use JS indentation.
+    if getline(v:lnum) =~# '^\s*</script>'
+      return indent(prev_lnum) - shiftwidth()
+    endif
+
+    let [lnum, col] = searchpos('<script[[:space:]>]\@=', "b", prev_lnum)
+
+    while lnum
+      let syngroup = synIDattr(synID(lnum, col, 0), "name")
+
+      if syngroup ==# "razorhtmlTag"
+        return indent(prev_lnum) + shiftwidth()
+      endif
+
+      let [lnum, col] = searchpos('<script[[:space:]>]\@=', "b", prev_lnum)
+    endwhile
+
+    let old_sw = &shiftwidth
+    let &shiftwidth = s:js_shiftwidth
+    let ind = eval(s:js_indentexpr)
+    let &shiftwidth = old_sw
+
+    return ind
+  elseif syngroup ==# "razorhtmlStyle" || syngroup[:2] ==# "css"
+    " `style` tag:
+    " Use CSS indentation.
+    if getline(v:lnum) =~# '^\s*</style>'
+      return indent(prev_lnum) - shiftwidth()
+    endif
+
+    let [lnum, col] = searchpos('<style[[:space:]>]\@=', "b", prev_lnum)
+
+    while lnum
+      let syngroup = synIDattr(synID(lnum, col, 0), "name")
+
+      if syngroup == "razorhtmlTag"
+        return indent(prev_lnum) + shiftwidth()
+      endif
+
+      let [lnum, col] = searchpos('<style[[:space:]>]\@=', "b", prev_lnum)
+    endwhile
+
+    let old_sw = &shiftwidth
+    let &shiftwidth = s:css_shiftwidth
+    let ind = eval(s:css_indentexpr)
+    let &shiftwidth = old_sw
+
+    return ind
+  elseif syngroup ==# "razorhtmlAttribute"
+    " Tag attribute:
+    return s:get_html_attribute_indent(prev_lnum)
+  elseif syngroup ==# "razorhtmlTag"
+    " Multiline tag:
+    let line = getline(v:lnum)
+    let char = matchstr(line, '\S')
+
+    if char ==# "/"
+      let [lnum, col] = searchpos("<", "bW")
+
+      while synIDattr(synID(lnum, col, 0), "name") !=# "razorhtmlTag"
+        let [lnum, col] = searchpos("<", "bW")
+      endwhile
+
+      return indent(lnum)
+    elseif char !=# "<"
+      return s:get_html_attribute_indent(prev_lnum)
+    endif
+  elseif syngroup ==# "razorDelimiter"
+    let char = getline(v:lnum)[0]
+
+    if char ==# "@"
+      let outer_synid = get(synstack(v:lnum, 1), -2)
+
+      if outer_synid
+        let outer_syngroup = synIDattr(outer_synid, "name")
+
+        if outer_syngroup ==# "razorhtmlTag" || outer_syngroup ==# "razorInnerHTMLTag"
+          return s:get_html_attribute_indent(prev_lnum)
+        endif
+      endif
+    elseif char ==# "{"
+      return indent(prev_lnum)
+    elseif char ==# "}"
+      return s:get_c_indent(v:lnum)
+    endif
+  elseif syngroup ==# "razorcsDelimiter"
+    return s:get_c_indent(v:lnum)
+  elseif syngroup ==# "razorInnerHTMLBlock"
+    return s:get_html_indent(v:lnum, prev_lnum)
   endif
 
   let line = getline(v:lnum)
-  let idx = match(line, '\S')
+  let [char, idx, _] = matchstrpos(line, '\S')
 
-  if synid
-    " Does this line begin with the closing tag for a style or script
-    " element?
-    if strpart(line, idx, 3) ==# "</s"
-      if strpart(line, idx + 3, 6) ==# "cript>" || strpart(line, idx + 3, 5) ==# "tyle>"
-        return indent(prev_lnum) - shiftwidth()
-      endif
+  if char ==# "{"
+    let syngroup = synIDattr(synID(v:lnum, idx + 1, 0), "name")
+
+    if syngroup ==# "razorDelimiter"
+      return indent(prev_lnum)
+    elseif syngroup ==# "razorcsDelimiter"
+      return s:get_c_indent(v:lnum)
     endif
-
-    " Is this line inside of a script element?
-    if synid == g:razor#highlighting#html_script || synIDattr(synid, "name")[:9] ==# "javascript"
-      " Is the previous line the beginning tag of the element?
-      let prev_line = getline(prev_lnum)
-      let idx = -1
-
-      while 1
-        let idx = stridx(prev_line, "<script", idx + 1)
-
-        if idx == -1 || prev_line[idx + 7] !~# '[[:alnum:]_.:-]' && synID(prev_lnum, idx + 1, 0) == g:razor#highlighting#html_tag
-          break
-        endif
-      endwhile
-
-      if idx != -1
-        return idx + shiftwidth()
-      endif
-
-      " Otherwise, use JS indentation.
-      let old_sw = &shiftwidth
-      let &shiftwidth = s:js_sw
-
-      let ind = eval(s:js_indentexpr)
-      let &shiftwidth = old_sw
-
-      return ind
-    endif
-
-    " Is this line inside of a style element?
-    if synid == g:razor#highlighting#html_style || synIDattr(synid, "name")[:2] ==# "css"
-      " Is the previous line the beginning tag of the element?
-      let prev_line = getline(prev_lnum)
-      let idx = -1
-
-      while 1
-        let idx = stridx(prev_line, "<style", idx + 1)
-
-        if idx == -1 || prev_line[idx + 6] !~# '[[:alnum:].:_-]' && synID(prev_lnum, idx + 1, 0) == g:razor#highlighting#html_tag
-          break
-        endif
-      endwhile
-
-      if idx != -1
-        return idx + shiftwidth()
-      endif
-
-      " Otherwise, use CSS indentation.
-      let old_sw = &shiftwidth
-      let &shiftwidth = s:css_sw
-
-      let ind = eval(s:css_indentexpr)
-      let &shiftwidth = old_sw
-
-      return ind
-    endif
-
-    " Is this line inside of a multiline tag?
-    if synid == g:razor#highlighting#html_tag && line[idx] !~# '[<>/]' || synid == g:razor#highlighting#html_attribute
-      let prev_line = getline(prev_lnum)
-      let idx = match(prev_line, '\S')
-
-      if prev_line[idx] ==# "<"
-        let idx = stridx(prev_line, " ", idx + 1)
-
-        if idx == -1
-          return indent(prev_lnum) + shiftwidth()
-        endif
-
-        let idx = match(prev_line, '\S', idx + 1)
-      endif
-
-      return idx
-    endif
-
-    " Is this line inside of a Razor block?
-    if synid == g:razor#highlighting#delimiter || synid == g:razor#highlighting#block || synid == g:razor#highlighting#cs_block || synIDattr(synid, "name")[:6] ==# "razorcs"
-      " If the current line begins with a closing bracket, use
-      " C indentation.
-      if getline(v:lnum) =~# '^\s*[)\]}]'
-        let old_sw = &shiftwidth
-        let &shiftwidth = s:cs_sw
-
-        let ind = cindent(v:lnum)
-        let &shiftwidth = old_sw
-
-        return ind
-      endif
-
-      " If the previous line was a preprocessor directive or was inside of
-      " a multiline region, find the nearest previous line that wasn't.
-      let prev_line = getline(prev_lnum)
-      let first_idx = match(prev_line, '\S')
-      let first_char = prev_line[first_idx]
-      let synid = synID(prev_lnum, 1, 0)
-
-      while first_char ==# "#" || synid == g:razor#highlighting#comment || synid == g:razor#highlighting#comment_end || synid == g:razor#highlighting#cs_comment || synid == g:razor#highlighting#cs_comment_end || synid == g:razor#highlighting#cs_string || synid == g:razor#highlighting#cs_string_end
-        let prev_lnum = prevnonblank(prev_lnum - 1)
-
-        if prev_lnum == 0
-          return 0
-        endif
-
-        let prev_line = getline(prev_lnum)
-        let first_idx = match(prev_line, '\S')
-        let first_char = prev_line[first_idx]
-        let synid = synID(prev_lnum, 1, 0)
-      endwhile
-
-      " If the previous line was one of the following:
-      " 1. An attribute
-      " 2. A comment
-      " 3. An HTML line
-      " 4. The closing delimiter of a Razor block
-      " align with the previous line.
-      if first_char ==# "["
-        call cursor(prev_lnum, first_idx + 1)
-
-        if searchpair('\[', "", '\]', "z", s:skip_cs_delimiter, prev_lnum)
-          return first_idx
-        endif
-      elseif first_char ==# "]"
-        call cursor(prev_lnum, first_idx + 1)
-
-        let [_, col] = searchpairpos('\[', "", '\]', "bW", s:skip_cs_delimiter)
-
-        return col - 1
-      elseif first_char ==# "/"
-        let second_char = prev_line[first_idx + 1]
-
-        if second_char ==# "/" || second_char ==# "*"
-          return first_idx
-        endif
-      elseif first_char ==# "@"
-        let second_char = prev_line[first_idx + 1]
-
-        if second_char ==# ":" || second_char ==# "*"
-          return first_idx
-        endif
-
-        " Check to see if this is a Razor attribute inside of
-        " a multiline HTML tag.
-        if first_idx > 0
-          let synid = synID(prev_lnum, 1, 0)
-
-          if synid == g:razor#highlighting#html_tag || synid == g:razor#highlighting#html_end_tag
-            call cursor(prev_lnum, 1)
-
-            let [lnum, col] = searchpos("<", "bW")
-            let synid = synID(lnum, col, 1)
-
-            while synid != g:razor#highlighting#html_tag && synid != g:razor#highlighting#html_end_tag
-              let [lnum, col] = searchpos("<", "bW")
-              let synid = synID(lnum, col, 1)
-            endwhile
-
-            return col - 1
-          endif
-        endif
-      elseif first_char ==# "<"
-        let synid = synID(prev_lnum, first_idx + 1, 1)
-
-        if synid == g:razor#highlighting#html_tag || synid == g:razor#highlighting#html_end_tag
-          return first_idx
-        endif
-      elseif first_char ==# "}"
-        let synid = synID(prev_lnum, first_idx + 1, 1)
-
-        if synid == g:razor#highlighting#delimiter
-          " If there are unpaired opening brackets on the same line,
-          " indent; otherwise, align with the previous line.
-          call cursor(prev_lnum, strlen(prev_line))
-
-          if searchpair("{", "", "}", "bc", s:skip_delimiter, prev_lnum)
-            return first_idx + s:cs_sw
-          else
-            return first_idx
-          endif
-        endif
-      endif
-
-      " Otherwise, fall back to C indentation.
-      "
-      " TODO: In the future, this should probably be replaced with custom
-      " logic.
-      let old_sw = &shiftwidth
-      let &shiftwidth = s:cs_sw
-
-      let ind = cindent(v:lnum)
-      let &shiftwidth = old_sw
-
-      return ind
-    endif
+  elseif char ==# "}"
+    return s:get_c_indent(v:lnum)
+  elseif char ==# "<" && line[idx + 1] ==# "/"
+    return s:get_html_indent(v:lnum, prev_lnum)
   endif
 
-  " Special case: if we aren't inside of a syngroup, make sure that the
-  " previous character isn't a Razor delimiter.
-  let [last_char, last_idx, prev_line] = s:get_last_char(prev_lnum)
+  let [prev_line, prev_first_char, prev_first_idx, prev_last_char, prev_last_idx] = s:get_line_with_first_and_last_chars(prev_lnum)
 
-  if last_char ==# "{" && synID(prev_lnum, last_idx + 1, 0) == g:razor#highlighting#delimiter
-    return indent(prev_lnum) + s:cs_sw
+  if prev_last_idx == -1
+    " Previous line was a comment line.
+    return indent(prev_lnum)
   endif
 
-  " Otherwise, proceed with normal HTML indentation.
+  if prev_last_char ==# "{"
+    let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
+
+    if syngroup ==# "razorDelimiter" || syngroup ==# "razorcsDelimiter"
+      return s:get_c_indent(v:lnum)
+    endif
+  elseif prev_last_char ==# "}"
+    let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
+
+    if syngroup ==# "razorDelimiter"
+      return s:get_html_indent(v:lnum, prev_lnum)
+    elseif syngroup ==# "razorcsDelimiter"
+      return s:get_c_indent(v:lnum)
+    endif
+  elseif prev_last_char ==# ">"
+    let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
+
+    if syngroup ==# "razorhtmlTag" || syngroup ==# "razorhtmlEndTag" || syngroup == "razorInnerHTMLEndBracket"
+      return s:get_html_indent(v:lnum, prev_lnum)
+    else
+      return s:get_c_indent(v:lnum)
+    endif
+  elseif prev_last_char ==# "]"
+    return indent(s:get_start_line(prev_lnum))
+  elseif prev_first_char ==# "@"
+    return indent(s:get_start_line(prev_lnum))
+  else
+    return s:get_c_indent(v:lnum)
+  endif
+
+  return s:get_html_indent(v:lnum, prev_lnum)
+endfunction
+
+function s:get_html_indent(lnum, prev_lnum)
   let shift = 0
 
-  if match(line, '^\%(</\|/\=>\)', idx) != -1
+  if getline(a:lnum) =~# '^\s*</'
     let shift -= 1
   endif
 
-  let [start_lnum, pairs] = s:get_indent_info(prev_lnum)
+  let start_lnum = s:get_start_line(a:prev_lnum)
 
-  if pairs > 0
+  call cursor(a:lnum, 1)
+
+  let [lnum, col, p] = searchpos('\(</\@!\)\|\(</\)', "bp", start_lnum)
+  let pairs = 0
+
+  while lnum
+    if p == 2
+      if synIDattr(synID(lnum, col, 0), "name") !=# "razorhtmlTag"
+        let [lnum, col, p] = searchpos('\(</\@!\)\|\(</\)', "bp", start_lnum)
+        continue
+      endif
+
+      let [l, c] = searchpos(">", "zW")
+
+      while l
+        let syngroup = synIDattr(synID(l, c, 0), "name")
+
+        if syngroup ==# "razorhtmlTag" || syngroup ==# "razorInnerHTMLEndBracket"
+          break
+        endif
+
+        let [l, c] = searchpos(">", "zW")
+      endwhile
+
+      if l
+        call cursor(lnum, col)
+      endif
+
+      if getline(l)[c - 2] ==# "/"
+        let [lnum, col, p] = searchpos('\(</\@!\)\|\(</\)', "bp", start_lnum)
+        continue
+      endif
+
+      if pairs == 1
+        break
+      endif
+
+      if strpart(getline(lnum), col) !~# '\v^%(area|base|br|col|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)[[:space:]>]\@='
+        let pairs += 1
+      endif
+    elseif p == 3
+      if synIDattr(synID(lnum, col, 0), "name") ==# "razorhtmlEndTag"
+        let pairs -= 1
+      endif
+    endif
+
+    let [lnum, col, p] = searchpos('\(</\@!\)\|\(</\)', "bp", start_lnum)
+  endwhile
+
+  if pairs == 1
     let shift += 1
   endif
 
   return indent(start_lnum) + shift * shiftwidth()
 endfunction
-" }}}1
+
+function s:get_html_attribute_indent(prev_lnum)
+  " If the previous line began with an attribute, align with that
+  " attribute; else, if it began with a tag, align with the first
+  " attribute after that tag, unless there is no attribute after tag, in
+  " which case add a shift.
+  let line = getline(a:prev_lnum)
+  let [char, idx, _] = matchstrpos(line, '\S')
+
+  if char ==# "<"
+    let idx2 = match(line, '\s', idx + 1)
+
+    if idx2 == -1
+      " Nothing after the tag name
+      return idx + shiftwidth()
+    endif
+
+    let idx2 = match(line, '\S', idx2 + 1)
+
+    if idx2 == -1
+      " Nothing but whitespace after the tag name
+      return idx + shiftwidth()
+    endif
+
+    return idx2
+  else
+    return idx
+  endif
+endfunction
+
+function s:get_c_indent(lnum)
+  let old_sw = &shiftwidth
+  let &shiftwidth = s:cs_shiftwidth
+  let ind = cindent(a:lnum)
+  let &shiftwidth = old_sw
+
+  return ind
+endfunction
+" }}}
 
 " vim:fdm=marker
