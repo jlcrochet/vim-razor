@@ -423,8 +423,8 @@ hi def link razorcsQuoteEscape razorcsEscapeSequence
 hi def link razorcsBraceEscape razorcsEscapeSequence
 hi def link razorcsFieldInitializer razorcsDeclarator
 hi def link razorcsKeywordError Error
-hi def link razorcsAttribute PreProc
-hi def link razorcsAttributeDelimiter razorcsDelimiter
+hi def link razorcsAttribute razorcsIdentifier
+hi def link razorcsAttributeDelimiter PreProc
 " }}}1
 
 " vim:fdm=marker
