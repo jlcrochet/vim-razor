@@ -282,7 +282,13 @@ end
 
 local function get_start_line(lnum, skip_func)
   while skip_func(lnum) do
-    lnum = prevnonblank(lnum - 1)
+    local prev_lnum = prevnonblank(lnum - 1)
+
+    if prev_lnum == 0 then
+      return lnum
+    end
+
+    lnum = prev_lnum
   end
 
   return lnum

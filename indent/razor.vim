@@ -59,7 +59,13 @@ function s:get_start_line(lnum)
   let lnum = a:lnum
 
   while s:skip_line(lnum)
-    let lnum = prevnonblank(lnum - 1)
+    let prev_lnum = prevnonblank(lnum - 1)
+
+    if prev_lnum == 0
+      return lnum
+    endif
+
+    lnum = prev_lnum
   endwhile
 
   return lnum
