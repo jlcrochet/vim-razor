@@ -3,4 +3,4 @@
 " Author: Jeffrey Crochet <jlcrochet@pm.me>
 " URL: github.com/jlcrochet/vim-razor
 
-autocmd BufRead,BufNewFile *.razor,*.cshtml setlocal filetype=razor
+autocmd BufRead,BufNewFile *.razor,*.cshtml setfiletype razor
