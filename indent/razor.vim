@@ -29,7 +29,7 @@ if exists("*GetRazorIndent")
   finish
 endif
 
-runtime! indent/javascript.vim | unlet b:did_indent
+runtime! indent/javascript.vim | unlet! b:did_indent
 let s:js_indentexpr = &indentexpr
 
 runtime! indent/css.vim
@@ -44,15 +44,26 @@ let s:css_shiftwidth = get(g:, "razor_css_shiftwidth", &shiftwidth)
 
 " Helpers {{{1
 " =======
-let s:multiline_regions = [
-      \ "razorInvocation", "razorSubscript", "razorComment", "razorCommentEnd",
-      \ "razorhtmlComment", "razorhtmlCommentEnd", "razorHtmlCDATA", "razorHTMLCDATAEnd",
-      \ "razorcsInvocation", "razorcsSubscript", "razorcsRHSInvocation", "razorcsRHSSubscript", "razorcsComment", "razorcsCommentEnd"
-      \ ]
+let s:multiline_regions = #{
+      \ razorInvocation: 1,
+      \ razorSubscript: 1,
+      \ razorComment: 1,
+      \ razorCommentEnd: 1,
+      \ razorhtmlComment: 1,
+      \ razorhtmlCommentEnd: 1,
+      \ razorhtmlCDATA: 1,
+      \ razorhtmlCDATAEnd: 1,
+      \ razorcsInvocation: 1,
+      \ razorcsSubscript: 1,
+      \ razorcsRHSInvocation: 1,
+      \ razorcsRHSSubscript: 1,
+      \ razorcsComment: 1,
+      \ razorcsCommentEnd: 1
+      \ }
 
 function s:skip_line(lnum)
   let syngroup = synIDattr(synID(a:lnum, 1, 0), "name")
-  return index(s:multiline_regions, syngroup) != -1 || (syngroup ==# "razorhtmlTag" && getline(a:lnum)[0] !=# "<")
+  return get(s:multiline_regions, syngroup) || (syngroup ==# "razorhtmlTag" && getline(a:lnum)[0] !=# "<")
 endfunction
 
 function s:get_start_line(lnum)

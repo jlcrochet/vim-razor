@@ -13,21 +13,20 @@ local getline = fn.getline
 local synID = fn.synID
 local synIDattr = fn.synIDattr
 local synstack = fn.synstack
-local cursor = fn.cursor
 
 local api = vim.api
 local nvim_get_current_line = api.nvim_get_current_line
 local nvim_eval = api.nvim_eval
 local nvim_buf_line_count = api.nvim_buf_line_count
 local nvim_win_get_cursor = api.nvim_win_get_cursor
+local nvim_win_set_cursor = api.nvim_win_set_cursor
+local nvim_command = api.nvim_command
 
-local cmd = vim.cmd
-
-cmd "runtime! indent/javascript.vim"
+nvim_command "runtime! indent/javascript.lua indent/javascript.vim"
 b.did_indent = false
 local js_indentexpr = bo.indentexpr
 
-cmd "runtime! indent/css.vim"
+nvim_command "runtime! indent/css.lua indent/css.vim"
 local css_indentexpr = bo.indentexpr
 
 local cs_shiftwidth = g.razor_cs_shiftwidth or bo.shiftwidth
@@ -44,7 +43,7 @@ local function get_pos()
 end
 
 local function set_pos(lnum, col)
-  cursor(lnum, col)
+  nvim_win_set_cursor(0, { lnum, col - 1 })
 end
 
 local function search(re, skip_func, move_cursor, include_current, stop_line)
@@ -323,7 +322,7 @@ local function skip_line(lnum)
 
   return syngroup == "razorhtmlComment" or syngroup == "razorhtmlCommendEnd" or
     syngroup == "razorhtmlCDATA" or syngroup == "razorhtmlCDATAEnd" or
-    syngroup == "razorhtmlTag" and getline(lnum):byte(1) ~= 60 or  -- <
+    syngroup == "razorhtmlTag" and getline(lnum):byte(1) ~= 60 or
     syngroup == "razorInvocation" or syngroup == "razorcsInvocation" or syngroup == "razorcsRHSInvocation" or
     syngroup == "razorSubscript" or syngroup == "razorcsSubscript" or syngroup == "razorcsRHSSubscript"
 end

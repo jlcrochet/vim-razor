@@ -1,7 +1,5 @@
 syn include @razorcsXML syntax/xml.vim
 
-let b:current_syntax = "razorcs"
-
 " Syntax {{{1
 " Miscellaneous (low priority) {{{2
 syn keyword razorcsKeywordError contained

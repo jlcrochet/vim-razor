@@ -1,5 +1,5 @@
-syn include @razorhtmljs syntax/javascript.vim | unlet b:current_syntax
-syn include @razorhtmlcss syntax/css.vim
+syn include @razorhtmljs syntax/javascript.vim | unlet! b:current_syntax
+syn include @razorhtmlcss syntax/css.vim | unlet! b:current_syntax
 
 syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<!\=[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>/ contains=razorhtmlAttribute
 
