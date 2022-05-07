@@ -205,7 +205,7 @@ syn cluster razorcsLiterals contains=
 
 syn cluster razorcsRHS contains=
       \ @razorcsLiterals,
-      \ razorcsUnaryOperator,razorcsUnaryOperatorKeyword,razorcsRHSIdentifier,razorcsRHSType,
+      \ razorcsUnaryOperator,razorcsUnaryOperatorKeyword,razorcsRHSModifier,razorcsRHSIdentifier,razorcsRHSType,
       \ razorcsRHSGroup,razorcsFunctionKeyword,razorcsRHSAttributes,razorcsLINQExpression
 
 syn cluster razorcsOperators contains=razorcsOperator,razorcsOperatorKeyword,razorcsTernaryOperator
@@ -217,12 +217,13 @@ syn match razorcsUnaryOperator /\%#=1[!~*&^]/ contained nextgroup=@razorcsRHS sk
 
 syn keyword razorcsUnaryOperatorKeyword new nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsInitializer,razorcsRHSInvocation,razorcsRHSSubscript skipwhite skipempty
 syn keyword razorcsUnaryOperatorKeyword stackalloc nextgroup=razorcsRHSIdentifier,razorcsRHSType,razorcsInitializer,razorcsRHSSubscript skipwhite skipempty
-syn keyword razorcsUnaryOperatorKeyword ref out in contained nextgroup=@razorcsRHS skipwhite skipempty
 syn keyword razorcsUnaryOperatorKeyword await nextgroup=razorcsStatement,@razorcsRHS skipwhite skipempty
-syn keyword razorcsUnaryOperatorKeyword async contained nextgroup=razorcsRHSTypeIdentifier,razorcsRHSType,razorcsRHSGroup skipwhite skipempty
 syn keyword razorcsUnaryOperatorKeyword throw nextgroup=@razorcsRHS skipwhite skipempty
-syn keyword razorcsUnaryOperatorKeyword static contained nextgroup=razorcsRHSType,razorcsRHSIdentifier skipwhite skipempty
-syn keyword razorcsUnaryOperatorKeyword delegate contained nextgroup=razorcsFunctionPointerModifier skipwhite skipempty
+
+syn keyword razorcsRHSModifier async contained nextgroup=razorcsRHSTypeIdentifier,razorcsRHSType,razorcsRHSGroup skipwhite skipempty
+syn keyword razorcsRHSModifier ref out in contained nextgroup=@razorcsRHS skipwhite skipempty
+syn keyword razorcsRHSModifier static contained nextgroup=razorcsRHSType,razorcsRHSIdentifier skipwhite skipempty
+syn keyword razorcsRHSModifier delegate contained nextgroup=razorcsFunctionPointerModifier skipwhite skipempty
 
 syn keyword razorcsUnaryOperatorKeyword var contained nextgroup=razorcsRHSDeclarator,razorcsRHSTupleDeclarator skipwhite skipempty
 syn match razorcsRHSDeclarator /\%#=1\h\w*/ contained contains=razorcsKeywordError nextgroup=@razorcsOperators skipwhite skipempty
@@ -399,6 +400,7 @@ hi def link razorcsPatternKeyword razorcsOperatorKeyword
 hi def link razorcsPatternProperty razorcsIdentifier
 hi def link razorcsPatternPropertyMemberAccessOperator razorcsMemberAccessOperator
 hi def link razorcsUnaryOperatorKeyword razorcsOperatorKeyword
+hi def link razorcsRHSModifier razorcsModifier
 hi def link razorcsRHSDeclarator razorcsDeclarator
 hi def link razorcsRHSIdentifier razorcsIdentifier
 hi def link razorcsRHSType razorcsType
