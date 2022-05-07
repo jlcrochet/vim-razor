@@ -1,4 +1,4 @@
-syn include @razorcsXML syntax/xml.vim
+syn include @razorcsXML syntax/xml.vim | unlet! b:current_syntax
 
 " Syntax {{{1
 " Miscellaneous (low priority) {{{2
