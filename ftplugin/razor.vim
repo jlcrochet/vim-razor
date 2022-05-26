@@ -12,12 +12,16 @@ let b:did_ftplugin = 1
 
 runtime! ftplugin/html.vim
 
-setlocal comments=s1:@*,mb:*,ex:*@,:///,://
-setlocal commentstring=@*\ %s\ *@
-setlocal suffixesadd=.cshtml,.razor
+setlocal
+      \ comments=s1:@*,mb:*,ex:*@,:///,://
+      \ commentstring=@*\ %s\ *@
+      \ suffixesadd=.cshtml,.razor
+
+let b:undo_ftplugin = "setlocal comments< commentstring< suffixesadd<"
 
 if get(g:, "razor_fold")
   setlocal foldmethod=syntax
+  let b:undo_ftplugin ..= " foldmethod<"
 endif
 
 " Change the :browse filter to primarily show HTML-related files.
@@ -29,4 +33,6 @@ if has("gui_win32")
   else
     let b:browsefilter = "Razor Files (*.cshtml,*.razor)\t*.cshtml;*.razor\n"
   endif
+
+  let b:undo_ftplugin ..= " | unlet b:browsefilter"
 endif

@@ -19,6 +19,7 @@ syn sync fromstart
 execute "source " .. s:include_path .. "/html.vim"
 
 syn match razorHTMLEscape /\%#=1@/ contained nextgroup=razorInnerHTMLTag
+
 execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
 
 syn cluster razorcsRHS add=razorHTMLEscape
