@@ -10,7 +10,7 @@ if get(b:, "did_indent")
 endif
 
 if has("nvim-0.5")
-  lua require "get_razor_indent"
+  lua require "vim-razor/get_razor_indent"
 
   setlocal indentexpr=v:lua.get_razor_indent()
   let &indentkeys = &cinkeys .. ",<>>"
