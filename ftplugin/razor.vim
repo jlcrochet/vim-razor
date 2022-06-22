@@ -19,11 +19,6 @@ setlocal
 
 let b:undo_ftplugin = "setlocal comments< commentstring< suffixesadd<"
 
-if get(g:, "razor_fold")
-  setlocal foldmethod=syntax
-  let b:undo_ftplugin ..= " foldmethod<"
-endif
-
 " Change the :browse filter to primarily show HTML-related files.
 "
 " NOTE: Modified from ftplugin/html.vim to include Razor files

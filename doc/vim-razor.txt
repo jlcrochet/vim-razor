@@ -49,10 +49,5 @@ g:razor_css_shiftwidth				*g:razor_css_shiftwidth*
 
 If defined, overrides 'shiftwidth' for CSS lines.
 
-------------------------------------------------------------------------------
-g:razor_fold					*g:razor_fold*
-
-if set to `1`, Razor code blocks will be folded.
-
 ==============================================================================
 vim:filetype=help

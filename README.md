@@ -25,7 +25,3 @@ If defined, overrides `shiftwidth` for JavaScript lines.
 #### `g:razor_css_shiftwidth`
 
 If defined, overrides `shiftwidth` for CSS lines.
-
-#### `g:razor_fold`
-
-If true, Razor blocks will be folded.
