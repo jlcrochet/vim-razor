@@ -336,6 +336,8 @@ syn match razorcsTypeMemberAccessOperator /\%#=1::/ contained nextgroup=razorcsT
 
 syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contains=@razorcs
 
+syn match razorcsDelimiterError /\%#=1[)\]}]/
+
 " Highlighting {{{1
 hi def link razorcsComment Comment
 hi def link razorcsCommentStart razorcsComment
@@ -430,6 +432,7 @@ hi def link razorcsFieldInitializer razorcsDeclarator
 hi def link razorcsKeywordError Error
 hi def link razorcsAttribute razorcsIdentifier
 hi def link razorcsAttributeDelimiter PreProc
+hi def link razorcsDelimiterError Error
 " }}}1
 
 " vim:fdm=marker
