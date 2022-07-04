@@ -1,5 +1,3 @@
-syn include @razorcsXML syntax/xml.vim | unlet! b:current_syntax
-
 " Syntax {{{1
 " Miscellaneous (low priority) {{{2
 syn keyword razorcsKeywordError contained
@@ -322,8 +320,17 @@ syn keyword razorcsLINQKeyword in where select orderby group by ascending descen
 " Miscellaneous (high priority) {{{2
 syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
 syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\// contains=razorcsTodo containedin=ALLBUT,razorcsString,razorcsComment
-syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,@razorcsXML containedin=ALLBUT,razorcsString,razorcsComment
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,razorcsXMLTag,razorcsXMLEndTag containedin=ALLBUT,razorcsString,razorcsComment
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
+
+syn region razorcsXMLTag matchgroup=razorcsXMLTag start=/\%#=1<[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>/ contained contains=razorcsXMLAttribute
+syn match razorcsXMLEndTag /\%#=1<\/[[:alnum:]_:][[:alnum:]_:\-.]*>/ contained
+
+syn match razorcsXMLAttribute /\%#=1[^"'>/=[:space:]]\+/ contained nextgroup=razorcsXMLAttributeOperator skipwhite skipempty
+syn match razorcsXMLAttributeOperator /\%#=1=/ contained nextgroup=razorcsXMLValue skipwhite skipempty
+
+syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorcsXMLCharacterReference
+syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorcsXMLCharacterReference
 
 syn match razorcsDirective /\%#=1^\s*\zs#.*/ containedin=ALLBUT,razorcsDirective,razorcsString,razorcsComment
 
@@ -433,6 +440,12 @@ hi def link razorcsKeywordError Error
 hi def link razorcsAttribute razorcsIdentifier
 hi def link razorcsAttributeDelimiter PreProc
 hi def link razorcsDelimiterError Error
+hi def link razorcsXMLTag Identifier
+hi def link razorcsXMLEndTag razorcsXMLTag
+hi def link razorcsXMLAttribute Keyword
+hi def link razorcsXMLAttributeOperator Operator
+hi def link razorcsXMLValue String
+hi def link razorcsXMLValueDelimiter razorcsXMLValue
 " }}}1
 
 " vim:fdm=marker
