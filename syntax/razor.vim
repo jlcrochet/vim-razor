@@ -160,6 +160,7 @@ syn match razorTagHelperPrefixPattern /\%#=1[[:alnum:]_:][[:alnum:]_:\-.]*/ cont
 
 " Highlighting {{{1
 hi def link razorDelimiter PreProc
+hi def link razorDelimiterEscape razorDelimiter
 hi def link razorIdentifier razorcsIdentifier
 hi def link razorGenericIdentifier razorIdentifier
 hi def link razorServiceIdentifier razorIdentifier
