@@ -28,7 +28,7 @@ syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHT
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag,razorInnerHTMLTag nextgroup=razorhtmlAttribute,razorExpression,razorBoolean
 syn match razorDelimiter /\%#=1@/ contained containedin=razor\a\{-}Block nextgroup=razorIdentifier,@razorDirectives,razorExpression,razorHTMLLine
 
-syn match razorDelimiterEscape /\%#=1@@/ transparent containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag contains=NONE
+syn match razorDelimiterEscape /\%#=1@@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag contains=NONE
 
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine contains=@razorcsRHS
 
