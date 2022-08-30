@@ -12,8 +12,11 @@ endif
 if has("nvim-0.5")
   lua require "vim-razor/get_razor_indent"
 
-  setlocal indentexpr=v:lua.get_razor_indent()
-  let &indentkeys = &cinkeys .. ",<>>"
+  setlocal
+        \ indentexpr=v:lua.get_razor_indent()
+        \ cinoptions+=j1,J1
+
+  let &indentkeys = &cinkeys..",<>>"
 
   let b:did_indent = 1
 
@@ -21,8 +24,11 @@ if has("nvim-0.5")
 endif
 
 if exists("*GetRazorIndent")
-  setlocal indentexpr=GetRazorIndent()
-  let &indentkeys = &cinkeys .. ",<>>"
+  setlocal
+        \ indentexpr=GetRazorIndent()
+        \ cinoptions+=j1,J1
+
+  let &indentkeys = &cinkeys..",<>>"
 
   let b:did_indent = 1
 
@@ -35,8 +41,11 @@ let s:js_indentexpr = &indentexpr
 runtime! indent/css.vim
 let s:css_indentexpr = &indentexpr
 
-setlocal indentexpr=GetRazorIndent()
-let &indentkeys = &cinkeys .. ",<>>"
+setlocal
+      \ indentexpr=GetRazorIndent()
+      \ cinoptions+=j1,J1
+
+let &indentkeys = &cinkeys..",<>>"
 
 let s:cs_shiftwidth = get(g:, "razor_cs_shiftwidth", &shiftwidth)
 let s:js_shiftwidth = get(g:, "razor_js_shiftwidth", &shiftwidth)
