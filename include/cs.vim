@@ -440,7 +440,7 @@ hi def link razorcsKeywordError Error
 hi def link razorcsAttribute razorcsIdentifier
 hi def link razorcsAttributeDelimiter PreProc
 hi def link razorcsDelimiterError Error
-hi def link razorcsXMLTag Identifier
+hi def link razorcsXMLTag PreProc
 hi def link razorcsXMLEndTag razorcsXMLTag
 hi def link razorcsXMLAttribute Keyword
 hi def link razorcsXMLAttributeOperator Operator
