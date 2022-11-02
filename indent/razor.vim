@@ -177,12 +177,7 @@ function GetRazorIndent() abort
       let [lnum, col] = searchpos('<script[[:space:]>]\@=', "b", prev_lnum)
     endwhile
 
-    let old_sw = &shiftwidth
-    let &shiftwidth = s:js_shiftwidth
-    let ind = eval(s:js_indentexpr)
-    let &shiftwidth = old_sw
-
-    return ind
+    return eval(s:js_indentexpr)
   elseif syngroup ==# "razorhtmlStyle" || syngroup[:2] ==# "css"
     " `style` tag:
     " Use CSS indentation.
@@ -202,12 +197,7 @@ function GetRazorIndent() abort
       let [lnum, col] = searchpos('<style[[:space:]>]\@=', "b", prev_lnum)
     endwhile
 
-    let old_sw = &shiftwidth
-    let &shiftwidth = s:css_shiftwidth
-    let ind = eval(s:css_indentexpr)
-    let &shiftwidth = old_sw
-
-    return ind
+    return eval(s:css_indentexpr)
   elseif syngroup ==# "razorhtmlAttribute"
     " Tag attribute:
     return s:get_html_attribute_indent(prev_lnum)
@@ -243,10 +233,10 @@ function GetRazorIndent() abort
     elseif char ==# "{"
       return indent(prev_lnum)
     elseif char ==# "}"
-      return s:get_c_indent(v:lnum)
+      return cindent(v:lnum)
     endif
   elseif syngroup ==# "razorcsDelimiter"
-    return s:get_c_indent(v:lnum)
+    return cindent(v:lnum)
   elseif syngroup ==# "razorInnerHTMLBlock"
     return s:get_html_indent(v:lnum, prev_lnum)
   endif
@@ -260,10 +250,10 @@ function GetRazorIndent() abort
     if syngroup ==# "razorDelimiter"
       return indent(prev_lnum)
     elseif syngroup ==# "razorcsDelimiter"
-      return s:get_c_indent(v:lnum)
+      return cindent(v:lnum)
     endif
   elseif char ==# "}"
-    return s:get_c_indent(v:lnum)
+    return cindent(v:lnum)
   elseif char ==# "<" && line[idx + 1] ==# "/"
     return s:get_html_indent(v:lnum, prev_lnum)
   endif
@@ -279,7 +269,7 @@ function GetRazorIndent() abort
     let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
 
     if syngroup ==# "razorDelimiter" || syngroup ==# "razorcsDelimiter"
-      return s:get_c_indent(v:lnum)
+      return cindent(v:lnum)
     endif
   elseif prev_last_char ==# "}"
     let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
@@ -287,7 +277,7 @@ function GetRazorIndent() abort
     if syngroup ==# "razorDelimiter"
       return s:get_html_indent(v:lnum, prev_lnum)
     elseif syngroup ==# "razorcsDelimiter"
-      return s:get_c_indent(v:lnum)
+      return cindent(v:lnum)
     endif
   elseif prev_last_char ==# ">"
     let syngroup = synIDattr(synID(prev_lnum, prev_last_idx + 1, 0), "name")
@@ -295,14 +285,14 @@ function GetRazorIndent() abort
     if syngroup ==# "razorhtmlTag" || syngroup ==# "razorhtmlEndTag" || syngroup == "razorInnerHTMLEndBracket"
       return s:get_html_indent(v:lnum, prev_lnum)
     else
-      return s:get_c_indent(v:lnum)
+      return cindent(v:lnum)
     endif
   elseif prev_last_char ==# "]"
     return indent(s:get_start_line(prev_lnum))
   elseif prev_first_char ==# "@"
     return indent(s:get_start_line(prev_lnum))
   else
-    return s:get_c_indent(v:lnum)
+    return cindent(v:lnum)
   endif
 
   return s:get_html_indent(v:lnum, prev_lnum)
@@ -400,15 +390,6 @@ function s:get_html_attribute_indent(prev_lnum)
   else
     return idx
   endif
-endfunction
-
-function s:get_c_indent(lnum)
-  let old_sw = &shiftwidth
-  let &shiftwidth = s:cs_shiftwidth
-  let ind = cindent(a:lnum)
-  let &shiftwidth = old_sw
-
-  return ind
 endfunction
 " }}}
 

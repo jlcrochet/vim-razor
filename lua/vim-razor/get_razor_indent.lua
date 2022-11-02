@@ -1,5 +1,4 @@
 local v = vim.v
-local g = vim.g
 local b = vim.b
 local bo = vim.bo
 
@@ -28,10 +27,6 @@ local js_indentexpr = bo.indentexpr
 
 nvim_command "runtime! indent/css.lua indent/css.vim"
 local css_indentexpr = bo.indentexpr
-
-local cs_shiftwidth = g.razor_cs_shiftwidth or bo.shiftwidth
-local js_shiftwidth = g.razor_js_shiftwidth or bo.shiftwidth
-local css_shiftwidth = g.razor_css_shiftwidth or bo.shiftwidth
 
 local function syngroup_at(lnum, col)
   return synIDattr(synID(lnum, col, false), "name")
@@ -358,12 +353,7 @@ function get_razor_indent()
       return indent(prev_lnum) + shiftwidth()
     end
 
-    local old_sw = bo.shiftwidth
-    bo.shiftwidth = js_shiftwidth
-    local ind = nvim_eval(js_indentexpr)
-    bo.shiftwidth = old_sw
-
-    return ind
+    return nvim_eval(js_indentexpr)
   elseif syngroup == "razorhtmlStyle" or syngroup:sub(1, 3) == "css" then
     -- `style` tag:
     -- Use CSS indentation.
@@ -377,12 +367,7 @@ function get_razor_indent()
       return indent(prev_lnum) + shiftwidth()
     end
 
-    local old_sw = bo.shiftwidth
-    bo.shiftwidth = css_shiftwidth
-    local ind = nvim_eval(css_indentexpr)
-    bo.shiftwidth = old_sw
-
-    return ind
+    return nvim_eval(css_indentexpr)
   elseif syngroup == "razorhtmlAttribute" then
     -- Tag attribute:
     goto html_attribute
@@ -417,10 +402,10 @@ function get_razor_indent()
     elseif b == 123 then  -- {
       return indent(prev_lnum)
     elseif b == 125 then  -- }
-      goto cindent
+      return cindent(lnum)
     end
   elseif syngroup == "razorcsDelimiter" then
-    goto cindent
+    return cindent(lnum)
   elseif syngroup == "razorInnerHTMLBlock" then
     line, b, col = get_line_with_first_byte()
     goto html
@@ -435,10 +420,10 @@ function get_razor_indent()
       if syngroup == "razorDelimiter" then
         return indent(prev_lnum)
       elseif syngroup == "razorcsDelimiter" then
-        goto cindent
+        return cindent(lnum)
       end
     elseif b == 125 then  -- }
-      goto cindent
+      return cindent(lnum)
     elseif b == 60 and line:byte(col + 1) == 47 then  -- < /
       goto html
     end
@@ -454,7 +439,7 @@ function get_razor_indent()
       local syngroup = syngroup_at(prev_lnum, prev_last_col)
 
       if syngroup == "razorDelimiter" or syngroup == "razorcsDelimiter" then
-        goto cindent
+        return cindent(lnum)
       end
     elseif prev_last_byte == 125 then  -- }
       local syngroup = syngroup_at(prev_lnum, prev_last_col)
@@ -462,7 +447,7 @@ function get_razor_indent()
       if syngroup == "razorDelimiter" then
         goto html
       elseif syngroup == "razorcsDelimiter" then
-        goto cindent
+        return cindent(lnum)
       end
     elseif prev_last_byte == 62 then  -- >
       local syngroup = syngroup_at(prev_lnum, prev_last_col)
@@ -470,7 +455,7 @@ function get_razor_indent()
       if syngroup == "razorhtmlTag" or syngroup == "razorhtmlEndTag" or syngroup == "razorInnerHTMLEndBracket" then
         goto html
       else
-        goto cindent
+        return cindent(lnum)
       end
     elseif prev_last_byte == 93 then  -- ]
       if syngroup_at(prev_lnum, prev_last_col) == "razorcsAttributeDelimiter" then
@@ -479,7 +464,7 @@ function get_razor_indent()
     elseif prev_first_byte == 64 then  -- @
       return indent(get_start_line(prev_lnum, skip_line))
     else
-      goto cindent
+      return cindent(lnum)
     end
   end
 
@@ -509,15 +494,6 @@ function get_razor_indent()
     end
 
     return indent(start_lnum) + shift * shiftwidth()
-  end
-
-  ::cindent:: do
-    local old_sw = bo.shiftwidth
-    bo.shiftwidth = cs_shiftwidth
-    local ind = cindent(lnum)
-    bo.shiftwidth = old_sw
-
-    return ind
   end
 
   ::html_attribute:: do
