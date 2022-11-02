@@ -47,10 +47,6 @@ setlocal
 
 let &indentkeys = &cinkeys..",<>>"
 
-let s:cs_shiftwidth = get(g:, "razor_cs_shiftwidth", &shiftwidth)
-let s:js_shiftwidth = get(g:, "razor_js_shiftwidth", &shiftwidth)
-let s:css_shiftwidth = get(g:, "razor_css_shiftwidth", &shiftwidth)
-
 " Helpers {{{1
 " =======
 let s:multiline_regions = #{
