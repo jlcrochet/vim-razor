@@ -69,7 +69,7 @@ syn region razorcsCondition matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=
 syn keyword razorcsStatement else do
 
 syn keyword razorcsCaseStatement case nextgroup=razorcsCasePatterns
-syn region razorcsCasePatterns start=/\%#=1/ end=/\%#=1[;:]\@=/ contained contains=@razorcsRHS,razorcsOperator,razorcsPatternBlock,razorcsPatternKeyword,razorcsRHSTypeIdentifier
+syn region razorcsCasePatterns start=/\%#=1/ end=/\%#=1[;:]\@=/ contained contains=@razorcsRHS,@razorcsOperators,razorcsPatternBlock,razorcsPatternKeyword,razorcsRHSTypeIdentifier
 
 syn keyword razorcsStatement default
 
@@ -141,8 +141,8 @@ syn region razorcsTupleDeclarator matchgroup=razorcsDelimiter start=/\%#=1(/ end
 
 syn match razorcsIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=\%(?\.\@!\)\=\**\%(\[.\{-}\]\)*/ contains=razorcsGeneric,razorcsTypeModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsAssignmentOperator,razorcsCompoundAssignmentOperator,razorcsMemberAccessOperator,razorcsNullForgivingOperator,razorcsInvocation,razorcsSubscript,razorcsOperatorModifier,razorcsPropertyBlock skipwhite skipempty
 syn region razorcsGeneric matchgroup=razorcsDelimiter start=/\%#=1</ end=/\%#=1>/ contained contains=razorcsType,razorcsTypeIdentifier,razorcsModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsOperatorModifier,razorcsPropertyBlock skipwhite skipempty
-syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsSubscript,razorcsOperator skipwhite skipempty
-syn region razorcsSubscript matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsSubscript,razorcsOperator skipwhite skipempty
+syn region razorcsInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsSubscript,@razorcsOperators skipwhite skipempty
+syn region razorcsSubscript matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsInvocation,razorcsSubscript,@razorcsOperators skipwhite skipempty
 
 syn keyword razorcsConstant this base nextgroup=razorcsAssignmentOperator,razorcsCompoundAssignmentOperator,razorcsMemberAccessOperator,razorcsInvocation,razorcsSubscript skipwhite skipempty
 
@@ -206,7 +206,7 @@ syn cluster razorcsRHS contains=
       \ razorcsUnaryOperator,razorcsUnaryOperatorKeyword,razorcsRHSModifier,razorcsRHSIdentifier,razorcsRHSType,
       \ razorcsRHSGroup,razorcsFunctionKeyword,razorcsRHSAttributes,razorcsLINQExpression
 
-syn cluster razorcsOperators contains=razorcsOperator,razorcsOperatorKeyword,razorcsTernaryOperator
+syn cluster razorcsOperators contains=razorcsOperator,razorcsOperatorKeyword,razorcsTernaryOperator,razorcsComment
 
 syn match razorcsUnaryOperator /\%#=1++\=/ contained nextgroup=@razorcsRHS skipwhite skipempty
 syn match razorcsUnaryOperator /\%#=1--\=/ contained nextgroup=@razorcsRHS skipwhite skipempty
@@ -302,7 +302,7 @@ syn match razorcsPatternPropertyColon /\%#=1:/ contained nextgroup=razorcsPatter
 syn match razorcsPatternPropertyMemberAccessOperator /\%#=1\./ contained nextgroup=razorcsPatternProperty skipwhite skipempty
 
 syn keyword razorcsOperatorKeyword switch contained nextgroup=razorcsPatternBlock skipwhite skipempty
-syn region razorcsPatternBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcsLiterals,razorcsUnaryOperatorKeyword,razorcsOperator,razorcsTernaryOperator,razorcsPatternIdentifier,razorcsPatternGroup,razorcsObjectPattern,razorcsPatternKeyword nextgroup=@razorcsOperators skipwhite skipempty
+syn region razorcsPatternBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcsLiterals,razorcsUnaryOperatorKeyword,@razorcsOperators,razorcsPatternIdentifier,razorcsPatternGroup,razorcsObjectPattern,razorcsPatternKeyword nextgroup=@razorcsOperators skipwhite skipempty
 
 syn keyword razorcsOperatorKeyword with contained nextgroup=razorcsInitializer skipwhite skipempty
 
