@@ -24,21 +24,21 @@ execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
 
 syn cluster razorcsRHS add=razorHTMLEscape
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine nextgroup=razorIdentifier,@razorDirectives,razorBlock,razorBoolean
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine nextgroup=razorIdentifier,razorDirective,razorBlock,razorBoolean
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag,razorInnerHTMLTag nextgroup=razorhtmlAttribute,razorExpression,razorBoolean
-syn match razorDelimiter /\%#=1@/ contained containedin=razorBlock,razorCodeBlock nextgroup=razorIdentifier,@razorDirectives,razorExpression,razorHTMLLine
+syn match razorDelimiter /\%#=1@/ contained containedin=razorBlock nextgroup=razorIdentifier,razorDirective,razorExpression,razorHTMLLine
 
 syn match razorDelimiterEscape /\%#=1@@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag
 
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine contains=@razorcsRHS
 
 syn region razorExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS
-syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag fold
+syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorPostfixDirective skipwhite skipempty fold
 
-syn match razorIdentifier /\%#=1\h\w*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorSubscript
+syn match razorIdentifier /\%#=1\h\w*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 syn match razorMemberAccessOperator /\%#=1\./ contained nextgroup=razorIdentifier
-syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorSubscript
-syn region razorSubscript matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorSubscript
+syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
+syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 
 syn region razorInnerHTMLTag matchgroup=razorhtmlTag start=/\%#=1<!\=[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>\@=/ contained containedin=razorcsBlock contains=razorhtmlAttribute nextgroup=razorInnerHTMLBlock,razorInnerHTMLEndBracket
 syn region razorInnerHTMLBlock matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/!\=[[:alnum:]_:][[:alnum:]_:\-.]*>/ contained contains=razorInnerHTMLTag,razorhtmlCharacterReference
@@ -52,109 +52,59 @@ syn region razorInnerHTMLTag matchgroup=razorhtmlTag start=/\%#=1<!\=style[[:spa
 
 syn region razorHTMLLine matchgroup=razorDelimiter start=/\%#=1:/ end=/\%#=1$/ keepend contained contains=razorInnerHTMLTag,razorhtmlCharacterReference
 
-syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ contains=razorcsTodo containedin=razorBlock,razorCodeBlock,razorInnerHTMLBlock,@razorcsBlocks
+syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ contains=razorcsTodo containedin=razorBlock,razorInnerHTMLBlock,@razorcsBlocks
 
 " Directives {{{2
-syn cluster razorDirectives contains=
-      \ razorAwait,razorIf,razorSwitch,razorFor,razorForeach,razorWhile,razorDo,razorUsing,razorTry,razorLock,razorTypeparam,
-      \ razorAttribute,razorCode,razorFunctions,razorImplements,razorInherits,razorModel,razorInject,razorPage,razorLayout,
-      \ razorNamespace,razorPreservewhitespace,razorSection,razorAddTagHelper,razorRemoveTagHelper,razorTagHelperPrefix
+syn keyword razorDirective await contained nextgroup=razorIdentifier skipwhite skipempty
 
-syn keyword razorAwait await contained nextgroup=razorIdentifier skipwhite skipempty
+syn keyword razorDirective if while switch lock contained nextgroup=razorCondition skipwhite skipempty
+syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorBlock skipwhite skipempty
 
-syn keyword razorIf if contained nextgroup=razorIfCondition skipwhite skipempty
-syn region razorIfCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorIfBlock skipwhite skipempty
-syn region razorIfBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorElse skipwhite skipempty fold
+syn keyword razorDirective for foreach contained nextgroup=razorStatements skipwhite skipempty
+syn region razorStatements matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
 
-syn keyword razorElse else contained nextgroup=razorIf,razorBlock skipwhite skipempty
+syn keyword razorDirective do try code functions contained nextgroup=razorBlock skipwhite skipempty
 
-syn keyword razorSwitch switch contained nextgroup=razorSwitchCondition skipwhite skipempty
-syn region razorSwitchCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorSwitchBlock skipwhite skipempty
-syn region razorSwitchBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=razorCase,razorDefault,razorCaseColon,@razorcs,razorInnerHTMLTag fold
-syn keyword razorCase case contained nextgroup=razorcsCasePatterns
-syn keyword razorDefault default contained
-syn match razorCaseColon /\%#=1:/ contained
+syn keyword razorPostfixDirective else contained nextgroup=razorDirective,razorBlock skipwhite skipempty
+syn keyword razorPostfixDirective finally contained nextgroup=razorBlock skipwhite skipempty
+syn keyword razorPostfixDirective while contained nextgroup=razorCondition skipwhite skipempty
+syn keyword razorPostfixDirective catch contained nextgroup=razorStatements skipwhite skipempty
 
-syn keyword razorWhile while contained nextgroup=razorWhileCondition skipwhite skipempty
-syn region razorWhileCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorWhileBlock skipwhite skipempty
-syn region razorWhileBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorCS,razorInnerHTMLTag fold
+syn keyword razorDirective using contained nextgroup=razorStatements,razorTypeIdentifier skipwhite skipempty
+syn match razorTypeIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric nextgroup=razorTypeAliasOperator,razorTypeMemberAccessOperator,razorTypeDeclarator skipwhite
+syn match razorTypeMemberAccessOperator /\%#=1\./ contained nextgroup=razorTypeIdentifier skipwhite skipempty
+syn match razorTypeAliasOperator /\%#=1=/ contained nextgroup=razorTypeIdentifier skipwhite skipempty
+syn match razorTypeDeclarator /\%#=1\h\w*/ contained
 
-syn keyword razorDo do contained nextgroup=razorDoBlock skipwhite skipempty
-syn region razorDoBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorWhile skipwhite skipempty fold
-
-syn keyword razorFor for contained nextgroup=razorForExpressions skipwhite skipempty
-syn region razorForExpressions matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs,razorForExpression nextgroup=razorBlock skipwhite skipempty
-syn region razorForExpression start=/\%#=1;/ end=/\%#=1[;)]\@=/ contained contains=@razorcsRHS
-
-syn keyword razorForeach foreach contained nextgroup=razorForeachExpression skipwhite skipempty
-syn region razorForeachExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
-
-syn keyword razorUsing using contained nextgroup=razorUsingStatement,razorUsingIdentifier skipwhite skipempty
-syn region razorUsingStatement matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
-syn match razorUsingIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ contained contains=razorIdentifierDot nextgroup=razorUsingAliasOperator skipwhite
-syn match razorUsingAliasOperator /\%#=1=/ contained nextgroup=razorNamespaceIdentifier skipwhite
-
-syn keyword razorTry try contained nextgroup=razorTryBlock skipwhite skipempty
-syn region razorTryBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorCatch,razorFinally skipwhite skipempty fold
-
-syn keyword razorCatch catch contained nextgroup=razorCatchCondition skipwhite skipempty
-syn region razorCatchCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeIdentifier nextgroup=razorTryBlock skipwhite skipempty
-
-syn keyword razorFinally finally contained nextgroup=razorBlock skipwhite skipempty
-
-syn keyword razorLock lock contained nextgroup=razorLockExpression skipwhite skipempty
-syn region razorLockExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorBlock skipwhite skipempty
-
-syn keyword razorTypeparam typeparam contained nextgroup=razorTypeparamDeclarator skipwhite
+syn keyword razorDirective typeparam contained nextgroup=razorTypeparamDeclarator skipwhite
 syn match razorTypeparamDeclarator /\%#=1\h\w*/ contained nextgroup=razorWhere skipwhite
 syn keyword razorWhere where contained nextgroup=razorTypeparamConstraintIdentifier skipwhite
 syn match razorTypeparamConstraintIdentifier /\%#=1\h\w*/ contained nextgroup=razorTypeparamConstraintOperator skipwhite
 syn match razorTypeparamConstraintOperator /\%#=1:/ contained nextgroup=razorTypeparamConstraintArgument skipwhite
 syn match razorTypeparamConstraintArgument /\%#=1\h\w*/ contained
 
-syn keyword razorAttribute attribute contained nextgroup=razorcsAttributes skipwhite
+syn keyword razorDirective attribute contained nextgroup=razorcsAttributes skipwhite
 
-syn keyword razorCode code contained nextgroup=razorCodeBlock skipwhite skipempty
-syn region razorCodeBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs fold
+syn keyword razorDirective implements inherits model inject layout namespace contained nextgroup=razorTypeIdentifier skipwhite
 
-syn keyword razorFunctions functions contained nextgroup=razorCodeBlock skipwhite skipempty
-
-syn keyword razorImplements implements contained nextgroup=razorNamespaceIdentifier skipwhite
-
-syn keyword razorInherits inherits contained nextgroup=razorGenericIdentifier skipwhite
-syn match razorGenericIdentifier /\%#=1\h\w*\%(\.\h\w*\)*\%(<.\{-}>\)\=/ contained contains=razorIdentifierDot,razorGeneric
-syn match razorIdentifierDot /\%#=1\./ contained
-syn region razorGeneric matchgroup=razorcsDelimiter start=/\%#=1</ end=/\%#=1>/ contained contains=razorcsType,razorcsTypeIdentifier,razorcsModifier
-
-syn keyword razorModel model contained nextgroup=razorGenericIdentifier skipwhite
-
-syn keyword razorInject inject contained nextgroup=razorServiceIdentifier skipwhite
-syn match razorServiceIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ contained contains=razorIdentifierDot nextgroup=razorServiceAlias skipwhite
-syn match razorServiceAlias /\%#=1\h\w*/ contained
-
-syn keyword razorPage page contained nextgroup=razorString skipwhite
+syn keyword razorDirective page contained nextgroup=razorString skipwhite
 syn region razorString matchgroup=razorcsStringStart start=/\%#=1"/ matchgroup=razorcsStringEnd end=/\%#=1"/ oneline contained
 
-syn keyword razorLayout layout contained nextgroup=razorNamespaceIdentifier skipwhite
-
-syn keyword razorNamespace namespace contained nextgroup=razorNamespaceIdentifier skipwhite
-syn match razorNamespaceIdentifier /\%#=1\h\w*\%(\.\h\w*\)*/ contained contains=razorIdentifierDot
-
-syn keyword razorPreservewhitespace preservewhitespace contained nextgroup=razorBoolean skipwhite
+syn keyword razorDirective preservewhitespace contained nextgroup=razorBoolean skipwhite
 syn keyword razorBoolean true false contained
 
-syn keyword razorSection section contained nextgroup=razorSectionDeclarator skipwhite skipempty
+syn keyword razorDirective section contained nextgroup=razorSectionDeclarator skipwhite skipempty
 syn match razorSectionDeclarator /\%#=1\h\w*/ contained nextgroup=razorHTMLBlock skipwhite skipempty
 syn region razorHTMLBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=TOP fold
 
-syn keyword razorAddTagHelper addTagHelper contained nextgroup=razorTagHelperPattern skipwhite
-syn match razorTagHelperPattern /\%#=1\h\w*\%(\.\h\w*\)*\*\=/ contained contains=razorIdentifierDot nextgroup=razorTagHelperComma skipwhite
+syn keyword razorDirective addTagHelper contained nextgroup=razorTagHelperPattern skipwhite
+syn match razorTagHelperPattern /\%#=1\h\w*\%(\.\h\w*\)*\*\=/ contained nextgroup=razorTagHelperComma skipwhite
 syn match razorTagHelperPattern /\%#=1\*/ contained nextgroup=razorTagHelperComma skipwhite
-syn match razorTagHelperComma /\%#=1,/ contained nextgroup=razorNamespaceIdentifier skipwhite
+syn match razorTagHelperComma /\%#=1,/ contained nextgroup=razorTagHelperPattern skipwhite
 
-syn keyword razorRemoveTagHelper removeTagHelper contained nextgroup=razorAssemblyIdentifier skipwhite
+syn keyword razorDirective removeTagHelper contained
 
-syn keyword razorTagHelperPrefix tagHelperPrefix contained nextgroup=razorTagHelperPrefixPattern skipwhite
+syn keyword razorDirective tagHelperPrefix contained nextgroup=razorTagHelperPrefixPattern skipwhite
 syn match razorTagHelperPrefixPattern /\%#=1[[:alnum:]_:][[:alnum:]_:\-.]*/ contained
 " }}}2
 
@@ -162,15 +112,8 @@ syn match razorTagHelperPrefixPattern /\%#=1[[:alnum:]_:][[:alnum:]_:\-.]*/ cont
 hi def link razorDelimiter PreProc
 hi def link razorDelimiterEscape razorDelimiter
 hi def link razorIdentifier razorcsIdentifier
-hi def link razorGenericIdentifier razorIdentifier
-hi def link razorServiceIdentifier razorIdentifier
-hi def link razorServiceAlias razorServiceIdentifier
-hi def link razorNamespaceIdentifier razorIdentifier
-hi def link razorUsingIdentifier razorIdentifier
-hi def link razorUsingAliasOperator Operator
-hi def link razorIdentifierDot razorMemberAccessOperator
-hi def link razorTypeparamDeclarator razorIdentifier
-hi def link razorTypeparamConstraintIdentifier razorTypeparamDeclarator
+hi def link razorTypeparamDeclarator razorcsDeclarator
+hi def link razorTypeparamConstraintIdentifier razorTypeIdentifier
 hi def link razorTypeparamConstraintArgument razorTypeparamConstraintIdentifier
 hi def link razorTypeparamConstraintOperator Operator
 hi def link razorTagHelperPattern razorIdentifier
@@ -185,41 +128,14 @@ hi def link razorBoolean razorcsBoolean
 hi def link razorSectionDeclarator razorcsDeclarator
 hi def link razorHTMLEscape razorDelimiter
 hi def link razorTagHelperPrefixPattern String
-hi def link razorCaseColon razorDelimiter
-
 hi def link razorDirective PreProc
-hi def link razorAwait razorDirective
-hi def link razorIf razorDirective
-hi def link razorElse razorDirective
-hi def link razorSwitch razorDirective
-hi def link razorCase razorDirective
-hi def link razorDefault razorDirective
-hi def link razorFor razorDirective
-hi def link razorForeach razorDirective
-hi def link razorWhile razorDirective
-hi def link razorDo razorDirective
-hi def link razorUsing razorDirective
-hi def link razorTry razorDirective
-hi def link razorCatch razorDirective
-hi def link razorFinally razorDirective
-hi def link razorLock razorDirective
-hi def link razorTypeparam razorDirective
-hi def link razorWhere razorDirective
-hi def link razorAttribute razorDirective
-hi def link razorCode razorDirective
-hi def link razorFunctions razorDirective
-hi def link razorImplements razorDirective
-hi def link razorInherits razorDirective
-hi def link razorModel razorDirective
-hi def link razorInject razorDirective
-hi def link razorPage razorDirective
-hi def link razorLayout razorDirective
-hi def link razorNamespace razorDirective
-hi def link razorPreservewhitespace razorDirective
-hi def link razorSection razorDirective
-hi def link razorAddTagHelper razorDirective
-hi def link razorRemoveTagHelper razorDirective
-hi def link razorTagHelperPrefix razorDirective
+hi def link razorPostfixDirective razorDirective
+hi def link razorWhere razorPostfixDirective
+hi def link razorBoolean Boolean
+hi def link razorTypeIdentifier razorcsTypeIdentifier
+hi def link razorTypeDeclarator razorcsDeclarator
+hi def link razorTypeAliasOperator Operator
+hi def link razorTypeMemberAccessOperator razorMemberAccessOperator
 " }}}
 
 unlet s:include_path

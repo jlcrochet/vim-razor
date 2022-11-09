@@ -316,10 +316,9 @@ local function skip_line(lnum)
   local syngroup = syngroup_at(lnum, 1)
 
   return syngroup == "razorhtmlComment" or syngroup == "razorhtmlCommendEnd" or
-    syngroup == "razorhtmlCDATA" or syngroup == "razorhtmlCDATAEnd" or
     syngroup == "razorhtmlTag" and getline(lnum):byte(1) ~= 60 or
     syngroup == "razorInvocation" or syngroup == "razorcsInvocation" or syngroup == "razorcsRHSInvocation" or
-    syngroup == "razorSubscript" or syngroup == "razorcsSubscript" or syngroup == "razorcsRHSSubscript"
+    syngroup == "razorIndex" or syngroup == "razorcsIndex" or syngroup == "razorcsRHSIndex"
 end
 
 function get_razor_indent()
@@ -335,9 +334,8 @@ function get_razor_indent()
 
   if syngroup == "razorComment" or syngroup == "razorCommentEnd" or
     syngroup == "razorhtmlComment" or syngroup == "razorhtmlCommentEnd" or
-    syngroup == "razorhtmlCDATA" or syngroup == "razorhtmlCDATAEnd" or
     syngroup == "razorcsComment" or syngroup == "razorcsCommentEnd" then
-    -- Comment or CDATA:
+    -- Comment:
     -- Do nothing.
     return -1
   elseif syngroup == "razorhtmlScript" or syngroup:sub(1, 10) == "javascript" then

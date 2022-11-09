@@ -23,7 +23,6 @@ syn match razorhtmlCharacterReference /\%#=1&\%(\a\+\|#\%(\d\+\|[xX]\x\+\)\);/
 
 syn region razorhtmlComment matchgroup=razorhtmlCommentStart start=/\%#=1<!--/ matchgroup=razorhtmlCommentEnd end=/\%#=1-->/
 syn region razorhtmlDoctype start=/\%#=1<!\cdoctype[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlCharacterReference
-syn region razorhtmlCDATA matchgroup=razorhtmlCDATAStart start=/\%#=1<!\[CDATA\[/ matchgroup=razorhtmlCDATAEnd end=/\%#=1]]>/ keepend
 
 syn match razorhtmlError /\%#=1>/
 
@@ -37,7 +36,4 @@ hi def link razorhtmlComment Comment
 hi def link razorhtmlCommentStart razorhtmlComment
 hi def link razorhtmlCommentEnd razorhtmlCommentStart
 hi def link razorhtmlDoctype razorhtmlComment
-hi def link razorhtmlCDATA Special
-hi def link razorhtmlCDATAStart razorhtmlCDATA
-hi def link razorhtmlCDATAEnd razorhtmlCDATAStart
 hi def link razorhtmlError Error

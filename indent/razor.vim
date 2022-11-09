@@ -51,17 +51,15 @@ let &indentkeys = &cinkeys..",<>>"
 " =======
 let s:multiline_regions = #{
       \ razorInvocation: 1,
-      \ razorSubscript: 1,
+      \ razorIndex: 1,
       \ razorComment: 1,
       \ razorCommentEnd: 1,
       \ razorhtmlComment: 1,
       \ razorhtmlCommentEnd: 1,
-      \ razorhtmlCDATA: 1,
-      \ razorhtmlCDATAEnd: 1,
       \ razorcsInvocation: 1,
-      \ razorcsSubscript: 1,
+      \ razorcsIndex: 1,
       \ razorcsRHSInvocation: 1,
-      \ razorcsRHSSubscript: 1,
+      \ razorcsRHSIndex: 1,
       \ razorcsComment: 1,
       \ razorcsCommentEnd: 1
       \ }
@@ -142,16 +140,8 @@ function GetRazorIndent() abort
 
   let syngroup = synIDattr(synID(v:lnum, 1, 0), "name")
 
-  if syngroup ==# "razorComment" || syngroup ==# "razorCommentEnd"
-    " Razor comment:
-    " Do nothing.
-    return -1
-  elseif syngroup ==# "razorhtmlComment" || syngroup ==# "razorhtmlCommentEnd" || syngroup ==# "razorhtmlCDATA" || syngroup ==# "razorhtmlCDATAEnd"
-    " HTML comment or CDATA:
-    " Do nothing.
-    return -1
-  elseif syngroup ==# "razorcsComment" || syngroup ==# "razorcsCommentEnd"
-    " C# comment:
+  if syngroup =~# '^razor\%(html\|cs\)\=Comment\%(End\)\=$'
+    " Comment:
     " Do nothing.
     return -1
   elseif syngroup ==# "razorhtmlScript" || syngroup[:9] ==# "javascript"
