@@ -345,7 +345,7 @@ syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ 
 
 syn match razorcsDelimiterError /\%#=1[)\]}]/
 
-syn cluster razorcsBlocks contains=razorcs\a\{-}Block
+syn cluster razorcsBlocks contains=razorcs\a\{-}Block,razorcsInitializer
 
 " Highlighting {{{1
 hi def link razorcsComment Comment
@@ -437,7 +437,6 @@ hi def link razorcsEscapeSequence PreProc
 hi def link razorcsEscapeSequenceError Error
 hi def link razorcsQuoteEscape razorcsEscapeSequence
 hi def link razorcsBraceEscape razorcsEscapeSequence
-hi def link razorcsFieldInitializer razorcsDeclarator
 hi def link razorcsKeywordError Error
 hi def link razorcsAttribute razorcsIdentifier
 hi def link razorcsAttributeDelimiter PreProc
