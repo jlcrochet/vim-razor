@@ -26,7 +26,7 @@ syn cluster razorcsRHS add=razorHTMLEscape
 
 syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine nextgroup=razorIdentifier,@razorDirectives,razorBlock,razorBoolean
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag,razorInnerHTMLTag nextgroup=razorhtmlAttribute,razorExpression,razorBoolean
-syn match razorDelimiter /\%#=1@/ contained containedin=razor\a\{-}Block nextgroup=razorIdentifier,@razorDirectives,razorExpression,razorHTMLLine
+syn match razorDelimiter /\%#=1@/ contained containedin=razorBlock,razorCodeBlock nextgroup=razorIdentifier,@razorDirectives,razorExpression,razorHTMLLine
 
 syn match razorDelimiterEscape /\%#=1@@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag contains=NONE
 
@@ -52,7 +52,7 @@ syn region razorInnerHTMLTag matchgroup=razorhtmlTag start=/\%#=1<!\=style[[:spa
 
 syn region razorHTMLLine matchgroup=razorDelimiter start=/\%#=1:/ end=/\%#=1$/ keepend contained contains=razorInnerHTMLTag,razorhtmlCharacterReference
 
-syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ contains=razorcsTodo containedin=razor\a\{-}Block
+syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ contains=razorcsTodo containedin=razorBlock,razorCodeBlock,razorInnerHTMLBlock,@razorcsBlocks
 
 " Directives {{{2
 syn cluster razorDirectives contains=
