@@ -24,11 +24,11 @@ execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
 
 syn cluster razorcsRHS add=razorHTMLEscape
 
-syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine nextgroup=razorIdentifier,razorDirective,razorBlock,razorBoolean
+syn match razorDelimiter /\%#=1\w\@1<!@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,javascript\a*,css\a* nextgroup=razorIdentifier,razorDirective,razorBlock,razorBoolean
 syn match razorDelimiter /\%#=1@/ contained containedin=razorhtmlTag,razorInnerHTMLTag nextgroup=razorhtmlAttribute,razorExpression,razorBoolean
 syn match razorDelimiter /\%#=1@/ contained containedin=razorBlock nextgroup=razorIdentifier,razorDirective,razorExpression,razorHTMLLine
 
-syn match razorDelimiterEscape /\%#=1@@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag
+syn match razorDelimiterEscape /\%#=1@@/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine,razorhtmlTag,razorInnerHTMLTag,javascript\a*,css\a*
 
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end=/\%#=1)/ containedin=razorhtmlValue,razorInnerHTMLBlock,razorHTMLLine contains=@razorcsRHS
 
