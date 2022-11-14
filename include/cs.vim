@@ -334,10 +334,10 @@ syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ match
 syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,razorcsXMLTag,razorcsXMLEndTag containedin=@razorcsBlocks
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 
-syn region razorcsXMLTag matchgroup=razorcsXMLTag start=/\%#=1<[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>/ contained oneline contains=razorcsXMLAttribute
-syn match razorcsXMLEndTag /\%#=1<\/[[:alnum:]_:][[:alnum:]_:\-.]*>/ contained
+syn region razorcsXMLTag matchgroup=razorcsXMLTag start=/\%#=1<[[:alpha:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>/ contained oneline contains=razorcsXMLAttribute
+syn match razorcsXMLEndTag /\%#=1<\/[[:alpha:]_:][[:alnum:]_:\-.]*>/ contained
 
-syn match razorcsXMLAttribute /\%#=1[^"'>/=[:space:]]\+/ contained nextgroup=razorcsXMLAttributeOperator skipwhite skipempty
+syn match razorcsXMLAttribute /\%#=1[[:alpha:]_:][[:alnum:]_:\-.]*/ contained nextgroup=razorcsXMLAttributeOperator skipwhite skipempty
 syn match razorcsXMLAttributeOperator /\%#=1=/ contained nextgroup=razorcsXMLValue skipwhite skipempty
 
 syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained oneline
