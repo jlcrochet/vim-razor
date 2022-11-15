@@ -16,14 +16,14 @@ syn match razorhtmlAttributeOperator /\%#=1=/ contained nextgroup=razorhtmlValue
 
 syn match razorhtmlValue /\%#=1[^<>`[:space:]]\+/ contained contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
 
-syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
-syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlCharacterReference
+syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlCharacterReference
 
 syn match razorhtmlCharacterReferenceError /\%#=1&/
 syn match razorhtmlCharacterReference /\%#=1&\%(\a\+\|#\%(\d\+\|[xX]\x\+\)\);/
 
 syn region razorhtmlComment matchgroup=razorhtmlCommentStart start=/\%#=1<!--/ matchgroup=razorhtmlCommentEnd end=/\%#=1-->/
-syn region razorhtmlDoctype start=/\%#=1<!\cdoctype[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
+syn region razorhtmlDoctype start=/\%#=1<!\cdoctype[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlCharacterReference
 
 syn match razorhtmlError /\%#=1>/
 
