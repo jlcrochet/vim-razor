@@ -35,7 +35,7 @@ syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end
 syn region razorExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorPostfixDirective skipwhite skipempty fold
 
-syn match razorIdentifier /\%#=1\h\w*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
+syn match razorIdentifier /\%#=1\K\k*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 syn match razorMemberAccessOperator /\%#=1\./ contained nextgroup=razorIdentifier
 syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
@@ -71,17 +71,17 @@ syn keyword razorPostfixDirective while contained nextgroup=razorCondition skipw
 syn keyword razorPostfixDirective catch contained nextgroup=razorStatements skipwhite skipempty
 
 syn keyword razorDirective using contained nextgroup=razorStatements,razorTypeIdentifier skipwhite skipempty
-syn match razorTypeIdentifier /\%#=1\h\w*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric nextgroup=razorTypeAliasOperator,razorTypeMemberAccessOperator,razorTypeDeclarator skipwhite
+syn match razorTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric nextgroup=razorTypeAliasOperator,razorTypeMemberAccessOperator,razorTypeDeclarator skipwhite
 syn match razorTypeMemberAccessOperator /\%#=1\./ contained nextgroup=razorTypeIdentifier skipwhite skipempty
 syn match razorTypeAliasOperator /\%#=1=/ contained nextgroup=razorTypeIdentifier skipwhite skipempty
-syn match razorTypeDeclarator /\%#=1\h\w*/ contained
+syn match razorTypeDeclarator /\%#=1\K\k*/ contained
 
 syn keyword razorDirective typeparam contained nextgroup=razorTypeparamDeclarator skipwhite
-syn match razorTypeparamDeclarator /\%#=1\h\w*/ contained nextgroup=razorWhere skipwhite
+syn match razorTypeparamDeclarator /\%#=1\K\k*/ contained nextgroup=razorWhere skipwhite
 syn keyword razorWhere where contained nextgroup=razorTypeparamConstraintIdentifier skipwhite
-syn match razorTypeparamConstraintIdentifier /\%#=1\h\w*/ contained nextgroup=razorTypeparamConstraintOperator skipwhite
+syn match razorTypeparamConstraintIdentifier /\%#=1\K\k*/ contained nextgroup=razorTypeparamConstraintOperator skipwhite
 syn match razorTypeparamConstraintOperator /\%#=1:/ contained nextgroup=razorTypeparamConstraintArgument skipwhite
-syn match razorTypeparamConstraintArgument /\%#=1\h\w*/ contained
+syn match razorTypeparamConstraintArgument /\%#=1\K\k*/ contained
 
 syn keyword razorDirective attribute contained nextgroup=razorcsAttributes skipwhite
 
@@ -94,11 +94,11 @@ syn keyword razorDirective preservewhitespace contained nextgroup=razorBoolean s
 syn keyword razorBoolean true false contained
 
 syn keyword razorDirective section contained nextgroup=razorSectionDeclarator skipwhite skipempty
-syn match razorSectionDeclarator /\%#=1\h\w*/ contained nextgroup=razorHTMLBlock skipwhite skipempty
+syn match razorSectionDeclarator /\%#=1\K\k*/ contained nextgroup=razorHTMLBlock skipwhite skipempty
 syn region razorHTMLBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=TOP fold
 
 syn keyword razorDirective addTagHelper contained nextgroup=razorTagHelperPattern skipwhite
-syn match razorTagHelperPattern /\%#=1\h\w*\%(\.\h\w*\)*\*\=/ contained nextgroup=razorTagHelperComma skipwhite
+syn match razorTagHelperPattern /\%#=1\K\k*\%(\.\K\k*\)*\*\=/ contained nextgroup=razorTagHelperComma skipwhite
 syn match razorTagHelperPattern /\%#=1\*/ contained nextgroup=razorTagHelperComma skipwhite
 syn match razorTagHelperComma /\%#=1,/ contained nextgroup=razorTagHelperPattern skipwhite
 
