@@ -7,8 +7,6 @@ if exists("b:current_syntax")
   finish
 endif
 
-let b:main_syntax = "razor"
-
 let s:include_path = expand("<sfile>:p:h") .. "/../include"
 
 " Syntax {{{1
