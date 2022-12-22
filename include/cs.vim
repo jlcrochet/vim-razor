@@ -49,7 +49,7 @@ syn region razorcsTypeBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=
 syn keyword razorcsStatement record nextgroup=razorcsRecordName,razorcsRecordModifier skipwhite skipempty
 syn keyword razorcsRecordModifier struct class contained nextgroup=razorcsRecordName skipwhite skipempty
 syn match razorcsRecordName /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsTypeBlock,razorcsRecordProperties,razorcsTypeInheritanceOperator skipwhite skipempty
-syn region razorcsRecordProperties matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeIdentifier nextgroup=razorcsTypeBlock,razorcsTypeInheritanceOperator skipwhite skipempty
+syn region razorcsRecordProperties matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeIdentifier,razorcsAttributes nextgroup=razorcsTypeBlock,razorcsTypeInheritanceOperator skipwhite skipempty
 
 syn match razorcsDestructorSign /\%#=1\~/ contained containedin=razorcsTypeBlock nextgroup=razorcsDestructor skipwhite skipempty
 syn match razorcsDestructor /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsParameters skipwhite skipempty
