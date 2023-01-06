@@ -326,7 +326,7 @@ syn match razorcsTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=\%([*?]\.\@!\|\[.\{-}\]
 syn match razorcsTypeMemberAccessOperator /\%#=1\./ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
 syn match razorcsTypeMemberAccessOperator /\%#=1::/ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
 
-syn keyword razorcsModifier
+syn keyword razorcsModifier nextgroup=razorcsModifier,razorcsType,razorcsTypeIdentifier,razorcsStatement skipwhite skipempty
       \ abstract async
       \ const
       \ event explicit extern
@@ -340,12 +340,12 @@ syn keyword razorcsModifier
       \ unsafe
       \ virtual volatile
 
-syn keyword razorcsModifier delegate nextgroup=razorcsFunctionPointerModifier skipwhite skipempty
+syn keyword razorcsModifier delegate nextgroup=razorcsFunctionPointerModifier,razorcsModifier,razorcsType,razorcsTypeIdentifier,razorcsStatement skipwhite skipempty
 syn match razorcsFunctionPointerModifier /\%#=1\*/ contained nextgroup=razorcsGeneric,razorcsFunctionPointerManaged skipwhite skipempty
 syn keyword razorcsFunctionPointerManaged managed unmanaged contained nextgroup=razorcsGeneric,razorcsFunctionPointerTypes skipwhite skipempty
 syn region razorcsFunctionPointerTypes matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=razorcsTypeIdentifier nextgroup=razorcsGeneric skipwhite skipempty
 
-syn keyword razorcsModifier public protected private internal static nextgroup=razorcsConstructor skipwhite skipempty
+syn keyword razorcsModifier public protected private internal static nextgroup=razorcsConstructor,razorcsModifier,razorcsType,razorcsTypeIdentifier,razorcsStatement skipwhite skipempty
 syn match razorcsConstructor /\%#=1\K\k*(\@=/ contained contains=razorcsKeywordError nextgroup=razorcsConstructorParameters
 syn region razorcsConstructorParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeIdentifier,razorcsModifier,razorcsAttributes nextgroup=razorcsLambdaOperator,razorcsConstructorInheritanceOperator skipwhite skipempty
 syn match razorcsConstructorInheritanceOperator /\%#=1:/ contained nextgroup=razorcsMethodConstant skipwhite skipempty
