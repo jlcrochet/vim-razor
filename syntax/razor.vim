@@ -35,8 +35,8 @@ syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ cont
 
 syn match razorIdentifier /\%#=1\K\k*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex,razorNullForgivingOperator
 syn match razorMemberAccessOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
-syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
-syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
+syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex,razorNullForgivingOperator
+syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex,razorNullForgivingOperator
 syn match razorNullForgivingOperator /\%#=1!/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 
 syn region razorInnerHTMLTag matchgroup=razorhtmlTag start=/\%#=1<!\=[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>\@=/ contained containedin=razorcsBlock contains=razorhtmlAttribute nextgroup=razorInnerHTMLBlock,razorInnerHTMLEndBracket
