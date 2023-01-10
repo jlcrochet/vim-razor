@@ -33,10 +33,11 @@ syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1@(/ end
 syn region razorExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS
 syn region razorBlock matchgroup=razorDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=@razorcs,razorInnerHTMLTag nextgroup=razorPostfixDirective skipwhite skipempty fold
 
-syn match razorIdentifier /\%#=1\K\k*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
-syn match razorMemberAccessOperator /\%#=1\./ contained nextgroup=razorIdentifier
+syn match razorIdentifier /\%#=1\K\k*/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex,razorNullForgivingOperator
+syn match razorMemberAccessOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
 syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
+syn match razorNullForgivingOperator /\%#=1!/ contained nextgroup=razorMemberAccessOperator,razorInvocation,razorIndex
 
 syn region razorInnerHTMLTag matchgroup=razorhtmlTag start=/\%#=1<!\=[[:alnum:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>\@=/ contained containedin=razorcsBlock contains=razorhtmlAttribute nextgroup=razorInnerHTMLBlock,razorInnerHTMLEndBracket
 syn region razorInnerHTMLBlock matchgroup=razorhtmlTag start=/\%#=1>/ matchgroup=razorhtmlEndTag end=/\%#=1<\/!\=[[:alnum:]_:][[:alnum:]_:\-.]*>/ contained contains=razorInnerHTMLTag,razorhtmlCharacterReference
@@ -116,6 +117,7 @@ hi def link razorTypeparamConstraintArgument razorTypeparamConstraintIdentifier
 hi def link razorTypeparamConstraintOperator Operator
 hi def link razorTagHelperPattern razorIdentifier
 hi def link razorMemberAccessOperator razorcsMemberAccessOperator
+hi def link razorNullForgivingOperator Operator
 hi def link razorInnerHTMLTag razorhtmlTag
 hi def link razorInnerHTMLEndBracket razorhtmlTag
 hi def link razorComment Comment
