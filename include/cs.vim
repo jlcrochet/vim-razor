@@ -318,6 +318,7 @@ syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1"/ en
 syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained oneline
 
 syn match razorcsDirective /\%#=1#.*/ containedin=@razorcsBlocks
+syn region razorcsRegion matchgroup=razorcsDirective start=/\%#=1#region\>.*/ end=/\%#=1#endregion\>.*/ containedin=@razorcsBlocks,razorcsRegion transparent fold
 
 syn match razorcsTypeModifier /\%#=1[*?]/ contained nextgroup=razorcsDeclarator,razorcsTypeModifier skipwhite skipempty
 syn region razorcsTypeModifier matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsDeclarator,razorcsInitializer,razorcsTypeModifier skipwhite skipempty
