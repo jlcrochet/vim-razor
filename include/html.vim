@@ -1,7 +1,7 @@
 syn include @razorhtmljs syntax/javascript.vim | unlet! b:current_syntax
 syn include @razorhtmlcss syntax/css.vim | unlet! b:current_syntax
 
-syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<!\=\a[[:alnum:]_\-.:]*/ end=/\%#=1>/ contains=razorhtmlAttribute
+syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<!\=\a[^[:space:]/>]*/ end=/\%#=1>/ contains=razorhtmlAttribute
 
 syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<!\=script[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlAttribute nextgroup=razorhtmlScript,razorhtmlEndTag skipnl
 syn region razorhtmlScript start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\/!\=script>/ contained keepend transparent contains=@razorhtmljs
@@ -9,12 +9,12 @@ syn region razorhtmlScript start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\
 syn region razorhtmlTag matchgroup=razorhtmlTag start=/\%#=1<!\=style[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlAttribute nextgroup=razorhtmlStyle,razorhtmlEndTag skipnl
 syn region razorhtmlStyle start=/\%#=1/ matchgroup=razorhtmlEndTag end=/\%#=1<\/!\=style>/ contained transparent contains=@razorhtmlcss
 
-syn match razorhtmlEndTag /\%#=1<\/!\=\a[[:alnum:]_\-.:]*>/
+syn match razorhtmlEndTag /\%#=1<\/!\=\a[^[:space:]/>]*>/
 
-syn match razorhtmlAttribute /\%#=1[^"'>/=[:space:]]\+/ contained nextgroup=razorhtmlAttributeOperator skipwhite skipempty
+syn match razorhtmlAttribute /\%#=1[^>/=[:space:]]\+/ contained nextgroup=razorhtmlAttributeOperator skipwhite skipempty
 syn match razorhtmlAttributeOperator /\%#=1=/ contained nextgroup=razorhtmlValue skipwhite skipempty
 
-syn match razorhtmlValue /\%#=1[^<>`[:space:]]\+/ contained contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
+syn match razorhtmlValue /\%#=1[^>[:space:]]\+/ contained contains=razorhtmlCharacterReference,razorhtmlCharacterReferenceError
 
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained contains=razorhtmlCharacterReference
 syn region razorhtmlValue matchgroup=razorhtmlValueDelimiter start=/\%#=1'/ end=/\%#=1'/ contained contains=razorhtmlCharacterReference

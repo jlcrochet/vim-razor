@@ -22,6 +22,11 @@ syn keyword razorcsKeywordError contained
       \ virtual void volatile
       \ while
 
+syn match razorcsDelimiter /\%#=1,/ containedin=@razorcsExtra
+syn match razorcsDelimiter /\%#=1;/ containedin=@razorcsBlocks
+
+syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contains=@razorcs fold
+
 " LHS {{{2
 syn keyword razorcsStatement global alias
 
@@ -303,15 +308,15 @@ syn keyword razorcsLINQKeyword let contained nextgroup=razorcsDeclarator skipwhi
 syn keyword razorcsLINQKeyword in where select orderby group by ascending descending join on equals contained
 
 " Miscellaneous (high priority) {{{2
-syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=@razorcsBlocks
-syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\// contains=razorcsTodo containedin=@razorcsBlocks
-syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,razorcsXMLTag,razorcsXMLEndTag containedin=@razorcsBlocks
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\// end=/\%#=1$/ contains=razorcsTodo containedin=@razorcsExtra
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\*/ matchgroup=razorcsCommentEnd end=/\%#=1\*\// contains=razorcsTodo containedin=@razorcsExtra
+syn region razorcsComment matchgroup=razorcsCommentStart start=/\%#=1\/\/\// end=/\%#=1$/ keepend contains=razorcsTodo,razorcsXMLTag,razorcsXMLEndTag containedin=@razorcsExtra
 syn keyword razorcsTodo TODO NOTE XXX FIXME HACK TBD contained
 
-syn region razorcsXMLTag matchgroup=razorcsXMLTag start=/\%#=1<[[:alpha:]_:][[:alnum:]_:\-.]*/ end=/\%#=1>/ contained oneline contains=razorcsXMLAttribute
-syn match razorcsXMLEndTag /\%#=1<\/[[:alpha:]_:][[:alnum:]_:\-.]*>/ contained
+syn region razorcsXMLTag matchgroup=razorcsXMLTag start=/\%#=1<\a[^[:space:]/>]*/ end=/\%#=1>/ contained oneline contains=razorcsXMLAttribute
+syn match razorcsXMLEndTag /\%#=1<\/\a[^[:space:]/>]*>/ contained
 
-syn match razorcsXMLAttribute /\%#=1[[:alpha:]_:][[:alnum:]_:\-.]*/ contained nextgroup=razorcsXMLAttributeOperator skipwhite skipempty
+syn match razorcsXMLAttribute /\%#=1[^>/=[:space:]]\+/ contained nextgroup=razorcsXMLAttributeOperator skipwhite skipempty
 syn match razorcsXMLAttributeOperator /\%#=1=/ contained nextgroup=razorcsXMLValue skipwhite skipempty
 
 syn region razorcsXMLValue matchgroup=razorcsXMLValueDelimiter start=/\%#=1"/ end=/\%#=1"/ contained oneline
@@ -353,11 +358,11 @@ syn match razorcsConstructorInheritanceOperator /\%#=1:/ contained nextgroup=raz
 syn keyword razorcsMethodConstant this base contained nextgroup=razorcsMethodConstantParameters skipwhite skipempty
 syn region razorcsMethodConstantParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorcsLambdaOperator skipwhite skipempty
 
-syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contains=@razorcs fold
+syn cluster razorcsBlocks contains=razorcs\a\{-}Block
 
-syn match razorcsDelimiterError /\%#=1[)\]}]/
-
-syn cluster razorcsBlocks contains=razorcs\a\{-}Block,razorcsInitializer
+syn cluster razorcsExtra contains=
+      \ ALLBUT,
+      \ razorcsString,razorcsCharacter,razorcsComment,razorcsXML\a\{-},razorcsDirective,razorcsEscapeSequenceError
 
 " Highlighting {{{1
 hi def link razorcsComment Comment
@@ -458,6 +463,8 @@ hi def link razorcsPatternTypeMemberAccessOperator razorcsMemberAccessOperator
 hi def link razorcsPatternDeclarator razorcsDeclarator
 hi def link razorcsPatternPropertyMemberAccessOperator razorcsMemberAccessOperator
 hi def link razorcsPatternSlice razorcsOperator
+hi def link razorcsComma razorcsDelimiter
+hi def link razorcsTypeInheriteeComma razorcsComma
 " }}}1
 
 " vim:fdm=marker
