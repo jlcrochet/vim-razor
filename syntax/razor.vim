@@ -7,18 +7,16 @@ if exists("b:current_syntax")
   finish
 endif
 
-let s:include_path = expand("<sfile>:p:h") .. "/../include"
-
 " Syntax {{{1
 syn sync fromstart
 
 " NOTE: The syntax files for HTML and C# are kept in a separate
 " directory so that they don't get picked up by Vim in other contexts.
-execute "source " .. s:include_path .. "/html.vim"
+runtime include/html.vim
 
 syn match razorHTMLEscape /\%#=1@/ contained nextgroup=razorInnerHTMLTag
 
-execute "syn include @razorcs " .. s:include_path .. "/cs.vim"
+syn include @razorcs include/cs.vim
 
 syn cluster razorcsRHS add=razorHTMLEscape
 
@@ -108,8 +106,8 @@ syn match razorTagHelperPrefixPattern /\%#=1[[:alnum:]_:][[:alnum:]_:\-.]*/ cont
 " }}}2
 
 " Highlighting {{{1
-hi def link razorDelimiter PreProc
-hi def link razorDelimiterEscape razorDelimiter
+hi def link razorDelimiter Delimiter
+hi def link razorDelimiterEscape SpecialChar
 hi def link razorIdentifier razorcsIdentifier
 hi def link razorTypeparamDeclarator razorcsDeclarator
 hi def link razorTypeparamConstraintIdentifier razorTypeIdentifier
@@ -128,7 +126,7 @@ hi def link razorBoolean razorcsBoolean
 hi def link razorSectionDeclarator razorcsDeclarator
 hi def link razorHTMLEscape razorDelimiter
 hi def link razorTagHelperPrefixPattern String
-hi def link razorDirective PreProc
+hi def link razorDirective Statement
 hi def link razorPostfixDirective razorDirective
 hi def link razorWhere razorPostfixDirective
 hi def link razorBoolean Boolean
@@ -137,8 +135,6 @@ hi def link razorTypeDeclarator razorcsDeclarator
 hi def link razorTypeAliasOperator Operator
 hi def link razorTypeMemberAccessOperator razorMemberAccessOperator
 " }}}
-
-unlet s:include_path
 
 let b:current_syntax = "razor"
 

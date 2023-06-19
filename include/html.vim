@@ -32,11 +32,11 @@ hi def link razorhtmlEndTag razorhtmlTag
 hi def link razorhtmlAttribute Keyword
 hi def link razorhtmlAttributeOperator Operator
 hi def link razorhtmlValue String
-hi def link razorhtmlValueDelimiter razorhtmlValue
+hi def link razorhtmlValueDelimiter Delimiter
 hi def link razorhtmlCharacterReference SpecialChar
 hi def link razorhtmlCharacterReferenceError Error
 hi def link razorhtmlComment Comment
 hi def link razorhtmlCommentStart razorhtmlComment
 hi def link razorhtmlCommentEnd razorhtmlCommentStart
-hi def link razorhtmlDoctype razorhtmlComment
+hi def link razorhtmlDoctype PreProc
 hi def link razorhtmlError Error

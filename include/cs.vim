@@ -222,7 +222,7 @@ syn keyword razorcsBoolean true false contained nextgroup=@razorcsOperators skip
 syn keyword razorcsNull null contained nextgroup=@razorcsOperators skipwhite skipempty
 syn keyword razorcsRHSConstant this base contained nextgroup=@razorcsOperators,razorcsRHSInvocation,razorcsRHSIndex skipwhite skipempty
 
-syn match razorcsCharacter /\%#=1'\%(\\\%(x\x\{1,4}\|u\x\{4}\|U\x\{8}\|.\)\|.\)'/ contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipempty
+syn region razorcsCharacter matchgroup=razorcsCharacterDelimiter start=/\%#=1'/ end=/\%#=1'/ oneline contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipempty
 
 syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1"/    matchgroup=razorcsStringEnd end=/\%#=1"\%(u8\)\=/ contained oneline contains=razorcsEscapeSequence,razorcsEscapeSequenceError nextgroup=@razorcsOperators skipwhite skipempty
 syn region razorcsString matchgroup=razorcsStringStart start=/\%#=1\$"/  matchgroup=razorcsStringEnd end=/\%#=1"\%(u8\)\=/ contained oneline contains=razorcsBraceEscape,razorcsEscapeSequence,razorcsEscapeSequenceError,razorcsStringInterpolation,razorcsStringInterpolationError nextgroup=@razorcsOperators skipwhite skipempty
@@ -438,10 +438,11 @@ hi def link razorcsNumber Number
 hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant
 hi def link razorcsCharacter Character
+hi def link razorcsCharacterDelimiter razorcsDelimiter
 hi def link razorcsString String
-hi def link razorcsStringStart razorcsString
+hi def link razorcsStringStart razorcsDelimiter
 hi def link razorcsStringEnd razorcsStringStart
-hi def link razorcsStringInterpolationDelimiter PreProc
+hi def link razorcsStringInterpolationDelimiter razorcsDelimiter
 hi def link razorcsStringInterpolationError Error
 hi def link razorcsEscapeSequence PreProc
 hi def link razorcsEscapeSequenceError Error
@@ -449,14 +450,13 @@ hi def link razorcsQuoteEscape razorcsEscapeSequence
 hi def link razorcsBraceEscape razorcsEscapeSequence
 hi def link razorcsKeywordError Error
 hi def link razorcsAttribute razorcsIdentifier
-hi def link razorcsAttributeDelimiter PreProc
-hi def link razorcsDelimiterError Error
+hi def link razorcsAttributeDelimiter razorcsDelimiter
 hi def link razorcsXMLTag PreProc
 hi def link razorcsXMLEndTag razorcsXMLTag
 hi def link razorcsXMLAttribute Keyword
 hi def link razorcsXMLAttributeOperator Operator
 hi def link razorcsXMLValue String
-hi def link razorcsXMLValueDelimiter razorcsXMLValue
+hi def link razorcsXMLValueDelimiter razorcsDelimiter
 hi def link razorcsPatternType razorcsType
 hi def link razorcsPatternTypeIdentifier razorcsTypeIdentifier
 hi def link razorcsPatternTypeMemberAccessOperator razorcsMemberAccessOperator
