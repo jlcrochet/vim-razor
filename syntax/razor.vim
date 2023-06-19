@@ -55,7 +55,8 @@ syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup
 syn keyword razorDirective await contained nextgroup=razorIdentifier skipwhite skipempty
 
 syn keyword razorDirective if while switch lock contained nextgroup=razorCondition skipwhite skipempty
-syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorBlock skipwhite skipempty
+syn region razorCondition matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorBlock,razorSemicolon skipwhite skipempty
+syn match razorSemicolon /\%#=1;/ contained
 
 syn keyword razorDirective for foreach contained nextgroup=razorStatements skipwhite skipempty
 syn region razorStatements matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
@@ -106,7 +107,7 @@ syn match razorTagHelperPrefixPattern /\%#=1[[:alnum:]_:][[:alnum:]_:\-.]*/ cont
 " }}}2
 
 " Highlighting {{{1
-hi def link razorDelimiter Delimiter
+hi def link razorDelimiter PreProc
 hi def link razorDelimiterEscape SpecialChar
 hi def link razorIdentifier razorcsIdentifier
 hi def link razorTypeparamDeclarator razorcsDeclarator
@@ -134,6 +135,7 @@ hi def link razorTypeIdentifier razorcsTypeIdentifier
 hi def link razorTypeDeclarator razorcsDeclarator
 hi def link razorTypeAliasOperator Operator
 hi def link razorTypeMemberAccessOperator razorMemberAccessOperator
+hi def link razorSemicolon Delimiter
 " }}}
 
 let b:current_syntax = "razor"
