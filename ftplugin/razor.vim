@@ -1,7 +1,7 @@
 " Vim ftplugin file
-" Language: Razor (docs.microsoft.com/en-us/aspnet/core/mvc/views/razor)
+" Language: Razor (https://docs.microsoft.com/en-us/aspnet/core/mvc/views/razor)
 " Author: Jeffrey Crochet <jlcrochet91@pm.me>
-" URL: github.com/jlcrochet/vim-razor
+" URL: https://github.com/jlcrochet/vim-razor
 
 " Only do this when not done yet for this buffer
 if get(b:, "did_ftplugin")
@@ -13,9 +13,9 @@ let b:did_ftplugin = 1
 runtime! ftplugin/html.vim
 
 setlocal
-      \ comments=s1:@*,mb:*,ex:*@,:///,://
-      \ commentstring=@*\ %s\ *@
-      \ suffixesadd=.cshtml,.razor
+    \ comments=s1:@*,mb:*,ex:*@,:///,://
+    \ commentstring=@*\ %s\ *@
+    \ suffixesadd=.cshtml,.razor
 
 let b:undo_ftplugin = "setlocal comments< commentstring< suffixesadd<"
 
