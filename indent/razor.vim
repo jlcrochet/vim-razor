@@ -147,10 +147,15 @@ function s:html_indent() abort
     endif
 
     let [b, t, o, c] = s:get_html_line_info(s:prev_lnum)
+
     let brackets += b
     let tags += t
     let closers -= o
     let closers += c
+  endwhile
+
+  while s:is_multiline(s:syn_name_at(s:prev_lnum, 1))
+    let s:prev_lnum = prevnonblank(s:prev_lnum - 1)
   endwhile
 
   if tags > 0
