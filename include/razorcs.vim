@@ -264,7 +264,7 @@ syn match razorcsOperator /\%#=1:/ contained nextgroup=@razorcsRHS,razorcsStatem
 syn match razorcsOperator /\%#=1::/ contained nextgroup=razorcsRHSIdentifier skipwhite skipempty
 
 syn region razorcsRHSGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS,razorcsRHSTypeIdentifier nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipempty
-syn match razorcsRHSTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=\%([*?]\.\@!\|\[.\{-}\]\)*/ contained contains=razorcsType,razorcsKeywordError,razorcsGeneric,razorcsTypeModifier nextgroup=@razorcsOperators,razorcsRHSGroup,razorcsRHSIndex skipwhite skipempty
+syn match razorcsRHSTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=\%([*?]\.\@!\|\[.\{-}\]\)*/ contained contains=razorcsType,razorcsKeywordError,razorcsGeneric,razorcsTypeModifier nextgroup=@razorcsOperators,razorcsRHSGroup,razorcsRHSIndex,razorcsDeclarator skipwhite skipempty
 
 syn keyword razorcsOperatorKeyword as contained nextgroup=razorcsRHSTypeIdentifier skipwhite skipempty
 syn keyword razorcsOperatorKeyword in when contained nextgroup=@razorcsRHS skipwhite skipempty
