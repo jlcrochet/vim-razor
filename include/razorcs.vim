@@ -180,7 +180,7 @@ syn cluster razorcsLiterals contains=
 syn cluster razorcsRHS contains=
       \ @razorcsLiterals,
       \ razorcsUnaryOperator,razorcsUnaryOperatorKeyword,razorcsRHSIdentifier,razorcsRHSType,
-      \ razorcsRHSGroup,razorcsFunctionKeyword,razorcsRHSAttributes,razorcsLINQExpression
+      \ razorcsRHSGroup,razorcsRHSAttributes,razorcsLINQExpression
 
 syn cluster razorcsOperators contains=razorcsOperator,razorcsOperatorKeyword,razorcsComment
 
@@ -198,6 +198,9 @@ syn keyword razorcsUnaryOperatorKeyword throw nextgroup=@razorcsRHS skipwhite sk
 syn keyword razorcsUnaryOperatorKeyword static contained nextgroup=razorcsRHSType,razorcsRHSIdentifier skipwhite skipempty
 syn keyword razorcsUnaryOperatorKeyword delegate contained nextgroup=razorcsFunctionPointerModifier skipwhite skipempty
 syn keyword razorcsUnaryOperatorKeyword not contained nextgroup=@razorcsPatterns skipwhite skipempty
+
+syn keyword razorcsUnaryOperatorKeyword default contained nextgroup=razorcsRHSInvocation,@razorcsOperators skipwhite skipempty
+syn keyword razorcsUnaryOperatorKeyword typeof checked unchecked sizeof nameof contained nextgroup=razorcsRHSInvocation skipwhite skipempty
 
 syn keyword razorcsUnaryOperatorKeyword var contained nextgroup=razorcsRHSDeclarator,razorcsRHSTupleDeclarator skipwhite skipempty
 syn match razorcsRHSDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=@razorcsOperators skipwhite skipempty
@@ -297,8 +300,6 @@ syn region razorcsPatternList matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\
 syn match razorcsPatternSlice /\%#=1\.\./ contained
 
 syn keyword razorcsOperatorKeyword with contained nextgroup=razorcsInitializer skipwhite skipempty
-
-syn keyword razorcsFunctionKeyword typeof default checked unchecked sizeof nameof contained nextgroup=razorcsRHSInvocation skipwhite skipempty
 
 syn region razorcsRHSAttributes matchgroup=razorcsAttributeDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=razorcsAttribute nextgroup=@razorcsRHS,@razorcsOperators skipwhite skipempty
 syn region razorcsIndexSetter matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=razorcsAssignmentOperator skipwhite skipempty
@@ -435,7 +436,6 @@ hi def link razorcsRHSIdentifier razorcsIdentifier
 hi def link razorcsRHSType razorcsType
 hi def link razorcsLINQKeyword Keyword
 hi def link razorcsUnaryOperator razorcsOperator
-hi def link razorcsFunctionKeyword Keyword
 hi def link razorcsNumber Number
 hi def link razorcsBoolean Boolean
 hi def link razorcsNull Constant
