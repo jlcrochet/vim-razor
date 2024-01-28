@@ -42,7 +42,7 @@ hi def link razorhtmlAttributeOperator Operator
 hi def link razorhtmlValue String
 hi def link razorhtmlValueDelimiter razorhtmlDelimiter
 
-syn match razorhtmlTagName /\%#=1\%(area\|base\|br\|col\|embed\|hr\|input\|link\|meta\|param\|source\|track\|wbr\)[[:space:]/>]\@=/ contained nextgroup=razorhtmlNoBlockAttribute,razorhtmlRazorNoBlockAttribute,razorhtmlTagEnd skipwhite skipempty
+syn match razorhtmlTagName /\%#=1\%(area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\)[[:space:]/>]\@=/ contained nextgroup=razorhtmlNoBlockAttribute,razorhtmlRazorNoBlockAttribute,razorhtmlTagEnd skipwhite skipempty
 syn match razorhtmlNoBlockAttribute /\%#=1[^[:space:]/>=]\+/ contained nextgroup=razorhtmlTagEnd,razorhtmlNoBlockAttribute,razorhtmlRazorNoBlockAttribute,razorhtmlNoBlockAttributeOperator skipwhite skipempty
 syn match razorhtmlNoBlockAttributeOperator /\%#=1=/ contained nextgroup=razorhtmlNoBlockValue skipwhite skipempty
 syn match razorhtmlNoBlockValue /\%#=1[^>=[:space:]]\+/ contained contains=razorhtmlCharacterReference nextgroup=razorhtmlNoBlockAttribute,razorhtmlRazorNoBlockAttribute,razorhtmlTagEnd skipwhite skipempty
@@ -198,7 +198,7 @@ syn keyword razorInherits inherits contained nextgroup=razorTypeIdentifier skipw
 syn keyword razorModel model contained nextgroup=razorTypeIdentifier skipwhite
 
 syn keyword razorInject inject contained nextgroup=razorInjectIdentifier skipwhite
-syn match razorInjectIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorInjectDeclarator skipwhite
+syn match razorInjectIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError nextgroup=razorInjectDeclarator skipwhite
 syn match razorInjectDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError
 
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite

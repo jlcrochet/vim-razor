@@ -238,9 +238,12 @@ function s:is_void_element(name) abort
       \ a:name ==? 'base' ||
       \ a:name ==? 'br' ||
       \ a:name ==? 'col' ||
+      \ a:name ==? 'command' ||
       \ a:name ==? 'embed' ||
       \ a:name ==? 'hr' ||
+      \ a:name ==? 'img' ||
       \ a:name ==? 'input' ||
+      \ a:name ==? 'keygen' ||
       \ a:name ==? 'link' ||
       \ a:name ==? 'meta' ||
       \ a:name ==? 'param' ||
