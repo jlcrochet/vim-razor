@@ -125,7 +125,7 @@ function GetRazorIndent() abort
         return s:js_indent()
       elseif name ==# 'razorhtmlStyleBlock'
         return s:css_indent()
-      elseif name ==# 'razorInvocation' || name ==# 'razorIndex' || name ==# 'razorExplicitExpression' || name ==# 'razorcsAttributes'
+      elseif name ==# 'razorInvocation' || name ==# 'razorIndex' || name ==# 'razorExplicitExpression' || name ==# 'razorcsCollectionOrAttributes'
         return cindent(v:lnum)
       elseif name ==# 'razorBlock' || name ==# 'razorcsTypeBlock'
         return s:cs_indent()
@@ -270,7 +270,7 @@ function s:cs_indent() abort
   endwhile
 
   if first_char ==# '[' || first_char ==# ']'
-    if s:syn_name_at(s:prev_lnum, first_idx + 1) ==# 'razorcsAttributeDelimiter'
+    if s:syn_name_at(s:prev_lnum, first_idx + 1) ==# 'razorcsDelimiter'
       return indent(s:prev_lnum)
     endif
   elseif first_char ==# '}'

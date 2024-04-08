@@ -119,7 +119,7 @@ syn match razorStart /\%#=1@/ contained containedin=razorcsBlock nextgroup=razor
 syn match razorHTMLLineStart /\%#=1@:/ contained containedin=razorBlock nextgroup=razorHTMLLine
 syn match razorHTMLLine /\%#=1.*/ contained contains=TOP
 
-syn match razorRHSStart /\%#=1@/ contained nextgroup=razorhtmlTagStart
+syn match razorRHSStart /\%#=1@[$"]\@!/ contained nextgroup=razorhtmlTagStart
 syn cluster razorcsRHS add=razorRHSStart
 
 syn match razorStartEscape /\%#=1@/ contained
