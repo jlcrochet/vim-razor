@@ -36,17 +36,17 @@ syn region razorcsTypeConstructorParameters matchgroup=razorcsDelimiter start=/\
 syn region razorcsGenericParameters matchgroup=razorcsDelimiter start=/\%#=1</ end=/\%#=1>/ contained oneline contains=razorcsGenericParameter,razorcsModifier nextgroup=razorcsTypeBlock skipwhite skipempty
 syn match razorcsGenericParameter /\%#=1\K\k*/ contained contains=razorcsKeywordError
 syn match razorcsTypeInheritanceOperator /\%#=1:/ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
-syn match razorcsTypeInheritee /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGeneric nextgroup=razorcsTypeBlock,razorcsTypeInheriteeFieldOperator,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeInheriteeArguments,razorcsTypeConstraintModifier skipwhite skipempty
+syn match razorcsTypeInheritee /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGeneric nextgroup=razorcsTypeBlock,razorcsTypeInheriteeMemberOperator,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeInheriteeArguments,razorcsTypeConstraintModifier skipwhite skipempty
 syn keyword razorcsTypeInheriteeKeyword contained nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeConstraintModifier skipwhite skipempty
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
       \ class struct enum default notnull
-syn match razorcsTypeConstraintModifier /\%#=1?/ contained nextgroup=razorcsTypeInheriteeFieldOperator,razorcsTypeInheriteeComma,razorcsTypeConstraint skipwhite skipempty
+syn match razorcsTypeConstraintModifier /\%#=1?/ contained nextgroup=razorcsTypeInheriteeMemberOperator,razorcsTypeInheriteeComma,razorcsTypeConstraint skipwhite skipempty
 syn keyword razorcsTypeInheriteeKeyword new contained nextgroup=razorcsTypeInheriteeArguments,razorcsTypeInheritee skipwhite skipempty
 syn keyword razorcsTypeInheriteeKeyword managed unmanaged contained nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma skipwhite skipempty
 syn region razorcsTypeInheriteeArguments matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeVariable nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeConstraintLambdaOperator skipwhite skipempty
 syn match razorcsTypeConstraintLambdaOperator /\%#=1=>/ contained nextgroup=razorcsTypeInheriteeKeyword skipwhite skipempty
-syn match razorcsTypeInheriteeFieldOperator /\%#=1\./ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
+syn match razorcsTypeInheriteeMemberOperator /\%#=1\./ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
 syn match razorcsTypeInheriteeComma /\%#=1,/ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
 syn keyword razorcsTypeConstraint where contained nextgroup=razorcsTypeVariable skipwhite skipempty
 syn match razorcsTypeVariable /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsTypeInheritanceOperator skipwhite skipempty
@@ -111,7 +111,7 @@ syn keyword razorcsConversionMethodKeyword contained nextgroup=razorcsParameters
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
 
-syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsFieldOperator,razorcsInvocation,razorcsTypeModifier,razorcsOperatorModifier skipwhite skipempty
+syn keyword razorcsType nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsMemberOperator,razorcsInvocation,razorcsTypeModifier,razorcsOperatorModifier skipwhite skipempty
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
 
@@ -128,9 +128,9 @@ syn keyword razorcsConstant this base nextgroup=@razorcsOperators,razorcsInvocat
 syn keyword razorcsIndexerThis this contained nextgroup=razorcsIndexerParameters skipwhite skipempty
 syn region razorcsIndexerParameters matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=razorcsTypeIdentifier,razorcsModifier nextgroup=razorcsPropertyBlock,razorcsLambdaOperator skipwhite skipempty
 
-syn match razorcsDeclarator /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGenericParameters nextgroup=razorcsAssignmentOperator,razorcsLambdaOperator,razorcsParameters,razorcsPropertyBlock,razorcsDeclaratorFieldOperator,razorcsOperatorKeyword skipwhite skipempty
+syn match razorcsDeclarator /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGenericParameters nextgroup=razorcsAssignmentOperator,razorcsLambdaOperator,razorcsParameters,razorcsPropertyBlock,razorcsDeclaratorMemberOperator,razorcsOperatorKeyword skipwhite skipempty
 syn match razorcsNotDeclarator /\%#=1\<\K\k*\%(<.\{-}>\)\=\ze\s*\./ contained containedin=razorcsDeclarator contains=razorcsGeneric
-syn match razorcsDeclaratorFieldOperator /\%#=1\./ contained nextgroup=razorcsDeclarator,razorcsIdentifier,razorcsIndexerThis skipwhite skipempty
+syn match razorcsDeclaratorMemberOperator /\%#=1\./ contained nextgroup=razorcsDeclarator,razorcsIdentifier,razorcsIndexerThis skipwhite skipempty
 syn region razorcsParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeIdentifier,razorcsModifier,razorcsThisModifier,razorcsTypeTuple,razorcsCollectionExpressionOrAttributes nextgroup=razorcsLambdaOperator,razorcsBlock,razorcsMethodTypeConstraint skipwhite skipempty
 syn keyword razorcsThisModifier this contained
 syn region razorcsPropertyBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=razorcsAccessor,razorcsModifier nextgroup=razorcsAssignmentOperator skipwhite skipempty fold
@@ -138,17 +138,17 @@ syn keyword razorcsAccessor get set init add remove contained nextgroup=razorcsB
 syn match razorcsDeclaratorComma /\%#=1,/ nextgroup=razorcsDeclarator skipwhite skipempty
 
 syn match razorcsMethodTypeInheritanceOperator /\%#=1:/ contained nextgroup=razorcsMethodTypeInheritee,razorcsMethodTypeInheriteeKeyword skipwhite skipempty
-syn match razorcsMethodTypeInheritee /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGeneric nextgroup=razorcsMethodTypeInheriteeFieldOperator,razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsMethodTypeConstraintModifier,razorcsMethodTypeInheriteeArguments,razorcsLambdaOperator skipwhite skipempty
+syn match razorcsMethodTypeInheritee /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGeneric nextgroup=razorcsMethodTypeInheriteeMemberOperator,razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsMethodTypeConstraintModifier,razorcsMethodTypeInheriteeArguments,razorcsLambdaOperator skipwhite skipempty
 syn keyword razorcsMethodTypeInheriteeKeyword contained nextgroup=razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsMethodTypeConstraintModifier,razorcsMethodTypeConstraintLambdaOperator skipwhite skipempty
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
       \ class struct enum default notnull
-syn match razorcsMethodTypeConstraintModifier /\%#=1?/ contained nextgroup=razorcsMethodTypeInheriteeFieldOperator,razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsLambdaOperator skipwhite skipempty
+syn match razorcsMethodTypeConstraintModifier /\%#=1?/ contained nextgroup=razorcsMethodTypeInheriteeMemberOperator,razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsLambdaOperator skipwhite skipempty
 syn keyword razorcsMethodTypeInheriteeKeyword new contained nextgroup=razorcsMethodTypeInheriteeArguments,razorcsMethodTypeInheritee skipwhite skipempty
 syn keyword razorcsMethodTypeInheriteeKeyword managed unmanaged contained nextgroup=razorcsMethodTypeInheriteeComma,razorcsLambdaOperator skipwhite skipempty
 syn region razorcsMethodTypeInheriteeArguments matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained nextgroup=razorcsMethodTypeInheriteeComma,razorcsMethodTypeConstraint,razorcsMethodTypeConstraintLambdaOperator skipwhite skipempty
 syn match razorcsMethodTypeConstraintLambdaOperator /\%#=1=>/ contained nextgroup=razorcsMethodTypeInheriteeKeyword skipwhite skipempty
-syn match razorcsMethodTypeInheriteeFieldOperator /\%#=1\./ contained nextgroup=razorcsMethodTypeInheritee,razorcsMethodTypeInheriteeKeyword skipwhite skipempty
+syn match razorcsMethodTypeInheriteeMemberOperator /\%#=1\./ contained nextgroup=razorcsMethodTypeInheritee,razorcsMethodTypeInheriteeKeyword skipwhite skipempty
 syn match razorcsMethodTypeInheriteeComma /\%#=1,/ contained nextgroup=razorcsMethodTypeInheritee,razorcsMethodTypeInheriteeKeyword skipwhite skipempty
 syn keyword razorcsMethodTypeConstraint where contained nextgroup=razorcsMethodTypeVariable skipwhite skipempty
 syn match razorcsMethodTypeVariable /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsMethodTypeInheritanceOperator skipwhite skipempty
@@ -163,11 +163,11 @@ syn match razorcsAssignmentOperator /\%#=1=/ contained nextgroup=@razorcsRHS,raz
 
 syn match razorcsLambdaOperator /\%#=1=>/ contained nextgroup=@razorcsRHS,razorcsBlock skipwhite skipempty
 
-syn match razorcsFieldOperator /\%#=1?\=\./ contained nextgroup=razorcsIdentifier,razorcsConstant skipwhite skipempty
-syn match razorcsFieldOperator /\%#=1->/ contained nextgroup=razorcsIdentifier skipwhite skipempty
-syn match razorcsFieldOperator /\%#=1::/ contained nextgroup=razorcsIdentifier skipwhite skipempty
+syn match razorcsMemberOperator /\%#=1?\=\./ contained nextgroup=razorcsIdentifier,razorcsConstant skipwhite skipempty
+syn match razorcsMemberOperator /\%#=1->/ contained nextgroup=razorcsIdentifier skipwhite skipempty
+syn match razorcsMemberOperator /\%#=1::/ contained nextgroup=razorcsIdentifier skipwhite skipempty
 
-syn match razorcsNullForgivingOperator /\%#=1!/ contained nextgroup=razorcsFieldOperator,razorcsInvocation,razorcsIndex skipwhite skipempty
+syn match razorcsNullForgivingOperator /\%#=1!/ contained nextgroup=razorcsMemberOperator,razorcsInvocation,razorcsIndex skipwhite skipempty
 
 syn match razorcsIncrementOperator /\%#=1++/
 syn match razorcsDecrementOperator /\%#=1--/
@@ -208,7 +208,7 @@ syn keyword razorcsUnaryOperatorKeyword var contained nextgroup=razorcsRHSDeclar
 syn match razorcsRHSDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=@razorcsOperators skipwhite skipempty
 syn region razorcsRHSTupleDeclarator matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsRHSDeclarator nextgroup=@razorcsOperators skipwhite skipempty
 
-syn keyword razorcsRHSType contained nextgroup=razorcsFieldOperator,razorcsRHSGroup,razorcsRHSIndex,razorcsRHSDeclarator,razorcsTypeModifier,razorcsOperatorKeyword skipwhite skipempty
+syn keyword razorcsRHSType contained nextgroup=razorcsMemberOperator,razorcsRHSGroup,razorcsRHSIndex,razorcsRHSDeclarator,razorcsTypeModifier,razorcsOperatorKeyword skipwhite skipempty
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
 
@@ -280,22 +280,22 @@ syn region razorcsPatternBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\
 
 syn cluster razorcsPatterns contains=razorcsPatternType,razorcsPatternTypeIdentifier,razorcsUnaryOperatorKeyword,@razorcsLiterals,razorcsOperator,razorcsPatternGroup,razorcsPatternProperties,razorcsPatternList
 
-syn keyword razorcsPatternType contained nextgroup=razorcsPatternDeclarator,razorcsPatternTypeFieldOperator,razorcsPatternGroup,razorcsPatternProperties,razorcsOperatorKeyword skipwhite skipempty
+syn keyword razorcsPatternType contained nextgroup=razorcsPatternDeclarator,razorcsPatternTypeMemberOperator,razorcsPatternGroup,razorcsPatternProperties,razorcsOperatorKeyword skipwhite skipempty
       \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
       \ char bool object string void dynamic
 
-syn match razorcsPatternTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError nextgroup=razorcsPatternDeclarator,razorcsLambdaOperator,razorcsPatternTypeFieldOperator,razorcsPatternGroup,razorcsPatternProperties,razorcsOperatorKeyword skipwhite skipempty
+syn match razorcsPatternTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError nextgroup=razorcsPatternDeclarator,razorcsLambdaOperator,razorcsPatternTypeMemberOperator,razorcsPatternGroup,razorcsPatternProperties,razorcsOperatorKeyword skipwhite skipempty
 
-syn match razorcsPatternTypeFieldOperator /\%#=1\./ contained nextgroup=razorcsPatternTypeIdentifier skipwhite skipempty
+syn match razorcsPatternTypeMemberOperator /\%#=1\./ contained nextgroup=razorcsPatternTypeIdentifier skipwhite skipempty
 
 syn match razorcsPatternDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=@razorcsOperators skipwhite skipempty
 
 syn region razorcsPatternGroup matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsPatterns nextgroup=@razorcsOperators,razorcsPatternDeclarator,razorcsPatternProperties skipwhite skipempty
 
 syn region razorcsPatternProperties matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contained contains=razorcsPatternProperty nextgroup=@razorcsOperators,razorcsPatternDeclarator skipwhite skipempty
-syn match razorcsPatternProperty /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsPatternPropertyColon,razorcsPatternPropertyFieldOperator skipwhite skipempty
+syn match razorcsPatternProperty /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsPatternPropertyColon,razorcsPatternPropertyMemberOperator skipwhite skipempty
 syn match razorcsPatternPropertyColon /\%#=1:/ contained nextgroup=@razorcsPatterns skipwhite skipempty
-syn match razorcsPatternPropertyFieldOperator /\%#=1\./ contained nextgroup=razorcsPatternProperty skipwhite skipempty
+syn match razorcsPatternPropertyMemberOperator /\%#=1\./ contained nextgroup=razorcsPatternProperty skipwhite skipempty
 
 syn region razorcsPatternList matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsPatterns,razorcsPatternSlice,razorcsPatternListVar nextgroup=@razorcsOperators skipwhite skipempty
 syn match razorcsPatternSlice /\%#=1\.\./ contained
@@ -334,9 +334,9 @@ syn region razorcsRegion matchgroup=razorcsDirective start=/\%#=1#region\>.*/ en
 syn match razorcsTypeModifier /\%#=1[*?]/ contained nextgroup=razorcsDeclarator,razorcsTypeModifier skipwhite skipempty
 syn region razorcsTypeModifier matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1\]/ contained contains=@razorcsRHS nextgroup=razorcsDeclarator,razorcsInitializer,razorcsTypeModifier skipwhite skipempty
 
-syn match razorcsTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=\%([*?]\.\@!\|\[.\{-}\]\)*/ contained contains=razorcsType,razorcsKeywordError,razorcsGeneric,razorcsTypeModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsTypeFieldOperator,razorcsOperatorModifier skipwhite skipempty
-syn match razorcsTypeFieldOperator /\%#=1\./ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
-syn match razorcsTypeFieldOperator /\%#=1::/ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
+syn match razorcsTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=\%([*?]\.\@!\|\[.\{-}\]\)*/ contained contains=razorcsType,razorcsKeywordError,razorcsGeneric,razorcsTypeModifier nextgroup=razorcsDeclarator,razorcsIndexerThis,razorcsTypeMemberOperator,razorcsOperatorModifier skipwhite skipempty
+syn match razorcsTypeMemberOperator /\%#=1\./ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
+syn match razorcsTypeMemberOperator /\%#=1::/ contained nextgroup=razorcsTypeIdentifier skipwhite skipempty
 
 syn match razorcsConstructor /\%#=1\K\k*(\@=/ contained contains=razorcsKeywordError nextgroup=razorcsConstructorParameters
 syn region razorcsConstructorParameters matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsType,razorcsTypeIdentifier,razorcsModifier,razorcsCollectionExpressionOrAttributes nextgroup=razorcsLambdaOperator,razorcsConstructorInheritanceOperator skipwhite skipempty
@@ -386,13 +386,13 @@ hi def link razorcsRecordModifier razorcsStatement
 hi def link razorcsGenericParameter razorcsDeclarator
 hi def link razorcsTypeInheritanceOperator razorcsOperator
 hi def link razorcsTypeConstraintLambdaOperator razorcsOperator
-hi def link razorcsTypeInheriteeFieldOperator razorcsFieldOperator
+hi def link razorcsTypeInheriteeMemberOperator razorcsMemberOperator
 hi def link razorcsTypeConstraint razorcsStatement
 hi def link razorcsTypeConstraintModifier razorcsTypeModifier
 hi def link razorcsTypeInheriteeKeyword Keyword
 hi def link razorcsMethodTypeInheritanceOperator razorcsTypeInheritanceOperator
 hi def link razorcsMethodTypeConstraintLambdaOperator razorcsTypeConstraintLambdaOperator
-hi def link razorcsMethodTypeInheriteeFieldOperator razorcsTypeInheriteeFieldOperator
+hi def link razorcsMethodTypeInheriteeMemberOperator razorcsTypeInheriteeMemberOperator
 hi def link razorcsMethodTypeConstraint razorcsTypeConstraint
 hi def link razorcsMethodTypeInheriteeKeyword razorcsTypeInheriteeKeyword
 hi def link razorcsMethodTypeConstraintModifier razorcsTypeConstraintModifier
@@ -416,10 +416,10 @@ hi def link razorcsType Type
 hi def link razorcsTypeModifier razorcsOperator
 hi def link razorcsTypeIdentifier razorcsIdentifier
 hi def link razorcsRHSTypeIdentifier razorcsTypeIdentifier
-hi def link razorcsTypeFieldOperator razorcsFieldOperator
+hi def link razorcsTypeMemberOperator razorcsMemberOperator
 hi def link razorcsDeclarator Identifier
 hi def link razorcsNotDeclarator razorcsIdentifier
-hi def link razorcsDeclaratorFieldOperator razorcsFieldOperator
+hi def link razorcsDeclaratorMemberOperator razorcsMemberOperator
 hi def link razorcsConstructor razorcsDeclarator
 hi def link razorcsConstructorInheritanceOperator razorcsOperator
 hi def link razorcsDestructorSign razorcsOperator
@@ -431,7 +431,7 @@ hi def link razorcsIndexerThis razorcsConstant
 hi def link razorcsThisModifier razorcsConstant
 hi def link razorcsOperator Operator
 hi def link razorcsAssignmentOperator razorcsOperator
-hi def link razorcsFieldOperator razorcsOperator
+hi def link razorcsMemberOperator razorcsOperator
 hi def link razorcsNullForgivingOperator razorcsOperator
 hi def link razorcsLambdaOperator razorcsOperator
 hi def link razorcsAccessor razorcsStatement
@@ -468,9 +468,9 @@ hi def link razorcsXMLValue String
 hi def link razorcsXMLValueDelimiter razorcsDelimiter
 hi def link razorcsPatternType razorcsType
 hi def link razorcsPatternTypeIdentifier razorcsTypeIdentifier
-hi def link razorcsPatternTypeFieldOperator razorcsFieldOperator
+hi def link razorcsPatternTypeMemberOperator razorcsMemberOperator
 hi def link razorcsPatternDeclarator razorcsDeclarator
-hi def link razorcsPatternPropertyFieldOperator razorcsFieldOperator
+hi def link razorcsPatternPropertyMemberOperator razorcsMemberOperator
 hi def link razorcsPatternSlice razorcsOperator
 hi def link razorcsDeclaratorComma razorcsDelimiter
 hi def link razorcsTypeInheriteeComma razorcsDeclaratorComma

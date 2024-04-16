@@ -126,10 +126,10 @@ syn match razorStartEscape /\%#=1@/ contained
 
 syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ containedin=@razorcsExtra
 
-syn match razorIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorFieldOperator,razorInvocation,razorIndex
-syn match razorFieldOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
-syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorFieldOperator,razorInvocation,razorIndex
-syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=razorFieldOperator,razorInvocation,razorIndex
+syn match razorIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorMemberOperator,razorInvocation,razorIndex
+syn match razorMemberOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
+syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
+syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn keyword razorTypeof typeof contained nextgroup=razorInvocation
 
 syn region razorExplicitExpression matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS
@@ -140,7 +140,7 @@ hi def link razorStart PreProc
 hi def link razorStartEscape razorStart
 hi def link razorRHSStart razorStart
 hi def link razorIdentifier razorcsIdentifier
-hi def link razorFieldOperator razorcsFieldOperator
+hi def link razorMemberOperator razorcsMemberOperator
 hi def link razorDelimiter Delimiter
 hi def link razorComment Comment
 hi def link razorCommentStart razorComment
@@ -191,14 +191,15 @@ syn keyword razorCode code contained nextgroup=razorcsTypeBlock skipwhite skipem
 syn keyword razorFunctions functions contained nextgroup=razorcsTypeBlock skipwhite skipempty
 
 syn keyword razorImplements implements contained nextgroup=razorTypeIdentifier skipwhite
-syn match razorTypeIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError
+syn match razorTypeIdentifier /\%#=1\K\k*\%(\.\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator
+syn match razorExtraMemberOperator /\%#=1\./ contained
 
 syn keyword razorInherits inherits contained nextgroup=razorTypeIdentifier skipwhite
 
 syn keyword razorModel model contained nextgroup=razorTypeIdentifier skipwhite
 
 syn keyword razorInject inject contained nextgroup=razorInjectIdentifier skipwhite
-syn match razorInjectIdentifier /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError nextgroup=razorInjectDeclarator skipwhite
+syn match razorInjectIdentifier /\%#=1\K\k*\%(\.\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator nextgroup=razorInjectDeclarator skipwhite
 syn match razorInjectDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError
 
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
@@ -278,6 +279,7 @@ hi def link razorTagPatternMemberOperator razorMemberOperator
 hi def link razorTagPatternWildcard SpecialChar
 hi def link razorTagPatternComma Delimiter
 hi def link razorRendermodeMode Keyword
+hi def link razorExtraMemberOperator razorMemberOperator
 
 let b:current_syntax = "razor"
 
