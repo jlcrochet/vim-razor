@@ -126,7 +126,7 @@ syn match razorStartEscape /\%#=1@/ contained
 
 syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup=razorCommentEnd end=/\%#=1\*@/ containedin=@razorcsExtra
 
-syn match razorIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorMemberOperator,razorInvocation,razorIndex
+syn match razorIdentifier /\%#=1\K\k*/ contained contains=razorType,razorcsKeywordError nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn match razorMemberOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
 syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
@@ -174,7 +174,7 @@ syn keyword razorDo do contained nextgroup=razorBlock skipwhite skipempty
 
 syn keyword razorUsing using contained nextgroup=razorGuardedStatement,razorUsingIdentifier skipwhite skipempty
 syn region razorGuardedStatement matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
-syn match razorUsingIdentifier /\%#=1\K\k*/ contained nextgroup=razorUsingOperator,razorUsingMemberOperator skipwhite
+syn match razorUsingIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorUsingOperator,razorUsingMemberOperator skipwhite
 syn match razorUsingMemberOperator /\%#=1\./ contained nextgroup=razorUsingIdentifier
 syn match razorUsingOperator /\%#=1=/ contained nextgroup=razorUsingOperator skipwhite skipempty
 
@@ -231,6 +231,12 @@ syn keyword razorTagHelperPrefix tagHelperPrefix contained
 syn keyword razorRendermode rendermode contained nextgroup=razorRendermodeMode skipwhite
 syn keyword razorRendermodeMode InteractiveServer InteractiveWebAssembly InteractiveAuto contained
 
+" Miscellaneous
+syn keyword razorType contained
+    \ sbyte short int long byte ushort uint ulong float double decimal nint nuint
+    \ char bool object string
+
+" Highlighting
 hi def link razorDirective Statement
 hi def link razorIf razorDirective
 hi def link razorFor razorDirective
@@ -262,7 +268,6 @@ hi def link razorAddTagHelper razorDirective
 hi def link razorRemoveTagHelper razorDirective
 hi def link razorTagHelperPrefix razorDirective
 hi def link razorRendermode razorDirective
-
 hi def link razorSemicolon razorcsDelimiter
 hi def link razorTypeIdentifier razorcsTypeIdentifier
 hi def link razorUsingIdentifier razorIdentifier
@@ -280,6 +285,7 @@ hi def link razorTagPatternWildcard SpecialChar
 hi def link razorTagPatternComma Delimiter
 hi def link razorRendermodeMode Keyword
 hi def link razorExtraMemberOperator razorMemberOperator
+hi def link razorType razorcsType
 
 let b:current_syntax = "razor"
 
