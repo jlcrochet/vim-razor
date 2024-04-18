@@ -172,7 +172,8 @@ syn keyword razorWhile while contained nextgroup=razorCondition skipwhite skipem
 
 syn keyword razorDo do contained nextgroup=razorBlock skipwhite skipempty
 
-syn keyword razorUsing using contained nextgroup=razorGuardedStatement,razorUsingIdentifier skipwhite skipempty
+syn keyword razorUsing using contained nextgroup=razorGuardedStatement,razorUsingIdentifier,razorUsingStatic skipwhite skipempty
+syn keyword razorUsingStatic static contained nextgroup=razorUsingIdentifier skipwhite skipempty
 syn region razorGuardedStatement matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
 syn match razorUsingIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorUsingOperator,razorUsingMemberOperator skipwhite
 syn match razorUsingMemberOperator /\%#=1\./ contained nextgroup=razorUsingIdentifier
@@ -286,6 +287,7 @@ hi def link razorTagPatternComma Delimiter
 hi def link razorRendermodeMode Keyword
 hi def link razorExtraMemberOperator razorMemberOperator
 hi def link razorType razorcsType
+hi def link razorUsingStatic razorcsUsingStatic
 
 let b:current_syntax = "razor"
 

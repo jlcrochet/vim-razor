@@ -99,7 +99,8 @@ syn keyword razorcsStatement checked unchecked nextgroup=razorcsBlock skipwhite 
 
 syn keyword razorcsStatement lock nextgroup=razorcsCondition skipwhite skipempty
 
-syn keyword razorcsStatement using nextgroup=razorcsGuardedStatement,razorcsStatement,razorcsIdentifier,razorcsModifier skipwhite skipempty
+syn keyword razorcsStatement using nextgroup=razorcsGuardedStatement,razorcsStatement,razorcsIdentifier,razorcsUsingStatic skipwhite skipempty
+syn keyword razorcsUsingStatic static contained nextgroup=razorcsIdentifier skipwhite skipwhite
 syn keyword razorcsStatement fixed nextgroup=razorcsGuardedStatement skipwhite skipempty
 syn region razorcsGuardedStatement matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs
 
@@ -481,6 +482,7 @@ hi def link razorcsPatternListVar razorcsStatement
 hi def link razorcsPatternListDeclarator razorcsDeclarator
 hi def link razorcsPatternListDeclaratorComma razorcsDeclaratorComma
 hi def link razorcsReadonly razorcsUnaryOperatorKeyword
+hi def link razorcsUsingStatic razorcsModifier
 " }}}1
 
 " vim:fdm=marker
