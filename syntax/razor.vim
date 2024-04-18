@@ -184,7 +184,7 @@ syn keyword razorFinally finally contained nextgroup=razorBlock skipwhite skipem
 
 syn keyword razorLock lock contained nextgroup=razorGuardedStatement skipwhite skipempty
 
-syn keyword razorAttribute attribute contained nextgroup=razorcsAttributes skipwhite
+syn keyword razorAttribute attribute contained nextgroup=razorcsCollectionExpressionOrAttributes skipwhite
 
 syn keyword razorCode code contained nextgroup=razorcsTypeBlock skipwhite skipempty
 
