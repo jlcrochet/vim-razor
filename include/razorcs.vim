@@ -311,8 +311,8 @@ syn region razorcsIndexSetter matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\
 syn region razorcsLINQExpression start=/\%#=1\<from\>/ end=/\%#=1[)\]};]\@=/ contained transparent contains=razorcsLINQKeyword,@razorcsRHS
 syn keyword razorcsLINQKeyword from into contained nextgroup=razorcsLINQDeclarator,razorcsLINQDeclaration skipwhite skipempty
 syn match razorcsLINQDeclaration /\%#=1\K\k*\%(\.\K\k*\)*\%(<.\{-}>\)\=\s\+\%(in\>\)\@!\K\k*/ contained contains=razorcsType,razorcsIdentifier
-syn keyword razorcsLINQKeyword let contained nextgroup=razorcsLINQDeclarator skipwhite skipempty
-syn keyword razorcsLINQKeyword in where select orderby group by ascending descending join on equals contained
+syn keyword razorcsLINQKeyword let join contained nextgroup=razorcsLINQDeclarator skipwhite skipempty
+syn keyword razorcsLINQKeyword in where select orderby group by ascending descending on equals contained
 syn match razorcsLINQDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorcsAssignmentOperator skipwhite skipempty
 
 " Miscellaneous (high priority) {{{2
