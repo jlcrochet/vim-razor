@@ -177,7 +177,7 @@ syn keyword razorUsingStatic static contained nextgroup=razorUsingIdentifier ski
 syn region razorGuardedStatement matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
 syn match razorUsingIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorUsingOperator,razorUsingMemberOperator skipwhite
 syn match razorUsingMemberOperator /\%#=1\./ contained nextgroup=razorUsingIdentifier
-syn match razorUsingOperator /\%#=1=/ contained nextgroup=razorUsingOperator skipwhite skipempty
+syn match razorUsingOperator /\%#=1=/ contained nextgroup=razorUsingIdentifier skipwhite skipempty
 
 syn keyword razorTry try contained nextgroup=razorBlock skipwhite skipempty
 syn keyword razorCatch catch contained nextgroup=razorGuardedStatement skipwhite skipempty
