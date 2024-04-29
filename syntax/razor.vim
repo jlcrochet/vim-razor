@@ -206,7 +206,7 @@ syn match razorInjectDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordEr
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite
 
 syn keyword razorPage page contained nextgroup=razorString skipwhite
-syn region razorString matchgroup=razorcsStringStart start=/\%#=1"/ matchgroup=razorcsStringEnd end=/\%#=1"/ oneline contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError
+syn region razorString matchgroup=razorcsStringStart start=/\%#=1"/ matchgroup=razorcsStringEnd end=/\%#=1"/ contained contains=razorcsEscapeSequence,razorcsEscapeSequenceError
 
 syn keyword razorLayout layout contained nextgroup=razorIdentifier skipwhite
 
