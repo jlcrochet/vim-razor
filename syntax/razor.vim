@@ -98,14 +98,11 @@ syn match razorhtmlCharacterReference /\%#=1&\%(\a\+\|#\%(\d\+\|[xX]\x\+\)\);/
 syn region razorhtmlComment matchgroup=razorhtmlCommentStart start=/\%#=1<!--/ matchgroup=razorhtmlCommentEnd end=/\%#=1-->/
 syn region razorhtmlDoctype start=/\%#=1<!doctype[[:space:]>]\@=/ end=/\%#=1>/ contains=razorhtmlCharacterReference
 
-syn match razorhtmlError /\%#=1>/
-
 hi def link razorhtmlCharacterReference SpecialChar
 hi def link razorhtmlComment Comment
 hi def link razorhtmlCommentStart razorhtmlComment
 hi def link razorhtmlCommentEnd razorhtmlCommentStart
 hi def link razorhtmlDoctype PreProc
-hi def link razorhtmlError Error
 
 syn case match
 
