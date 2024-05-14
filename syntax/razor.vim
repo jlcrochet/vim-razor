@@ -125,6 +125,7 @@ syn region razorComment matchgroup=razorCommentStart start=/\%#=1@\*/ matchgroup
 
 syn match razorIdentifier /\%#=1\K\k*/ contained contains=razorType,razorcsKeywordError nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn match razorMemberOperator /\%#=1?\=\./ contained nextgroup=razorIdentifier
+syn match razorMemberOperator /\%#=1::/ contained nextgroup=razorIdentifier
 syn region razorInvocation matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn region razorIndex matchgroup=razorcsDelimiter start=/\%#=1\[/ end=/\%#=1]/ contained contains=@razorcsRHS nextgroup=razorMemberOperator,razorInvocation,razorIndex
 syn keyword razorTypeof typeof contained nextgroup=razorInvocation
@@ -174,6 +175,7 @@ syn keyword razorUsingStatic static contained nextgroup=razorUsingIdentifier ski
 syn region razorGuardedStatement matchgroup=razorDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcs nextgroup=razorBlock skipwhite skipempty
 syn match razorUsingIdentifier /\%#=1\K\k*/ contained contains=razorcsKeywordError nextgroup=razorUsingOperator,razorUsingMemberOperator skipwhite
 syn match razorUsingMemberOperator /\%#=1\./ contained nextgroup=razorUsingIdentifier
+syn match razorUsingMemberOperator /\%#=1::/ contained nextgroup=razorUsingIdentifier
 syn match razorUsingOperator /\%#=1=/ contained nextgroup=razorUsingIdentifier skipwhite skipempty
 
 syn keyword razorTry try contained nextgroup=razorBlock skipwhite skipempty
@@ -189,15 +191,16 @@ syn keyword razorCode code contained nextgroup=razorcsTypeBlock skipwhite skipem
 syn keyword razorFunctions functions contained nextgroup=razorcsTypeBlock skipwhite skipempty
 
 syn keyword razorImplements implements contained nextgroup=razorTypeIdentifier skipwhite
-syn match razorTypeIdentifier /\%#=1\K\k*\%(\.\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator
+syn match razorTypeIdentifier /\%#=1\K\k*\%(\%(\.\|::\)\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator
 syn match razorExtraMemberOperator /\%#=1\./ contained
+syn match razorExtraMemberOperator /\%#=1::/ contained
 
 syn keyword razorInherits inherits contained nextgroup=razorTypeIdentifier skipwhite
 
 syn keyword razorModel model contained nextgroup=razorTypeIdentifier skipwhite
 
 syn keyword razorInject inject contained nextgroup=razorInjectIdentifier skipwhite
-syn match razorInjectIdentifier /\%#=1\K\k*\%(\.\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator nextgroup=razorInjectDeclarator skipwhite
+syn match razorInjectIdentifier /\%#=1\K\k*\%(\%(\.\|::\)\K\k*\)*\%(<.\{-}>\)\=/ contained contains=razorcsGeneric,razorcsKeywordError,razorExtraMemberOperator nextgroup=razorInjectDeclarator skipwhite
 syn match razorInjectDeclarator /\%#=1\K\k*/ contained contains=razorcsKeywordError
 
 syn keyword razorNamespace namespace contained nextgroup=razorIdentifier skipwhite

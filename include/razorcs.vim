@@ -28,7 +28,7 @@ syn match razorcsDelimiter /\%#=1;/ containedin=@razorcsBlocks
 syn region razorcsBlock matchgroup=razorcsDelimiter start=/\%#=1{/ end=/\%#=1}/ contains=@razorcs fold
 
 " LHS {{{2
-syn keyword razorcsStatement global alias
+syn keyword razorcsStatement alias nextgroup=razorcsIdentifier skipwhite skipempty
 
 syn keyword razorcsStatement class struct nextgroup=razorcsTypeName skipwhite skipempty
 syn match razorcsTypeName /\%#=1\K\k*\%(<.\{-}>\)\=/ contained contains=razorcsKeywordError,razorcsGenericParameters nextgroup=razorcsTypeBlock,razorcsTypeInheritanceOperator,razorcsTypeConstraint,razorcsTypeConstructorParameters skipwhite skipempty
