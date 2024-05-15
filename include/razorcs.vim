@@ -44,7 +44,7 @@ syn keyword razorcsTypeInheriteeKeyword contained nextgroup=razorcsTypeBlock,raz
 syn match razorcsTypeConstraintModifier /\%#=1?/ contained nextgroup=razorcsTypeInheriteeMemberOperator,razorcsTypeInheriteeComma,razorcsTypeConstraint skipwhite skipempty
 syn keyword razorcsTypeInheriteeKeyword new contained nextgroup=razorcsTypeInheriteeArguments,razorcsTypeInheritee skipwhite skipempty
 syn keyword razorcsTypeInheriteeKeyword managed unmanaged contained nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma skipwhite skipempty
-syn region razorcsTypeInheriteeArguments matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=razorcsTypeVariable nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeConstraintLambdaOperator skipwhite skipempty
+syn region razorcsTypeInheriteeArguments matchgroup=razorcsDelimiter start=/\%#=1(/ end=/\%#=1)/ contained contains=@razorcsRHS nextgroup=razorcsTypeBlock,razorcsTypeInheriteeComma,razorcsTypeConstraint,razorcsTypeConstraintLambdaOperator skipwhite skipempty
 syn match razorcsTypeConstraintLambdaOperator /\%#=1=>/ contained nextgroup=razorcsTypeInheriteeKeyword skipwhite skipempty
 syn match razorcsTypeInheriteeMemberOperator /\%#=1\./ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
 syn match razorcsTypeInheriteeComma /\%#=1,/ contained nextgroup=razorcsTypeInheritee,razorcsTypeInheriteeKeyword skipwhite skipempty
