@@ -14,7 +14,7 @@ runtime! ftplugin/html.vim
 
 setlocal
     \ comments=s1:@*,mb:*,ex:*@,:///,://
-    \ commentstring=@*\ %s\ *@
+    \ commentstring=@*%s*@
     \ suffixesadd=.cshtml,.razor
 
 let b:undo_ftplugin = "setlocal comments< commentstring< suffixesadd<"
