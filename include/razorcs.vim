@@ -262,9 +262,9 @@ syn match razorcsOperator /\%#=1&&\==\=/ contained nextgroup=@razorcsRHS skipwhi
 syn match razorcsOperator /\%#=1||\==\=/ contained nextgroup=@razorcsRHS skipwhite skipempty
 syn match razorcsOperator /\%#=1?\%(?=\=\)\=/ contained nextgroup=@razorcsRHS skipwhite skipempty
 
-syn match razorcsOperator /\%#=1\./ contained nextgroup=razorcsRHSIdentifier,razorcsRHSConstant skipwhite skipempty
+syn match razorcsOperator /\%#=1\./ contained nextgroup=razorcsRHSTypeIdentifier,razorcsRHSConstant skipwhite skipempty
 syn match razorcsOperator /\%#=1\.\./ contained nextgroup=@razorcsRHS skipwhite skipempty
-syn match razorcsOperator /\%#=1?\./ contained nextgroup=razorcsRHSIdentifier,razorcsRHSConstant skipwhite skipempty
+syn match razorcsOperator /\%#=1?\./ contained nextgroup=razorcsRHSTypeIdentifier,razorcsRHSConstant skipwhite skipempty
 syn match razorcsOperator /\%#=1:/ contained nextgroup=@razorcsRHS,razorcsStatement skipwhite skipempty
 syn match razorcsOperator /\%#=1::/ contained nextgroup=razorcsRHSIdentifier skipwhite skipempty
 
